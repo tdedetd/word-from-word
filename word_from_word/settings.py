@@ -53,7 +53,9 @@ ROOT_URLCONF = 'word_from_word.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'game/template/',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
