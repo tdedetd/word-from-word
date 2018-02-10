@@ -1,13 +1,41 @@
 {% load static %}<!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Fword</title>
-        <link rel="stylesheet" href="{% static 'style/main.css' %}">
-    </head>
-    <body>
-        
-    </body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fword</title>
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="title-shadow">
+        <div>
+          <a href="{% url 'home' %}">
+            <h1 class="header-margin">WordFromWord</h1>
+          </a>
+          <h2 class="header-margin">Здесь слов хватит на всех!</h2>
+        </div>
+        <div class="user-panel">
+          <div class="title-small-shadow text-right">Уровень 3</div>
+          <div class="xp-bar">
+            <div class="xp-bar__bg"></div>
+          </div>
+          <h2 class="text-right">TDEDETD</h2>
+        </div>
+      </header>
+      <menu type="list">
+        <li class="menu-item">Играть</li>
+        <li class="menu-item">Профиль</li>
+      </menu>
+      <main>
+        <nav></nav>
+        {% block content %}{% endblock %}
+      </main>
+      <footer>
+        Copyright
+      </footer>
+    </div>
+  </body>
 </html>
