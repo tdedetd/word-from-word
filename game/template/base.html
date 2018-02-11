@@ -18,22 +18,33 @@
           </a>
           <h2 class="header-margin">Здесь слов хватит на всех!</h2>
         </div>
-        <div class="user-panel">
-          <div class="title-small-shadow text-right">Уровень 3</div>
-          <div class="xp-bar">
+        <div class="user-panel">{% if not user.is_anonymous %}
+          <div class="title-small-shadow">Уровень 3</div>
+          <div class="xp-bar" title="Ваш текущий игровой опыт">
+            <div class="xp-bar__filled"></div>
             <div class="xp-bar__bg"></div>
           </div>
-          <h2 class="text-right">TDEDETD</h2>
+          <h2>
+            <span>{{ user }}</span>&nbsp;
+            <a href="{% url 'logout' %}" title="Выйти">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+          </h2>{% else %}
+          <form class="auth-form" action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <input class="auth-form__item" type="text" name="username" placeholder="Логин">
+            <input class="auth-form__item" type="password" name="password" placeholder="Пароль">
+            <input class="auth-form__item" type="submit" value="Войти">
+          </form>
+          <a href="{% url 'register' %}">Зарегистрироваться</a>{% endif %}
         </div>
       </header>
       <menu type="list">
         <li class="menu-item">Играть</li>
         <li class="menu-item">Профиль</li>
       </menu>
-      <main>
-        <nav></nav>
-        {% block content %}{% endblock %}
-      </main>
+      <nav></nav>
+      {% block content %}{% endblock %}
       <footer>
         Copyright
       </footer>
