@@ -40,8 +40,12 @@
         </div>
       </header>
       <menu type="list">
-        <li class="menu-item">Играть</li>
-        <li class="menu-item">Профиль</li>
+        <a href="{% url 'play' %}">
+            <li class="menu-item">Играть</li>
+        </a>
+        <a href="">
+            <li class="menu-item">Профиль</li>
+        </a>
       </menu>
       <nav></nav>
       {% block content %}{% endblock %}

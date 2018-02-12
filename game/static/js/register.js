@@ -46,9 +46,9 @@ const passValidators = [
         }
     },
     {
-        message: "Пароль должен быть длиной не менее 8 символов",
+        message: "Пароль должен быть длиной не менее 5-ти символов",
         validate: (pass1, pass2) => {
-            if (pass1.length < 8)
+            if (pass1.length < 5)
                 return false;
             return true;
         }
@@ -63,6 +63,8 @@ const passValidators = [
         }
     }
 ];
+
+const check = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>";
 
 let loginReady = false,
     passReady = false;
@@ -89,7 +91,7 @@ $(document).on("change", "#reg-user", function() {
             loginOutput.addClass("text-fail");
             loginReady = false;
         } else {
-            loginOutput.html("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
+            loginOutput.html(check);
             loginOutput.addClass("text-success");
             loginReady = true;
         }
@@ -123,7 +125,7 @@ function validatePassword() {
         }
     }
 
-    passOutput.html("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
+    passOutput.html(check);
     passOutput.addClass("text-success");
     passReady = true;
     updateSubmitEnabled();

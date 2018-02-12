@@ -56,7 +56,7 @@ def signup(request):
     if password1 != password2:
         return fail
 
-    if len(password1) < 8:
+    if len(password1) < 5:
         return fail
 
     if re.match(r'^([0-9]|[a-z]|[A-Z])+$', password1) is None:
@@ -105,6 +105,14 @@ def if_login_exists(login):
 
 def home(request):
     return render(request, 'home.html')
+
+
+def lvl_select(request):
+    if request.user.is_anonymous():
+        from django.shortcuts import redirect, reverse
+        return redirect(reverse('register'))
+    
+    return render(request, 'lvl_select.html')
 
 
 def dictfetchall(cursor):
