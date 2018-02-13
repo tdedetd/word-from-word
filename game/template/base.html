@@ -32,9 +32,9 @@
           </h2>{% else %}
           <form class="auth-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <input class="auth-form__item" type="text" name="username" placeholder="Логин">
-            <input class="auth-form__item" type="password" name="password" placeholder="Пароль">
-            <input class="auth-form__item" type="submit" value="Войти">
+            <input class="auth-form__item input-light" type="text" name="username" placeholder="Логин">
+            <input class="auth-form__item input-light" type="password" name="password" placeholder="Пароль">
+            <input class="auth-form__item input-light" type="submit" value="Войти">
           </form>
           <a href="{% url 'register' %}">Зарегистрироваться</a>{% endif %}
         </div>

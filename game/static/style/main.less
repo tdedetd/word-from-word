@@ -43,6 +43,49 @@ header {
     font-weight: bold;
 }
 
+input[type="text"],
+input[type="password"] {
+    color: @blue;
+    background-color: @orange;
+    font-size: inherit;
+    border: none;
+    padding: .3em .5em;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px @dark-blue;
+}
+
+/* Button styling */
+
+input[type="button"],
+input[type="submit"],
+button {
+    color: @light-orange;
+    background-color: @blue;
+    font-size: inherit;
+    border: none;
+    padding: .3em .5em;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px @dark-blue;
+}
+
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+button:disabled {
+    cursor: default;
+    color: grey;
+    box-shadow: none;
+}
+
+/* Input styling */
+
+input.input-light {
+    color: @blue;
+    background-color: @light-orange;
+}
+
+/* other */
+
 @media (min-width: 652px) {
     header {
         justify-content: space-between;
