@@ -1,0 +1,39 @@
+@columns: 12;
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.get-col(@size, @i) when (@i > 0) {
+    .get-col(@size, @i - 1);
+
+    .col-@{size}-@{i} {
+        width: calc(100% / @columns * @i);
+    }
+}
+
+@media (min-width: 0px) and (max-width: 575px) {
+    .get-col(xs, @columns);
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .get-col(sm, @columns);
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .get-col(md, @columns);
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .get-col(lg, @columns);
+}
+
+@media (min-width: 1200px) and (max-width: 9999px) {
+    .get-col(xl, @columns);
+}
