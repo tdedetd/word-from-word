@@ -42,7 +42,7 @@ function displayLevel(word, wordsTotal, wordsSolved = 0) {
     level.find(".level__bar-solved").css("width", `${perc}%`);
     level.find(".level__bar-unsolved").css("width", `${100 - perc}%`);
 
-    console.log(`width: ${100 - perc}%;`);
+    level.find(".level__bar").attr("title", perc.toFixed(2) + "%");
 
     levels.append(level);
 }

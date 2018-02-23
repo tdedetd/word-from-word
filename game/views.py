@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
 
+
 def login(request):
     """
     Авторизует пользователя
@@ -56,7 +57,7 @@ def signup(request):
     if password1 != password2:
         return fail
 
-    if len(password1) < 5:
+    if len(password1) < 4:
         return fail
 
     if re.match(r'^([0-9]|[a-z]|[A-Z])+$', password1) is None:
@@ -92,10 +93,10 @@ def if_login_exists(login):
     """
     login = login.lower()
     check_sql = '''
-                SELECT EXISTS (
-                    SELECT FROM auth_user WHERE lower(username) = %s
-                )
-                '''
+        SELECT EXISTS (
+            SELECT FROM auth_user WHERE lower(username) = %s
+        )
+    '''
     from django.db import connection
     cursor = connection.cursor()
     cursor.execute(check_sql, [login])
@@ -113,6 +114,48 @@ def lvl_select(request):
         return redirect(reverse('register'))
     
     return render(request, 'lvl_select.html')
+
+
+def get_levels(request):
+    """
+    Возвращает список уровней
+    """
+    from .http import template, json
+
+    if not request.is_ajax():
+        return template(request, 404)
+
+    if request.user.is_anonymous():
+        return json(request, 401)
+
+    user_id = request.user.id
+    type_id = request.GET.get("type_id")
+    dir_id = request.GET.get("dir_id")
+    offset = request.GET.get("offset")
+    limit = request.GET.get("limit")
+
+    params = [type_id, dir_id, offset, limit]
+
+    for param in params:
+        try:
+            param = int(param)
+        except ValueError:
+            return json(request, 400)
+
+    params = [user_id] + params
+
+    levels_sql = '''
+        SELECT id, word, word_count, solved, last_activity
+        FROM get_levels(%s, %s, %s, %s, %s)
+    '''
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(levels_sql, params)
+    levels = dictfetchall(cursor)
+
+    from django.http import JsonResponse
+    return JsonResponse({'levels': levels})
 
 
 def dictfetchall(cursor):

@@ -46,9 +46,9 @@ const passValidators = [
         }
     },
     {
-        message: "Пароль должен быть длиной не менее 5-ти символов",
+        message: "Пароль должен быть длиной не менее 4-х символов",
         validate: (pass1, pass2) => {
-            if (pass1.length < 5)
+            if (pass1.length < 4)
                 return false;
             return true;
         }
