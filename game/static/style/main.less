@@ -1,10 +1,6 @@
-@light-blue: #d4e8ff;
-@blue: #005998;
-@dark-blue: #003357;
-@light-orange: #f6ba6d;
-@orange: #ed8600;
-@accent-green: #008b00;
-@accent-red: #aa0000;
+@import "colors.less";
+
+@static-url: "/static/";
 
 * {
     margin: 0;
@@ -16,8 +12,10 @@ body {
     height: 100%;
 }
 
+@bg-url: "@{static-url}img/bg.jpg";
+
 body {
-    background: url(/static/img/bg.jpg) @light-orange;
+    background: url(@bg-url) @light-orange fixed;
     font-family: arial;
     font-size: 24px;
     color: @blue;
@@ -205,6 +203,11 @@ h2 {
 
 .auth-form__item {
     display: block;
+}
+
+input.auth-form__item {
+    font-size: 14px;
+    margin: 1px 0;
 }
 
 .valid-msg {

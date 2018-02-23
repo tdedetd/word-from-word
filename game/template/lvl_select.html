@@ -1,8 +1,26 @@
 {% extends 'base.html' %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'style/grid.css' %}">
+<link rel="stylesheet" href="{% static 'style/lvl_select.css' %}">
+<script type="text/javascript" src="{% static 'js/lvl_select.js' %}"></script>
 <main>
-  <section class="section-narrow">
-    <h2>Выберите уровень</h2>
-    <p>123</p>
-  </section>
+  
+  <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-sample" style="display: none;">
+    <div class="level">
+      <div class="level__word"></div>
+      <div class="level__status">
+        <div class="level__bar">
+          <div class="level__bar-solved"></div>
+          <div class="level__bar-unsolved"></div>
+        </div>
+        <div class="level__word-count">
+          <span class="level__words-solved"></span>&nbsp;/&nbsp;<span class="level__words-total"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="levels-wrapper">
+    <div class="row" id="levels"></div>
+  </div>
 </main>
 {% endblock %}

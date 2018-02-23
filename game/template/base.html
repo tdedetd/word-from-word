@@ -6,14 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Word from word</title>
     <link rel="stylesheet" href="{% static 'style/fontawesome-all.min.css' %}">
-    <link rel="stylesheet" href="{% static 'style/grid.css' %}">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
   </head>
   <body>
     <div class="wrapper">
-      <header class="title-shadow">
-        <div>
+      <header>
+        <div class="title-shadow">
           <a href="{% url 'home' %}">
             <h1 class="header-margin">WordFromWord</h1>
           </a>
@@ -26,8 +25,8 @@
             <div class="xp-bar__bg"></div>
           </div>
           <h2>
-            <span>{{ user }}</span>&nbsp;
-            <a href="{% url 'logout' %}" title="Выйти">
+            <span class="title-shadow">{{ user }}</span>&nbsp;
+            <a href="{% url 'logout' %}" title="Выйти" class="title-shadow">
               <i class="fa fa-times" aria-hidden="true"></i>
             </a>
           </h2>{% else %}
@@ -37,7 +36,7 @@
             <input class="auth-form__item input-light" type="password" name="password" placeholder="Пароль">
             <input class="auth-form__item input-light" type="submit" value="Войти">
           </form>
-          <a href="{% url 'register' %}">Зарегистрироваться</a>{% endif %}
+          <a href="{% url 'register' %}" class="title-shadow">Зарегистрироваться</a>{% endif %}
         </div>
       </header>
       <menu type="list">

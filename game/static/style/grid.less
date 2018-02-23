@@ -1,4 +1,9 @@
-@columns: 12;
+@column-count: 12;
+@size-group-count: 5;
+
+@min-widths: 0px 576px 768px 992px 1200px;
+@max-widths: 575px 767px 991px 1199px 9999px;
+@size-groups: xs sm md lg xl;
 
 .row {
     display: flex;
@@ -10,30 +15,20 @@
     flex-shrink: 0;
 }
 
-.get-col(@size, @i) when (@i > 0) {
-    .get-col(@size, @i - 1);
+.get-cols(@size, @i) when (@i > 0) {
+    .get-cols(@size, @i - 1);
 
     .col-@{size}-@{i} {
-        width: calc(100% / @columns * @i);
+        width: calc(100% / @column-count * @i);
     }
 }
 
-@media (min-width: 0px) and (max-width: 575px) {
-    .get-col(xs, @columns);
+.render-group(@i) when (@i > 0) {
+    .render-group(@i - 1);
+
+    @media (min-width: extract(@min-widths, @i)) and (max-width: extract(@max-widths, @i)) {
+        .get-cols(extract(@size-groups, @i), @column-count);
+    }
 }
 
-@media (min-width: 576px) and (max-width: 767px) {
-    .get-col(sm, @columns);
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-    .get-col(md, @columns);
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-    .get-col(lg, @columns);
-}
-
-@media (min-width: 1200px) and (max-width: 9999px) {
-    .get-col(xl, @columns);
-}
+.render-group(@size-group-count);
