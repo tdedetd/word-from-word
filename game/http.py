@@ -12,7 +12,7 @@ def template(request, status, message=None):
     """
     Возвращает страницу, содержащую код ошибки и сообщение
     """
-    if message == None:
+    if message is None:
         message = STATUSES.get(status)
 
     context = {
@@ -28,7 +28,7 @@ def json(request, status, message=None):
     """
     Возвращает json-ответ с кодом состояния и сообщением
     """
-    if message == None:
+    if message is None:
         message = STATUSES.get(status)
 
     from django.http import JsonResponse

@@ -37,14 +37,14 @@ def signup(request):
     Регистрирует пользователя, предварительно проводя валидацию логина и пароля
     """
     username = request.POST.get('username')
-    password1 = request.POST.get('password')
-    password2 = request.POST.get('password-conf')
+    password = request.POST.get('password')
+    password_conf = request.POST.get('password-conf')
 
     # validators
     from .http import template
     fail = template(request, 400, 'При попытке регистрации произошла ошибка. Попробуйте пройти регистрацию повторно.')
 
-    if not (bool(username) and bool(password1) and bool(password2)):
+    if not (username and password and password_conf):
         return fail
 
     if len(username) > 40:
@@ -54,13 +54,13 @@ def signup(request):
     if re.match(r'^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$', username) is None:
         return fail
 
-    if password1 != password2:
+    if password != password_conf:
         return fail
 
-    if len(password1) < 4:
+    if len(password) < 4:
         return fail
 
-    if re.match(r'^([0-9]|[a-z]|[A-Z])+$', password1) is None:
+    if re.match(r'^([0-9]|[a-z]|[A-Z])+$', password) is None:
         return fail
 
     if if_login_exists(username):
@@ -68,7 +68,7 @@ def signup(request):
 
     # success
     from django.contrib.auth.models import User
-    User.objects.create_user(username=username, password=password1)
+    User.objects.create_user(username=username, password=password)
     return login(request)
 
 
@@ -138,9 +138,9 @@ def get_levels(request):
 
     for param in params:
         try:
-            param = int(param)
+            int(param)
         except ValueError:
-            return json(request, 400)
+            return json(request, 400, 'Wrong parameter(s)')
 
     params = [user_id] + params
 
@@ -156,6 +156,38 @@ def get_levels(request):
 
     from django.http import JsonResponse
     return JsonResponse({'levels': levels})
+
+
+def game(request, level_id):
+    """
+    Окно игры
+    """
+    if request.user.is_anonymous():
+        from django.shortcuts import redirect, reverse
+        return redirect(reverse('register'))
+
+    word_sql = '''
+        SELECT upper(word)
+        FROM levels, words
+        WHERE levels.id = %s and levels.word_id = words.id
+    '''
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(word_sql, [level_id])
+    word_result = cursor.fetchone()
+
+    if word_result is None:
+        from .http import template
+        return template(request, 404, 'Указанного уровня не существует')
+    else:
+        word = word_result[0]
+
+    context = {
+        'level_id': level_id,
+        'word': word,
+    }
+    return render(request, 'game.html', context)
 
 
 def dictfetchall(cursor):

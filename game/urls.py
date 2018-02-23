@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^auth/register/checklogin/(?P<login>.+)/$', views.checklogin, name='checklogin'),
     url(r'^play/$', views.lvl_select, name='play'),
     url(r'^get_levels/$', views.get_levels),
+    url(r'^game/(?P<level_id>\d+)/$', views.game),
     url(r'^$', views.home, name='home'),
 ]
