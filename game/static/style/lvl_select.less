@@ -7,15 +7,16 @@
 .level {
     background: @orange;
     border-radius: 5px;
-    box-shadow: 1px 1px 5px @dark-blue;
+    box-shadow: .5px .5px 3px @dark-blue;
     margin: 9px 7px;
     cursor: pointer;
     font-weight: bold;
-    transition: box-shadow .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: box-shadow .2s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .level:hover {
     box-shadow: 3px 3px 8px @dark-blue;
+    background-color: @orange-selected;
 }
 
 .level__word,
