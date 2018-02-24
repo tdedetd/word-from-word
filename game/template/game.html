@@ -1,6 +1,13 @@
 {% extends 'base.html' %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'style/grid.css' %}">
+<link rel="stylesheet" href="{% static 'style/game.css' %}">
+<div id="level-info" data-id="{{ level_id }}"></div>
 <main>
-{{ level_id }}
-{{ word }}
+  <div class="letters">{% for letter in letters %}
+    <div class="letters__item">{{ letter }}</div>{% endfor %}
+  </div>
+  <div class="solved-words">{% for word in words %}
+    <div class="solved-words__item">{{ word.0 }}</div>{% endfor %}
+  </div>
 </main>
 {% endblock %}

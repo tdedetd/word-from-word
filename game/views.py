@@ -183,9 +183,29 @@ def game(request, level_id):
     else:
         word = word_result[0]
 
+    letters = list(word)
+
+    words_sql = '''
+        SELECT word
+        FROM
+            user_solution us,
+            level_word lw,
+            words
+        WHERE
+            us.user_id = %s and
+            lw.level_id = %s and
+            us.level_word_id = lw.id and
+            lw.word_id = words.id
+        ORDER BY words.word asc
+    '''
+
+    cursor.execute(words_sql, [request.user.id, level_id])
+    words = cursor.fetchall()
+
     context = {
         'level_id': level_id,
-        'word': word,
+        'letters': letters,
+        'words': words,
     }
     return render(request, 'game.html', context)
 
