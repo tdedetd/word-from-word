@@ -210,6 +210,39 @@ def game(request, level_id):
     return render(request, 'game.html', context)
 
 
+def submit_word(request, level_id):
+    """
+    Отправляет слово на проверку. Возвращает результат с признаком успешности и текущим уровнем пользователя.
+    """
+    from .http import template, json
+
+    if not request.is_ajax():
+        return template(request, 404)
+
+    if request.user.is_anonymous():
+        return json(request, 401)
+
+    word = request.POST.get('word')
+
+    submit_word_sql = '''
+        SELECT key, val FROM submit_word(%s, %s, %s)
+    '''
+
+    params = [request.user.id, int(level_id), word]
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(submit_word_sql, params)
+    submit_result = cursor.fetchall()
+
+    submit_result_dict = {}
+
+    for row in submit_result:
+        submit_result_dict.update({row[0]: row[1]})
+
+    return json(request, 200, submit_result_dict)
+
+
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
