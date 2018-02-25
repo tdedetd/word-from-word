@@ -200,12 +200,16 @@ def game(request, level_id):
     '''
 
     cursor.execute(words_sql, [request.user.id, level_id])
-    words = cursor.fetchall()
+    solved_words = cursor.fetchall()
+
+    from game.models import Levels
+    word_count = Levels.objects.get(id=level_id).word_count
 
     context = {
         'level_id': level_id,
         'letters': letters,
-        'words': words,
+        'solved_words': solved_words,
+        'word_count': word_count,
     }
     return render(request, 'game.html', context)
 
