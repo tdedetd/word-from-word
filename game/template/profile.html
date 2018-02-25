@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'style/profile.css' %}">
+<main class="content-center">
+  <h2 class="text-center">Информация о профиле</h2>
+  <div class="box profile">{% for param in profile_info_dict %}
+    <div class="profile__param">
+      {{ param.name }}: {{ param.val }}
+    </div>{% endfor %}
+  </div>
+</main>
+{% endblock %}

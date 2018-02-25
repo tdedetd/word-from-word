@@ -228,6 +228,9 @@ def submit_word(request, level_id):
 
     word = request.POST.get('word')
 
+    if word is None or word.strip() == '':
+        return json(request, 400)
+
     submit_word_sql = '''
         SELECT key, val FROM submit_word(%s, %s, %s)
     '''
@@ -245,6 +248,38 @@ def submit_word(request, level_id):
         submit_result_dict.update({row[0]: row[1]})
 
     return json(request, 200, submit_result_dict)
+
+
+def profile(request, user_id):
+    """
+    Страница профиля
+    """
+    if request.user.is_anonymous():
+        from django.shortcuts import redirect, reverse
+        return redirect(reverse('register'))
+
+    from django.contrib.auth.models import User
+    target_user = User.objects.get(id=user_id)
+
+    profile_info_sql = '''
+        SELECT name, val from public.get_profile_info(%s, %s)
+    '''
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(profile_info_sql, [request.user.id, user_id])
+    profile_info = cursor.fetchall()
+
+    profile_info_dict = []
+    for profile_param in profile_info:
+        profile_info_dict.append({'name': profile_param[0], 'val': profile_param[1]})
+
+    context = {
+        'target_user': target_user,
+        'profile_info_dict': profile_info_dict,
+    }
+    
+    return render(request, 'profile.html', context)
 
 
 def dictfetchall(cursor):

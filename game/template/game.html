@@ -7,7 +7,7 @@
   <div class="letters">{% for letter in letters %}
     <div class="letters__item">{{ letter }}</div>{% endfor %}
   </div>
-  <div class="solved-words">{% for word in solved_words %}
+  <div class="solved-words box" id="solved-words">{% for word in solved_words %}
     <div class="solved-words__item">{{ word.0 }}</div>{% endfor %}
   </div>
   <div class="status-wrapper">
@@ -19,7 +19,7 @@
       </button>
     </div>
     <div class="level-status">
-      Слов: {{ solved_words|length }} / {{ word_count }}
+      Слов: <span id="words-solved">{{ solved_words|length }}</span> / {{ word_count }}
     </div>
   </div>
 </main>

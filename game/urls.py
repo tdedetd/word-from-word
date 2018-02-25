@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^game/$', views.lvl_select, name='game'),
     url(r'^game/(?P<level_id>\d+)/$', views.game),
     url(r'^game/(?P<level_id>\d+)/submit_word/$', views.submit_word),
+    url(r'^profile(?P<user_id>\d+)/$', views.profile, name='profile'),
     url(r'^$', views.home, name='home'),
 ]

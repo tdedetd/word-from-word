@@ -14,9 +14,10 @@
       <header>
         <div class="title-shadow">
           <a href="{% url 'home' %}">
-            <h1 class="header-margin">WordFromWord</h1>
+            <h1 class="header-margin full-title">WordFromWord</h1>
+            <h1 class="header-margin short-title">WFW</h1>
           </a>
-          <h2 class="header-margin">Здесь слов хватит на всех!</h2>
+          <h2 class="header-margin subtitle">Здесь слов хватит на всех!</h2>
         </div>
         <div class="user-panel">{% if not user.is_anonymous %}
           <div class="title-small-shadow">Уровень 3</div>
@@ -42,10 +43,10 @@
       <menu type="list">
         <a href="{% url 'game' %}">
           <li class="menu-item">Играть</li>
-        </a>
-        <a href="">
+        </a>{% if not user.is_anonymous %}
+        <a href="{% url 'profile' user.id %}">
           <li class="menu-item">Профиль</li>
-        </a>
+        </a>{% endif %}
       </menu>
       <nav></nav>
       {% block content %}{% endblock %}

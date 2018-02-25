@@ -92,20 +92,47 @@ input.input-light {
     .user-panel {
         text-align: right;
     }
+
+    .full-title {
+        display: block;
+    }
+
+    .short-title {
+        display: none;
+    }
+
+    .subtitle {
+        display: block;
+    }
 }
 
 @media (max-width: 651px) {
     header {
         justify-content: center;
+        text-align: center;
     }
 
     .user-panel {
         text-align: center;
         margin: 10px 0;
     }
+
+    .full-title {
+        display: none;
+    }
+
+    .short-title {
+        display: block;
+    }
+
+    .subtitle {
+        display: none;
+    }
 }
 
 menu {
+    flex-grow: 0;
+    flex-shrink: 0;
     background-color: @dark-blue;
     color: @light-blue;
     font-weight: bold;
@@ -121,6 +148,8 @@ nav {
 
 main {
     flex-grow: 1;
+    flex-shrink: 0;
+    padding: 5px;
     background-color: @light-orange;
 }
 
@@ -242,4 +271,11 @@ input.auth-form__item {
 
 .menu-item:hover {
     background-color: @blue;
+}
+
+.box {
+    background: @orange;
+    padding: 20px 30px;
+    box-shadow: 1px 1px 3px @dark-blue;
+    border-radius: 15px;
 }
