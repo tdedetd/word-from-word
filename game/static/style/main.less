@@ -43,6 +43,7 @@ header {
 
 input[type="text"],
 input[type="password"] {
+    -webkit-appearance: none;
     color: @blue;
     background-color: @orange;
     font-size: inherit;
@@ -57,21 +58,30 @@ input[type="password"] {
 input[type="button"],
 input[type="submit"],
 button {
+    -webkit-appearance: none;
     color: @light-orange;
     background-color: @blue;
+    -webkit-background-color: @blue;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 1px 1px 3px @dark-blue;
+    transition: background-color 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+button:hover {
+    background-color: @middle-light-blue;
 }
 
 input[type="button"]:disabled,
 input[type="submit"]:disabled,
 button:disabled {
     cursor: default;
-    color: grey;
+    color: @accent-grey;
     box-shadow: none;
 }
 

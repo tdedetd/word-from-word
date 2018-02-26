@@ -13,8 +13,14 @@
   <div class="status-wrapper">
     <div class="submit-word-form">
       {% csrf_token %}
-      <input type="text" class="submit-word-form__item" id="word-input">
-      <button class="submit-word-form__item" id="submit-word-button">
+      <input type="text" class="submit-word-form__item word-input" id="word-input">
+      <button class="submit-word-form__item" id="backspace-button" title="Стереть">
+        <i class="fas fa-long-arrow-alt-left"></i>
+      </button>
+      <button class="submit-word-form__item" id="clear-button" title="Очистить поле">
+        <i class="fa fa-terminal" aria-hidden="true"></i>
+      </button>
+      <button class="submit-word-form__item" id="submit-word-button" title="Отправить">
         <i class="fa fa-check" aria-hidden="true"></i>
       </button>
     </div>

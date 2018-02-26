@@ -15,6 +15,30 @@
     cursor: pointer;
 }
 
+.letters__item_disabled {
+    position: relative;
+    cursor: default;
+}
+
+.letters__item_disabled::after,
+.letters__item_disabled::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 45%;
+    width: 10%;
+    height: 100%;
+    background: @accent-red;
+}
+
+.letters__item_disabled::before {
+    transform: rotate(35deg);   
+}
+
+.letters__item_disabled::after {
+    transform: rotate(-35deg);   
+}
+
 @media (min-width: 652px) {
     .letters__item {
         font-size: 48px;
@@ -58,6 +82,15 @@
 
 .submit-word-form {
     margin: 0 20px;
+    font-size: 28px;
+}
+
+// .word-input {
+//     max-width: 700px;
+// }
+
+.submit-word-form__item {
+    margin: 5px;
 }
 
 .level-status {

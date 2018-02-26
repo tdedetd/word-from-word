@@ -4,7 +4,7 @@ const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
 let lvlHtml, levels;
 let lvlCount = 0,
-    lvlLimit = 20,
+    lvlLimit = 30,
     typeId = 1,
     dirId = 1;
 
