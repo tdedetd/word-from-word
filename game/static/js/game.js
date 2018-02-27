@@ -74,6 +74,7 @@ let wordsSolved, wordInput;
 $(document).ready(() => {
     wordsSolved = +$("#words-solved").text();
     wordInput = $("#word-input");
+    wordInput.val("");
 
     $("#submit-word-button").on("click", () => {
         submitWord();
@@ -114,13 +115,21 @@ $(document).ready(() => {
     });
 });
 
+/**
+ * Разоблокирует последнюю букву в поле ввода.
+ * @param {*} removeLastLetter нужно ли удалять последнюю букву слова
+ */
 function backspace(removeLastLetter) {
     if (wordInput.val() == "") {
         return;
     }
 
     let word = wordInput.val();
-    enableLetter(word[word.length - 1]);
+    let lastLetter = word[word.length - 1];
+    if (lastLetter == "ё" || lastLetter == "Ё") {
+        lastLetter = "е";
+    }
+    enableLetter(lastLetter);
 
     if (removeLastLetter) {
         word = word.substr(0, word.length - 1);
@@ -156,7 +165,7 @@ function submitWord() {
 
 /**
  * Добавляет указанное слово в список отгаданных слов
- * @param {string} word 
+ * @param {string} word слово
  */
 function insertSolvedWord(word) {
     let div = $(document.createElement("div"));
@@ -193,7 +202,7 @@ function enableAllLetters() {
  * @param {string} letter буква
  */
 function enableLetter(letter) {
-    return toogleLetter(true, letter);
+    return toggleLetter(true, letter);
 }
 
 /**
@@ -203,7 +212,7 @@ function enableLetter(letter) {
  * @param {string} letter буква
  */
 function disableLetter(letter) {
-    return toogleLetter(false, letter);
+    return toggleLetter(false, letter);
 }
 
 /**
@@ -212,7 +221,7 @@ function disableLetter(letter) {
  * @param {boolean} enable true - активировать, false - деактивировать
  * @param {string} letter буква
  */
-function toogleLetter(enable, letter) {
+function toggleLetter(enable, letter) {
     letter = letter.toLowerCase();
     let letters = $(".letters__item");
     let letterBlock, letterDisabled, letterSuits;
