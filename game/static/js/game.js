@@ -117,7 +117,7 @@ $(document).ready(() => {
 
 /**
  * Разоблокирует последнюю букву в поле ввода.
- * @param {*} removeLastLetter нужно ли удалять последнюю букву слова
+ * @param {boolean} removeLastLetter нужно ли удалять последнюю букву слова
  */
 function backspace(removeLastLetter) {
     if (wordInput.val() == "") {

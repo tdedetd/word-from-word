@@ -109,11 +109,35 @@ def home(request):
 
 
 def lvl_select(request):
+    """
+    Окно с выбором уровня
+    """
     if request.user.is_anonymous():
         from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
-    
-    return render(request, 'lvl_select.html')
+
+    from django.db import connection
+
+    order_types_sql = '''
+        SELECT id, name FROM level_order_types ORDER BY id
+    '''
+    cursor = connection.cursor()
+    cursor.execute(order_types_sql)
+    order_types = dictfetchall(cursor)
+
+    order_dirs_sql = '''
+        SELECT id, name FROM level_order_dirs ORDER BY id
+    '''
+    cursor = connection.cursor()
+    cursor.execute(order_dirs_sql)
+    order_dirs = dictfetchall(cursor)
+
+    context = {
+        'order_types': order_types,
+        'order_dirs': order_dirs,
+    }
+
+    return render(request, 'lvl_select.html', context)
 
 
 def get_levels(request):

@@ -1,26 +1,33 @@
 {% extends 'base.html' %}{% load static %}{% block content %}
+<div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-sample" style="display: none;">
+  <a href="" class="level-link">
+    <div class="level">
+      <div class="level__word"></div>
+      <div class="level__status">
+        <div class="level__bar">
+          <div class="level__bar-solved"></div>
+          <div class="level__bar-unsolved"></div>
+        </div>
+        <div class="level__word-count">
+          <span class="level__words-solved"></span>&nbsp;/&nbsp;<span class="level__words-total"></span>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
 <link rel="stylesheet" href="{% static 'style/grid.css' %}">
 <link rel="stylesheet" href="{% static 'style/lvl_select.css' %}">
 <script type="text/javascript" src="{% static 'js/lvl_select.js' %}"></script>
 <main>
-  
-  <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-sample" style="display: none;">
-    <a href="" class="level-link">
-      <div class="level">
-        <div class="level__word"></div>
-        <div class="level__status">
-          <div class="level__bar">
-            <div class="level__bar-solved"></div>
-            <div class="level__bar-unsolved"></div>
-          </div>
-          <div class="level__word-count">
-            <span class="level__words-solved"></span>&nbsp;/&nbsp;<span class="level__words-total"></span>
-          </div>
-        </div>
-      </div>
-    </a>
+  <div class="level-select-params">
+    <select id="select-order-types" class="level-select-params__item">{% for order_type in order_types %}
+      <option value="{{ order_type.id }}">{{ order_type.name }}</option>{% endfor %}
+    </select>
+    <select id="select-order-dirs" class="level-select-params__item">{% for order_dir in order_dirs %}
+      <option value="{{ order_dir.id }}">{{ order_dir.name }}</option>{% endfor %}
+    </select>
   </div>
-
   <div class="levels-wrapper">
     <div class="row" id="levels"></div>
   </div>
