@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^auth/register/$', views.register, name='register'),
     url(r'^auth/register/checklogin/(?P<login>.+)/$', views.checklogin, name='checklogin'),
     url(r'^get_levels/$', views.get_levels),
-    url(r'^game/$', views.lvl_select, name='game'),
+    url(r'^game/$', views.levels, name='game'),
     url(r'^game/(?P<level_id>\d+)/$', views.game),
     url(r'^game/(?P<level_id>\d+)/submit_word/$', views.submit_word),
     url(r'^profile(?P<user_id>\d+)/$', views.profile, name='profile'),

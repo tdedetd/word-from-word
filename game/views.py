@@ -108,7 +108,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-def lvl_select(request):
+def levels(request):
     """
     Окно с выбором уровня
     """
@@ -137,7 +137,7 @@ def lvl_select(request):
         'order_dirs': order_dirs,
     }
 
-    return render(request, 'lvl_select.html', context)
+    return render(request, 'levels.html', context)
 
 
 def get_levels(request):
