@@ -4,13 +4,22 @@ const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
 let lvlHtml, levels;
 let lvlCount = 0,
-    lvlLimit = 30,
-    typeId = 1,
-    dirId = 1;
+    lvlLimit = 30;
 
 $(document).ready(() => {
     lvlHtml = $("#level-sample").html();
     levels = $("#levels");
+
+    $("#select-order-types").on("change", () => {
+        resetLevels();
+        loadLevels();
+    });
+
+    $("#select-order-dirs").on("change", () => {
+        resetLevels();
+        loadLevels();
+    });
+
     loadLevels();
 });
 
@@ -19,8 +28,8 @@ $(document).ready(() => {
  */
 function loadLevels() {
     $.get("/get_levels/", {
-        "type_id": typeId,
-        "dir_id": dirId,
+        "type_id": $("#select-order-types").val(),
+        "dir_id": $("#select-order-dirs").val(),
         "offset": lvlCount,
         "limit": lvlLimit
     }).done(data => {
@@ -46,14 +55,14 @@ function resetLevels() {
 }
 
 /**
- * Выводит компонент уровня
+ * Выводит уровень
  * @param {number} id id уровня
  * @param {string} word слово
  * @param {number} wordsTotal общее количество слов
  * @param {number} wordsSolved количество отгаданных слов
- * @param {*} lastActivity дата последней активности
+ * @param {string} lastActivity дата последней активности
  */
-function displayLevel(id, word, wordsTotal, wordsSolved = 0, lastActivity=null) {
+function displayLevel(id, word, wordsTotal, wordsSolved = 0, lastActivity="-") {
     let div = document.createElement("div");
     div.className = LVL_CLASS;
     let level = $(div);
@@ -62,6 +71,7 @@ function displayLevel(id, word, wordsTotal, wordsSolved = 0, lastActivity=null) 
     level.find(".level__word").text(word.toUpperCase());
     level.find(".level__words-solved").text(wordsSolved);
     level.find(".level__words-total").text(wordsTotal);
+    level.find(".level__last-activity").text("Активность: " + lastActivity);
 
     const perc = wordsSolved / wordsTotal * 100;
     level.find(".level__bar-solved").css("width", `${perc}%`);

@@ -2,10 +2,20 @@
 <link rel="stylesheet" href="{% static 'style/profile.css' %}">
 <main class="content-center">
   <h2 class="text-center">Информация о профиле</h2>
-  <div class="box profile">{% for param in profile_info_dict %}
-    <div class="profile__param">
-      {{ param.name }}: {{ param.val }}
-    </div>{% endfor %}
+  <div class="box profile">
+    <div class="profile__row profile__first-row">
+      <div class="box-inverse accent-block">{{ profile_info_dict.username }}</div>
+      <div class="box-inverse accent-block">#{{ profile_info_dict.rank }}</div>
+    </div>
+    <div class="profile__row">
+      <div>Зарегистрирован: <b>{{ profile_info_dict.joined_on }}</b></div>
+    </div>
+    <div class="points-info">
+      <div class="points-info__item">Уровень: <b>1</b></div>
+      <div class="points-info__item">Рейтинг: <b>{{ profile_info_dict.rating }}</b></div>
+      <div class="points-info__item">Уровней опробовано: <b>{{ profile_info_dict.levels_played }}</b></div>
+      <div class="points-info__item">Слов отгадано: <b>{{ profile_info_dict.words_solved }}</b></div>
+    </div>
   </div>
 </main>
 {% endblock %}

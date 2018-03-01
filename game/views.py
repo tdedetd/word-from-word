@@ -286,17 +286,17 @@ def profile(request, user_id):
     target_user = User.objects.get(id=user_id)
 
     profile_info_sql = '''
-        SELECT name, val from public.get_profile_info(%s, %s)
+        SELECT name, val from public.get_profile_info(%s)
     '''
 
     from django.db import connection
     cursor = connection.cursor()
-    cursor.execute(profile_info_sql, [request.user.id, user_id])
+    cursor.execute(profile_info_sql, [user_id])
     profile_info = cursor.fetchall()
 
-    profile_info_dict = []
+    profile_info_dict = {}
     for profile_param in profile_info:
-        profile_info_dict.append({'name': profile_param[0], 'val': profile_param[1]})
+        profile_info_dict.update({profile_param[0]: profile_param[1]})
 
     context = {
         'target_user': target_user,
