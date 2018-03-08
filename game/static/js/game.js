@@ -157,8 +157,8 @@ function submitWord() {
         if (response["success"] == 1) {
             wordsSolved++;
             $("#words-solved").text(wordsSolved);
-
             insertSolvedWord(word);
+            displayXpInfo();
         }
     });
 }

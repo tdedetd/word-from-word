@@ -10,8 +10,14 @@
     <div class="profile__row">
       <div>Зарегистрирован: <b>{{ profile_info_dict.joined_on }}</b></div>
     </div>
+    <div class="profile__row">
+      <div>Email: <b>{{ profile_info_dict.email|default:'Не указан' }}</b></div>
+      <!-- <div>
+        <button>Потвердить</button>
+      </div> -->
+    </div>
     <div class="points-info">
-      <div class="points-info__item">Уровень: <b>1</b></div>
+      <div class="points-info__item">Уровень: <b>{{ profile_info_dict.level }}</b></div>
       <div class="points-info__item">Рейтинг: <b>{{ profile_info_dict.rating }}</b></div>
       <div class="points-info__item">Уровней опробовано: <b>{{ profile_info_dict.levels_played }}</b></div>
       <div class="points-info__item">Слов отгадано: <b>{{ profile_info_dict.words_solved }}</b></div>

@@ -108,6 +108,24 @@ def home(request):
     return render(request, 'home.html')
 
 
+def get_xp_info(request):
+    """
+    Возвращает информацию о рейтинге и уровне пользователя
+    """
+    if not request.is_ajax():
+        return template(request, 404)
+
+    if request.user.is_anonymous:
+        return json(request, 401)
+
+    from .xp import get_xp_info
+    from .models import User
+    xp_info = get_xp_info(User.objects.get(id=request.user.id).rating)
+
+    from django.http import JsonResponse
+    return JsonResponse({'xp_info': xp_info})
+
+
 def levels(request):
     """
     Окно с выбором уровня
@@ -282,7 +300,7 @@ def profile(request, user_id):
         from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
-    from django.contrib.auth.models import User
+    from .models import User
     target_user = User.objects.get(id=user_id)
 
     profile_info_sql = '''
@@ -297,6 +315,12 @@ def profile(request, user_id):
     profile_info_dict = {}
     for profile_param in profile_info:
         profile_info_dict.update({profile_param[0]: profile_param[1]})
+
+    from .xp import get_xp_info
+    from .models import User
+    xp_info = get_xp_info(User.objects.get(id=request.user.id).rating)
+
+    profile_info_dict.update(xp_info)
 
     context = {
         'target_user': target_user,

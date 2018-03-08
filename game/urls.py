@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^auth/signup/$', views.signup, name='signup'),
     url(r'^auth/register/$', views.register, name='register'),
     url(r'^auth/register/checklogin/(?P<login>.+)/$', views.checklogin, name='checklogin'),
+    url(r'^get_xp_info/$', views.get_xp_info),
     url(r'^get_levels/$', views.get_levels),
     url(r'^game/$', views.levels, name='game'),
     url(r'^game/(?P<level_id>\d+)/$', views.game),

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'style/fontawesome-all.min.css' %}">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -20,10 +21,10 @@
           <h2 class="header-margin subtitle">Здесь слов хватит на всех!</h2>
         </div>
         <div class="user-panel">{% if not user.is_anonymous %}
-          <div class="title-small-shadow">Уровень 3</div>
-          <div class="xp-bar" title="Ваш текущий игровой опыт">
-            <div class="xp-bar__filled"></div>
-            <div class="xp-bar__bg"></div>
+          <div class="title-small-shadow">Уровень <span id="level">-</span></div>
+          <div class="xp-bar" id="xp-bar">
+            <div class="xp-bar__filled" id="xp-bar__filled"></div>
+            <div class="xp-bar__empty" id="xp-bar__empty"></div>
           </div>
           <h2>
             <span class="title-shadow">{{ user }}</span>&nbsp;
@@ -51,7 +52,10 @@
       <nav></nav>
       {% block content %}{% endblock %}
       <footer>
-        Copyright
+        <div class="footer-wrapper">
+          <div class="footer-wrapper__item">Copyright<sup>©</sup> TDEDETD, 2018</div>
+          <div class="footer-wrapper__item footer-wrapper__item_link" id="feedback-button">Написать нам</div>
+        </div>
       </footer>
     </div>
   </body>
