@@ -112,7 +112,7 @@ def levels(request):
     """
     Окно с выбором уровня
     """
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
@@ -149,7 +149,7 @@ def get_levels(request):
     if not request.is_ajax():
         return template(request, 404)
 
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return json(request, 401)
 
     user_id = request.user.id
@@ -186,7 +186,7 @@ def game(request, level_id):
     """
     Окно игры
     """
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
@@ -247,7 +247,7 @@ def submit_word(request, level_id):
     if not request.is_ajax():
         return template(request, 404)
 
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         return json(request, 401)
 
     word = request.POST.get('word')
@@ -278,7 +278,7 @@ def profile(request, user_id):
     """
     Страница профиля
     """
-    if request.user.is_anonymous():
+    if request.user.is_anonymous:
         from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
