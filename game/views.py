@@ -319,7 +319,7 @@ def profile(request, user_id):
 
     from .xp import get_xp_info
     from .models import User
-    xp_info = get_xp_info(User.objects.get(id=request.user.id).rating)
+    xp_info = get_xp_info(User.objects.get(id=user_id).rating)
 
     profile_info_dict.update(xp_info)
 
@@ -350,7 +350,22 @@ def stats(request):
     cursor.execute(top_rating_sql)
     top_rating = dictfetchall(cursor)
 
-    return render(request, 'stats.html', {'top_rating': top_rating})
+
+    top_words_sql = '''
+        SELECT
+            row_number() OVER (ORDER BY count(*) DESC, u.username) as place,
+            u.username,
+            count(*) as words
+        FROM user_solution us, auth_user u
+        WHERE us.user_id = u.id
+        GROUP BY u.id
+        LIMIT 10
+    '''
+    cursor.execute(top_words_sql)
+    top_words = dictfetchall(cursor)
+
+    return render(request, 'stats.html', {'top_rating': top_rating,
+                                          'top_words': top_words})
 
 
 def get_personal_stats(request):
@@ -378,8 +393,8 @@ def get_personal_stats(request):
         cursor.execute(word_len_distrib_sql, [request.user.id])
         word_len_distrib_res = cursor.fetchall()
         
-        word_len_distrib_vals = []
         word_len_distrib_names = []
+        word_len_distrib_vals = []
         for current in word_len_distrib_res:
             word_len_distrib_names.append(current[0])
             word_len_distrib_vals.append(current[1])
@@ -388,8 +403,41 @@ def get_personal_stats(request):
             'names': word_len_distrib_names,
             'vals': word_len_distrib_vals,
         }
+
+        # first letter
+
+        first_letter_sql = '''
+            SELECT
+                substring(w.word, 1, 1),
+                count(*)
+            FROM
+                user_solution us,
+                level_word lw,
+                words w
+            WHERE
+                us.user_id = %s and
+                us.level_word_id = lw.id and
+                lw.word_id = w.id
+            GROUP BY substring(w.word, 1, 1)
+            ORDER BY 1 ASC
+        '''
+
+        cursor.execute(first_letter_sql, [request.user.id])
+        first_letter_res = cursor.fetchall()
+
+        first_letter_names = []
+        first_letter_vals = []
+        for current in first_letter_res:
+            first_letter_names.append(current[0])
+            first_letter_vals.append(current[1])
+
+        first_letter = {
+            'names': first_letter_names,
+            'vals': first_letter_vals,
+        }
         
-    return JsonResponse({'word_len_distrib': word_len_distrib})
+    return JsonResponse({'word_len_distrib': word_len_distrib,
+                         'first_letter': first_letter})
 
 
 def dictfetchall(cursor):
