@@ -1,0 +1,42 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'style/grid.css' %}">
+<link rel="stylesheet" href="{% static 'style/stats.css' %}">
+<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/stats.js' %}"></script>
+<main>
+  <div class="row">
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+      <div class="section-title">Топ-10 игроков по рейтингу</div>
+      <div class="top-rating-table">
+        <div class="top-rating-table__row top-rating-table__head">
+          <div class="top-rating-table__cell top-rating-table__place">№</div>
+          <div class="top-rating-table__cell top-rating-table__username">Игрок</div>
+          <div class="top-rating-table__cell top-rating-table__rating">Рейтинг</div>
+        </div>{% for player in top_rating %}
+        <div class="top-rating-table__row">
+          <div class="top-rating-table__cell top-rating-table__place">{{ player.place }}</div>
+          <div class="top-rating-table__cell top-rating-table__username">{{ player.username }}</div>
+          <div class="top-rating-table__cell top-rating-table__rating">{{ player.rating }}</div>
+        </div>{% endfor %}
+      </div>
+    </div>{% if not user.is_anonymous %}
+    <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="section-title">Персональная статистика</div>
+      <div class="tab-pane tab-person-stats" id="tab-person-stats">
+        <div class="tab-pane__tabs">
+          <div class="tab-pane__tab">Длина слова</div>
+          <!-- <div class="tab-pane__tab">Первая буква</div> -->
+        </div>
+        <div class="tab-pane__contents">
+          <div class="tab-pane__content">
+            <div class="person-stats-chart" id="chart-word-length"></div>
+          </div>
+          <!-- <div class="tab-pane__content">
+          
+          </div> -->
+        </div>
+      </div>
+    </div>{% endif %}
+  </div>
+</main>
+{% endblock %}

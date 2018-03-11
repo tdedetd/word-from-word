@@ -16,6 +16,7 @@ body {
 
 body {
     background: url(@bg-url) @light-orange fixed;
+    -webkit-background-size: cover;
     font-family: arial;
     font-size: 24px;
     color: @blue;
@@ -170,6 +171,7 @@ menu {
     font-weight: bold;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 nav {
@@ -190,6 +192,7 @@ footer {
     flex-shrink: 0;
     background-color: @blue;
     color: @light-blue;
+    border-top: solid 7px @dark-blue;
 }
 
 .footer-wrapper {
@@ -340,3 +343,33 @@ input.auth-form__item {
     box-shadow: 1px 1px 3px @dark-blue;
     border-radius: 15px;
 }
+
+/* TAB PANE */
+
+.tab-pane__tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.tab-pane__tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    -webkit-transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.tab-pane__tab:hover {
+    background: @orange;
+}
+
+.tab-pane__tab_selected {
+    background: @orange;
+}
+
+.tab-pane__contents {
+    background: @orange;
+    padding: 10px;
+}
+
+/* end TAB PANE */

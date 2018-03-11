@@ -14,7 +14,7 @@
     <div class="wrapper">
       <header>
         <div class="title-shadow">
-          <a href="{% url 'home' %}">
+          <a href="{% url 'home' %}" title="Word From Word">
             <h1 class="header-margin full-title">WordFromWord</h1>
             <h1 class="header-margin short-title">WFW</h1>
           </a>
@@ -48,6 +48,9 @@
         <a href="{% url 'profile' user.id %}">
           <li class="menu-item">Профиль</li>
         </a>{% endif %}
+        <a href="{% url 'stats' %}">
+          <li class="menu-item">Статистика</li>
+        </a>
       </menu>
       <nav></nav>
       {% block content %}{% endblock %}

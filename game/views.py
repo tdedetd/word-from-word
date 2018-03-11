@@ -112,6 +112,7 @@ def get_xp_info(request):
     """
     Возвращает информацию о рейтинге и уровне пользователя
     """
+    from .http import template, json
     if not request.is_ajax():
         return template(request, 404)
 
@@ -137,7 +138,7 @@ def levels(request):
     from django.db import connection
 
     order_types_sql = '''
-        SELECT id, name FROM level_order_types ORDER BY id
+        SELECT id, name FROM level_order_types ORDER BY nio
     '''
     cursor = connection.cursor()
     cursor.execute(order_types_sql)
@@ -328,6 +329,67 @@ def profile(request, user_id):
     }
     
     return render(request, 'profile.html', context)
+
+
+def stats(request):
+    """
+    Экран глобальной статистики по всем игрокам
+    """
+    from django.db import connection
+    cursor = connection.cursor()
+    
+    top_rating_sql = '''
+        SELECT
+            row_number() OVER (ORDER BY rating DESC, username ASC) as place,
+            username,
+            rating::int as rating
+        FROM auth_user
+        LIMIT 10
+    '''
+
+    cursor.execute(top_rating_sql)
+    top_rating = dictfetchall(cursor)
+
+    return render(request, 'stats.html', {'top_rating': top_rating})
+
+
+def get_personal_stats(request):
+    if not request.user.is_anonymous:
+
+        from django.db import connection
+        cursor = connection.cursor()
+
+        word_len_distrib_sql = '''
+            SELECT
+                length(w.word),
+                count(*)
+            FROM
+                user_solution us,
+                level_word lw,
+                words w
+            WHERE
+                us.user_id = %s and
+                us.level_word_id = lw.id and
+                lw.word_id = w.id
+            GROUP BY length(w.word)
+            ORDER BY 1 ASC
+        '''
+
+        cursor.execute(word_len_distrib_sql, [request.user.id])
+        word_len_distrib_res = cursor.fetchall()
+        
+        word_len_distrib_vals = []
+        word_len_distrib_names = []
+        for current in word_len_distrib_res:
+            word_len_distrib_names.append(current[0])
+            word_len_distrib_vals.append(current[1])
+
+        word_len_distrib = {
+            'names': word_len_distrib_names,
+            'vals': word_len_distrib_vals,
+        }
+        
+    return JsonResponse({'word_len_distrib': word_len_distrib})
 
 
 def dictfetchall(cursor):
