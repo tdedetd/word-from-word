@@ -6,7 +6,20 @@ let
     chartFirstLetter;
 
 $(document).ready(() => {
-    tabPersonStats = new TabPane("tab-person-stats");
+    events = {
+        0: () => {
+            if (chartWordLength != undefined) {
+                chartWordLength.resize();
+            }
+        },
+        1: () => {
+            if (chartFirstLetter != undefined) {
+                chartFirstLetter.resize();
+            }
+        }
+    }
+
+    tabPersonStats = new TabPane("tab-person-stats", events);
     loadPersonalStats();
 });
 
@@ -15,6 +28,9 @@ $(document).resize(() => {
     chartFirstLetter.resize();
 });
 
+/**
+ * Загружает данные по персональной статистике и отображает их на графиках
+ */
 function loadPersonalStats() {
     const colorBlue = "#005998",
           colorDarkBlue = "#003357",
@@ -83,9 +99,6 @@ function loadPersonalStats() {
                 }
             ]
         });
-        chartWordLength.resize();
-        
-        tabPersonStats.select(1);
         
         chartFirstLetter = echarts.init(document.getElementById("chart-first-letter"));
         chartFirstLetter.setOption({
@@ -133,7 +146,6 @@ function loadPersonalStats() {
             ],
             color: [colorBlue]
         });
-        chartFirstLetter.resize();
 
         tabPersonStats.select(0);
     });

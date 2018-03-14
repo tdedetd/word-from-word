@@ -23,8 +23,9 @@ class TabPane {
     /**
      * Инициализирует tab pane
      * @param {string} id id таб пейна
+     * @param {*} events события по нажатию на вкладку
      */
-    constructor(id) {
+    constructor(id, events=undefined) {
         this.classTabSelected = "tab-pane__tab_selected";
         this.classTab = "tab-pane__tab";
         this.classContent = "tab-pane__content";
@@ -44,6 +45,10 @@ class TabPane {
         for (let i = 0; i < this.tabs.length; i++) {
             $(this.tabs[i]).on("click", () => {
                 this.select(i);
+
+                if (events != undefined && events[i] != undefined) {
+                    events[i]();
+                }
             });
         }
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    rating = models.FloatField()
+    rating = models.FloatField(default=0)
 
     class Meta:
         db_table = '"public"."auth_user"'
