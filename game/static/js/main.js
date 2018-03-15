@@ -1,7 +1,17 @@
 // "use strict";
 
+let feedbackModal;
+
 $(document).ready(() => {
     displayXpInfo();
+
+    feedbackModal = new Modal({
+        id: "feedback-modal"
+    });
+
+    $("#feedback-button").on("click", () => {
+        feedbackModal.show();
+    });
 });
 
 /**
@@ -36,8 +46,10 @@ class TabPane {
 
         this.hideAll();
 
-        if (this.tabs.length == 0) throw "Отсутствуют табы";
-        if (this.contents.length == 0) throw "Отсутствует содержимое";
+        if (this.tabs.length == 0)
+            throw "Отсутствуют табы";
+        if (this.contents.length == 0)
+            throw "Отсутствует содержимое";
 
         if (this.tabs.length != this.contents.length)
             throw `Количество табов (${this.tabs.length}) не соответствует количеству содержимого (${this.contents.length})`;
@@ -73,5 +85,86 @@ class TabPane {
         
         $(this.tabs[index]).addClass(this.classTabSelected);
         $(this.contents[index]).css({"display": "block"});
+    }
+}
+
+class Modal {
+    /**
+     * Инициализирует модальное окно
+     * @param {*} options настройки модального окна
+     */
+    constructor(options) {
+        if (!options.id)
+            throw "Не указан id модального окна.";
+
+        this.options = {
+            id: options.id,
+            isShown: options.isShown || false
+        }
+
+        const object = $(`#${this.options.id}`);
+        if (object.get(0) == undefined)
+            throw `Объект с id "${this.options.id}" не найден.`;
+
+        this.bg = $(object).find(".modal__bg");
+        this.window = $(object).find(".modal__win");
+
+        // Тут проверка на наличие bg или window
+
+        this.width = this.window.outerWidth();
+        this.height = this.window.outerHeight();
+        this.calcCoords();
+
+        $(window).resize(() => {
+            this.calcCoords();
+        });
+
+        this.bg.on("click", () => {
+            this.hide();
+        });
+
+        if (this.options.isShown)
+            this.show();
+        else
+            this.hide();
+    }
+
+    calcCoords() {
+        this.x = $(window).outerWidth() / 2 - this.width / 2;
+
+        this.hiddenY = -this.height - 100;
+        this.shownY = $(window).outerHeight() / 2 - this.height / 2;
+
+        this.updatePosition();
+    }
+
+    updatePosition() {
+        const y = this.options.isShown ? this.shownY : this.hiddenY;
+
+        this.window.css({
+            top: y,
+            left: this.x
+        });
+    }
+
+    show() {
+        this.options.isShown = true;
+        this.updatePosition();
+        this.bg.css({display: "block"});
+    }
+
+    hide() {
+        this.options.isShown = false;
+        this.updatePosition();
+        this.bg.css({display: "none"});
+    }
+
+    toogle() {
+        this.options.isShown = !this.options.isShown;
+
+        if (this.options.isShown)
+            this.show();
+        else
+            this.hide();
     }
 }

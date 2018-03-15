@@ -2,6 +2,8 @@
 
 @static-url: "/static/";
 
+/* Tags */
+
 * {
     margin: 0;
     padding: 0;
@@ -41,11 +43,26 @@ header {
     font-weight: bold;
 }
 
+textarea {
+    -webkit-appearance: none;
+    color: @blue;
+    background: @orange;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    padding: .3em .5em;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px @dark-blue;
+    resize: none;
+}
+
+/* Other */
+
 input[type="text"],
 input[type="password"] {
     -webkit-appearance: none;
     color: @blue;
-    background-color: @orange;
+    background: @orange;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
@@ -343,7 +360,7 @@ input.auth-form__item {
     border-radius: 15px;
 }
 
-/* TAB PANE */
+/* Tab pane */
 
 .tab-pane__tabs {
     display: flex;
@@ -371,4 +388,26 @@ input.auth-form__item {
     padding: 10px;
 }
 
-/* end TAB PANE */
+/* Modal */
+
+.modal__bg {
+    position: fixed;
+    z-index: 144;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: @dark-blue;
+    opacity: .5;
+}
+
+.modal__win {
+    position: fixed;
+    z-index: 145;
+    background: @light-orange;
+    border-top: solid 5px @dark-blue;
+    border-bottom: solid 5px @dark-blue;
+    padding: 20px 10px;
+    text-align: center;
+    transition: top 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}

@@ -23,7 +23,7 @@ $(document).ready(() => {
     loadPersonalStats();
 });
 
-$(document).resize(() => {
+$(window).resize(() => {
     chartWordLength.resize();
     chartFirstLetter.resize();
 });
@@ -131,7 +131,12 @@ function loadPersonalStats() {
             },
             xAxis: {
                 type: "value",
-                boundaryGap: [0, 0.01]
+                boundaryGap: [0, 0.01],
+                splitLine: {
+                    lineStyle: {
+                        color: colorLightOrange
+                    }
+                }
             },
             yAxis: {
                 type: "category",
