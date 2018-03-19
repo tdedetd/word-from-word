@@ -5,12 +5,11 @@ let feedbackModal;
 $(document).ready(() => {
     displayXpInfo();
 
-    feedbackModal = new Modal({
-        id: "feedback-modal"
-    });
+    feedbackModal = new Modal("feedback-modal");
 
     $("#feedback-button").on("click", () => {
-        feedbackModal.show();
+        if (feedbackModal != undefined)
+            feedbackModal.show();
     });
 });
 
@@ -24,8 +23,8 @@ function displayXpInfo() {
         $("#xp-bar").attr("title", `Очков: ${response["points_current"]} / ${response["points_needed"]}`);
 
         const perc = response["points_current"] / response["points_needed"] * 100;
-        $("#xp-bar__filled").css({"width": `${perc}%`});
-        $("#xp-bar__empty").css({"width": `${100 - perc}%`});
+        $("#xp-bar__filled").css({width: `${perc}%`});
+        $("#xp-bar__empty").css({width: `${100 - perc}%`});
     });
 }
 
@@ -91,20 +90,17 @@ class TabPane {
 class Modal {
     /**
      * Инициализирует модальное окно
-     * @param {*} options настройки модального окна
+     * @param {string} id id DOM'а
+     * @param {boolean} isShown показывать ли окно изначально
      */
-    constructor(options) {
-        if (!options.id)
-            throw "Не указан id модального окна.";
+    constructor(id, isShown=false) {
 
-        this.options = {
-            id: options.id,
-            isShown: options.isShown || false
-        }
+        this.id = id;
+        this.isShown = isShown;
 
-        const object = $(`#${this.options.id}`);
+        const object = $(`#${this.id}`);
         if (object.get(0) == undefined)
-            throw `Объект с id "${this.options.id}" не найден.`;
+            throw `Объект с id "${this.id}" не найден.`;
 
         this.bg = $(object).find(".modal__bg");
         this.window = $(object).find(".modal__win");
@@ -123,10 +119,8 @@ class Modal {
             this.hide();
         });
 
-        if (this.options.isShown)
-            this.show();
-        else
-            this.hide();
+        if (this.isShown) this.show();
+        else this.hide();
     }
 
     calcCoords() {
@@ -139,7 +133,7 @@ class Modal {
     }
 
     updatePosition() {
-        const y = this.options.isShown ? this.shownY : this.hiddenY;
+        const y = this.isShown ? this.shownY : this.hiddenY;
 
         this.window.css({
             top: y,
@@ -148,21 +142,21 @@ class Modal {
     }
 
     show() {
-        this.options.isShown = true;
+        this.isShown = true;
         this.updatePosition();
         this.bg.css({display: "block"});
     }
 
     hide() {
-        this.options.isShown = false;
+        this.isShown = false;
         this.updatePosition();
         this.bg.css({display: "none"});
     }
 
     toogle() {
-        this.options.isShown = !this.options.isShown;
+        this.isShown = !this.isShown;
 
-        if (this.options.isShown)
+        if (this.isShown)
             this.show();
         else
             this.hide();
