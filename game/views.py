@@ -105,6 +105,8 @@ def if_login_exists(login):
 
 
 def home(request):
+    # from .email import send_verification_email
+    # send_verification_email()
     return render(request, 'home.html')
 
 
