@@ -12,19 +12,6 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="modal" id="feedback-modal">
-        <div class="modal__bg"></div>
-        <div class="modal__win">
-          <p>Не хватает какого-то слова или хотите оставить отзыв?</p>
-          <p>Напишите нам!</p>
-          <p>&nbsp;</p>
-          <textarea cols="30" rows="10"></textarea>
-          <p>&nbsp;</p>
-          <div>
-            <button>Отправить</button>
-          </div>
-        </div>
-      </div>
       <header>
         <div class="title-shadow">
           <a href="{% url 'home' %}" title="Word From Word">
@@ -34,7 +21,7 @@
           <h2 class="header-margin subtitle">Здесь слов хватит на всех!</h2>
         </div>
         <div class="user-panel">{% if not user.is_anonymous %}
-          <div class="title-small-shadow">Уровень <span id="level">-</span></div>
+          <div class="title-small-shadow">Уровень <span id="level">0</span></div>
           <div class="xp-bar" id="xp-bar">
             <div class="xp-bar__filled" id="xp-bar__filled"></div>
             <div class="xp-bar__empty" id="xp-bar__empty"></div>
@@ -73,6 +60,19 @@
           <div class="footer-wrapper__item footer-wrapper__item_link" id="feedback-button">Написать нам</div>
         </div>
       </footer>
+      <div class="modal" id="feedback-modal">
+        <div class="modal__bg"></div>
+        <div class="modal__win">
+          <p>Не хватает какого-то слова или хотите оставить отзыв?</p>
+          <p>Напишите нам!</p>
+          <p>&nbsp;</p>
+          <textarea cols="30" rows="10"></textarea>
+          <p>&nbsp;</p>
+          <div>
+            <button>Отправить</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

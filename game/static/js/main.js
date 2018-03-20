@@ -8,8 +8,7 @@ $(document).ready(() => {
     feedbackModal = new Modal("feedback-modal");
 
     $("#feedback-button").on("click", () => {
-        if (feedbackModal != undefined)
-            feedbackModal.show();
+        feedbackModal.show();
     });
 });
 
@@ -153,12 +152,10 @@ class Modal {
         this.bg.css({display: "none"});
     }
 
-    toogle() {
+    toggle() {
         this.isShown = !this.isShown;
 
-        if (this.isShown)
-            this.show();
-        else
-            this.hide();
+        if (this.isShown) this.show();
+        else this.hide();
     }
 }

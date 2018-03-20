@@ -62,7 +62,7 @@ function resetLevels() {
  * @param {number} wordsSolved количество отгаданных слов
  * @param {string} lastActivity дата последней активности
  */
-function displayLevel(id, word, wordsTotal, wordsSolved = 0, lastActivity="-") {
+function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
     let div = document.createElement("div");
     div.className = LVL_CLASS;
     let level = $(div);

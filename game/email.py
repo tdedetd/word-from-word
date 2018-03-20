@@ -1,20 +1,22 @@
 
-def send_verification_email():
+def send_verification_email(request, reciever_email):
     import smtplib
     from django.conf import settings
 
     smtp_server = 'smtp.gmail.com'
     sender = settings.EMAIL_LOGIN
     sender_pwd = settings.EMAIL_PASSWORD
-    receivers = settings.TEST_RECIEVER_EMAIL
+    receivers = reciever_email
 
     subject = 'Test'
-    content = 'This is test email'
+
+    from django.shortcuts import render
+    content = render(request, 'email_verify.html').getvalue().decode('utf-8')
 
     from smtplib import SMTPException
     from email.mime.text import MIMEText
     try:
-        msg = MIMEText(content, 'text/html')
+        msg = MIMEText(content, 'html')
         msg['Subject'] = subject
         msg['From'] = sender
 

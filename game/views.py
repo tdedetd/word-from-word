@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-
+from django.http import JsonResponse
 
 
 def login(request):
@@ -42,7 +41,7 @@ def signup(request):
 
     # validators
     from .http import template
-    fail = template(request, 400, 'При попытке регистрации произошла ошибка. Попробуйте пройти регистрацию повторно.')
+    fail = template(request, 400, 'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
 
     if not (username and password and password_conf):
         return fail
@@ -89,7 +88,7 @@ def checklogin(request, login):
 
 def if_login_exists(login):
     """
-    Проверяет, присутствует ли пользователь с указанным именем в базе
+    Проверяет, присутствует ли пользователь с указанным логином в базе
     """
     login = login.lower()
     check_sql = '''
@@ -106,7 +105,6 @@ def if_login_exists(login):
 
 def home(request):
     # from .email import send_verification_email
-    # send_verification_email()
     return render(request, 'home.html')
 
 
@@ -247,7 +245,7 @@ def game(request, level_id):
     cursor.execute(words_sql, [request.user.id, level_id])
     solved_words = cursor.fetchall()
 
-    from game.models import Levels
+    from .models import Levels
     word_count = Levels.objects.get(id=level_id).word_count
 
     context = {

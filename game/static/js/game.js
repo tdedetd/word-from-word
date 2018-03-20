@@ -143,9 +143,7 @@ function submitWord() {
     wordInput.val("");
     enableAllLetters();
 
-    if (word.trim() == "") {
-        return;
-    }
+    if (word.trim() == "") return;
 
     let csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
 
