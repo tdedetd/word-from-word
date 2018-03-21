@@ -113,6 +113,8 @@ $(document).ready(() => {
             wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
         }
     });
+
+    setInterval(clearLabels, 10000);
 });
 
 /**
@@ -158,6 +160,8 @@ function submitWord() {
             insertSolvedWord(word);
             displayXpInfo();
         }
+
+        spawnLabel(response["reward"]);
     });
 }
 
@@ -220,7 +224,13 @@ function disableLetter(letter) {
  * @param {string} letter буква
  */
 function toggleLetter(enable, letter) {
-    letter = letter.toLowerCase();
+    try {
+        letter = letter.toLowerCase();
+    } catch (e) {
+        if (e instanceof TypeError) return false;
+        else throw e;
+    }
+    
     let letters = $(".letters__item");
     let letterBlock, letterDisabled, letterSuits;
 
@@ -241,4 +251,62 @@ function toggleLetter(enable, letter) {
         }
     }
     return false;
+}
+
+/**
+ * Спавнит всплывающую надпись
+ * @param {*} reward награда за отгаданное слово
+ */
+function spawnLabel(reward) {
+    let div = $(document.createElement("div"));
+    div.addClass("label");
+    
+    if (reward == null) {
+        div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
+        div.addClass("label-fail");
+    } else {
+        div.text(`+${reward}`);
+        div.addClass("label-success");
+    }
+
+    $("#labels").append(div);
+    div.addClass("label-anim");
+
+    const x = $(window).width(),
+          y = $(window).height();
+
+    div.css({
+        top: `${y / 2 * Math.random() + y / 2}px`,
+        left: `${x / 2 * Math.random()}px`
+    });
+
+    setTimeout(animateLabel.bind(null, div), 10);
+}
+
+function animateLabel(div) {
+    div.css({
+        top: "-50px",
+        opacity: 0
+    });
+}
+
+function clearLabels() {
+    const labelsElem = document.getElementById("labels");
+    const labels = $(labelsElem).children();
+    let labelsToRemove = [];
+    
+    for (let i = 0; i < labels.length; i++) {
+        if ($(labels[i]).css("opacity") == 0)
+            labelsToRemove.push(labels[i]);
+    }
+
+    labelsToRemove.forEach(label => {
+        labelsElem.removeChild(label);
+    });
+}
+
+function spawnLabelsTest(count) {
+    for (let i = 0; i < count; i++) {
+        spawnLabel(i);
+    }
 }
