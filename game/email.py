@@ -8,7 +8,7 @@ def send_verification_email(request, reciever_email):
     sender_pwd = settings.EMAIL_PASSWORD
     receivers = reciever_email
 
-    subject = 'Test'
+    subject = 'Word From Word: подтверждение электронной почты'
 
     from django.shortcuts import render
     content = render(request, 'email_verify.html').getvalue().decode('utf-8')
