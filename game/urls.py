@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^profile(?P<user_id>\d+)/$', views.profile, name='profile'),
     url(r'^stats/$', views.stats, name='stats'),
     url(r'^stats/get_personal_stats/$', views.get_personal_stats),
+    url(r'^stats/get_popular_words/$', views.get_popular_words),
     url(r'^$', views.home, name='home'),
 ]

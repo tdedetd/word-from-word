@@ -500,6 +500,44 @@ def get_personal_stats(request):
     return JsonResponse({'word_len_distrib': word_len_distrib,
                          'first_letter': first_letter})
 
+    
+def get_popular_words(request):
+    from .http import template, json
+
+    if not request.is_ajax():
+        return template(request, 404)
+
+    if request.user.is_anonymous:
+        return json(request, 401)
+
+    offset = request.GET.get('offset')
+    limit = request.GET.get('limit')
+
+    words_sql = '''
+        SELECT
+            w.id,
+            w.word,
+            count(*)
+        FROM
+            user_solution us,
+            level_word lw,
+            words w
+        WHERE
+            us.user_id = %s and
+            us.level_word_id = lw.id and
+            lw.word_id = w.id
+        GROUP BY w.id
+        ORDER BY 3 desc
+        OFFSET %s LIMIT %s
+    '''
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(words_sql, [request.user.id, offset, limit])
+    words = dictfetchall(cursor)
+
+    return JsonResponse({'words': words})
+
 
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
