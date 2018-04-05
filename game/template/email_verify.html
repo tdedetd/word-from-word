@@ -34,9 +34,17 @@
         margin: 0;
         font-size: 24px;
         font-weight: bold;
-    ">Здравствуйте, {{ user }}.</p>
+    ">Здравствуйте, {{ user }}!</p>
+    <p style="
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+    ">Данное письмо является формой подтверждения вашей электронной почты.
+        Если вы не имеете отношения к регистрации на WordFromWord, проигнорируйте это сообщение.
+        Для завершения подтверждения перейдите по ссылке ниже.
+    </p>
     <br>
-    <a href="">
+    <a href="http://localhost:8000/auth/?token={{ token }}">
         <button style="
             background-color: #005998;
             color: #f6ba6d;
@@ -45,8 +53,8 @@
             font-size: 24px;
             padding: 6px 13px;
             margin-bottom: 15px;
-        ">
-            Подтвердить адрес<br>электронной почты
+            cursor: pointer;
+        ">Подтвердить адрес<br>электронной почты
         </button>
     </a>
     <br>
@@ -65,5 +73,5 @@
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-    ">Спасибо за использование нашего приложения!</p>
+    ">Благодарим за использование нашего приложения!</p>
 </div>

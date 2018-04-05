@@ -103,8 +103,69 @@ def if_login_exists(login):
     return exists
 
 
+def send_verification_email(request):
+    from .http import json
+    if not request.is_ajax():
+        from .http import template
+        return template(request, 404)
+
+    if request.user.is_anonymous:
+        return json(request, 401)
+
+    expiration_interval = 12 # in hours
+    email = request.POST.get('email').lower()
+
+    from .models import User
+    user = User.objects.get(id=request.user.id)
+    if user.is_verified:
+        return json(request, 400, 'Email has been already verified')
+
+    user_email = User.objects.filter(email=email)
+    if len(user_email) > 0:
+        return json(request, 400, 'The specified email already used')
+
+    from django.utils.crypto import get_random_string
+    token = get_random_string(length=64)
+
+    from .models import EmailToken
+    from datetime import datetime, timedelta
+    email_token = EmailToken(
+        user_id=request.user.id,
+        token=token,
+        expires=datetime.now() + timedelta(hours=expiration_interval),
+        email=email
+    )
+    email_token.save(force_insert=True)
+
+    from .email import send_verification_email
+    send_verification_email(request, email, token)
+
+    return json(request, 200)
+
+
+def verify_email(request):
+    from .http import json
+    if not request.is_ajax():
+        from .http import template
+        return template(request, 404)
+
+    if request.user.is_anonymous:
+        return json(request, 401)
+
+    # проверка на наличие указанного токена в базе
+
+    # проверка на то, что токен еще не истек
+
+    # проверка на то, что указанный ящик не используется
+
+    # подтверждение
+
+    return json(request, 200)
+
+
+# other
+
 def home(request):
-    # from .email import send_verification_email
     return render(request, 'home.html')
 
 

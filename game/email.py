@@ -1,5 +1,5 @@
 
-def send_verification_email(request, reciever_email):
+def send_verification_email(request, reciever_email, token):
     import smtplib
     from django.conf import settings
 
@@ -10,8 +10,10 @@ def send_verification_email(request, reciever_email):
 
     subject = 'Word From Word: подтверждение электронной почты'
 
+    context = {'token': token}
+
     from django.shortcuts import render
-    content = render(request, 'email_verify.html').getvalue().decode('utf-8')
+    content = render(request, 'email_verify.html', context).getvalue().decode('utf-8')
 
     from smtplib import SMTPException
     from email.mime.text import MIMEText

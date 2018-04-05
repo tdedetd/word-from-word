@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     rating = models.FloatField(default=0)
+    is_verified = models.BooleanField(default=False)
 
     class Meta:
         db_table = '"public"."auth_user"'
@@ -17,4 +18,16 @@ class Levels(models.Model):
 
     class Meta:
         db_table = '"public"."levels"'
+        managed = False
+
+
+class EmailToken(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
+    token = models.CharField(max_length=64)
+    expires = models.DateTimeField()
+    email = models.CharField(max_length=254)
+
+    class Meta:
+        db_table = '"public"."email_tokens"'
         managed = False
