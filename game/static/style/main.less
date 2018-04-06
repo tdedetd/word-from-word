@@ -361,6 +361,13 @@ input.auth-form__item {
     color: @orange;
 }
 
+.section-title {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
 /* Tab pane */
 
 .tab-pane__tabs {
@@ -412,4 +419,26 @@ input.auth-form__item {
     padding: 20px 10px;
     text-align: center;
     transition: top 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+/* Table */
+
+.table__row {
+    border-radius: 5px;
+    display: flex;
+}
+
+.table__row:nth-child(2n+3) {
+    background: @orange;
+}
+
+.table__head {
+    color: @light-blue;
+    background: @blue;
+}
+
+.table__cell {
+    padding: 3px 5px;
+    text-align: center;
+    flex-grow: 1;
 }

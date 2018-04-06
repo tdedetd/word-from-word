@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load static %}{% block content %}
-<!-- <link rel="stylesheet" href="{% static 'style/grid.css' %}"> -->
+<link rel="stylesheet" href="{% static 'style/grid.css' %}">
 <link rel="stylesheet" href="{% static 'style/game.css' %}">
 <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
 <div id="level-info" data-id="{{ level_id }}"></div>
@@ -26,6 +26,27 @@
     </div>
     <div class="level-status">
       Слов:&nbsp;<span id="words-solved">{{ solved_words|length }}</span>&nbsp;/&nbsp;{{ word_count }}
+    </div>
+  </div>
+  <div class="container level-info-wrapper">
+    <div class="row">
+      {% if solve_history|length > 0 %}
+      <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <h2 class="section-title">История разгадывания слова</h2>
+        <div class="table table-lvl-history">
+          <div class="table__row table__head">
+            <div class="table__cell table__date">Дата</div>
+            <div class="table__cell table__count">Кол-во слов</div>
+          </div>
+          {% for date in solve_history %}
+          <div class="table__row">
+            <div class="table__cell table__date">{{ date.date }}</div>
+            <div class="table__cell table__count">{{ date.count }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
   <div id="labels"></div>

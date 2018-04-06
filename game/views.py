@@ -309,11 +309,30 @@ def game(request, level_id):
     from .models import Levels
     word_count = Levels.objects.get(id=level_id).word_count
 
+    
+    solve_history_sql = '''
+        SELECT
+            to_char(us.created_on::date, 'dd.mm.yyyy') as "date",
+            count(*)
+        FROM user_solution us, level_word lw
+        WHERE
+            us.user_id = %s and
+            lw.level_id = %s and
+            us.level_word_id = lw.id
+        GROUP BY us.created_on::date
+        HAVING us.created_on::date != current_date
+        ORDER BY us.created_on::date desc
+    '''
+
+    cursor.execute(solve_history_sql, [request.user.id, level_id])
+    solve_history = dictfetchall(cursor)
+
     context = {
         'level_id': level_id,
         'letters': letters,
         'solved_words': solved_words,
         'word_count': word_count,
+        'solve_history': solve_history,
     }
     return render(request, 'game.html', context)
 
@@ -352,6 +371,45 @@ def submit_word(request, level_id):
         submit_result_dict.update({row[0]: row[1]})
 
     return json(request, 200, submit_result_dict)
+
+
+def get_solved_words(request, level_id):
+    """
+    Возвращает список отгаданных слов указанного пользователя за указанную дату
+    """
+    from .http import template, json
+
+    if not request.is_ajax():
+        return template(request, 404)
+
+    if request.user.is_anonymous:
+        return json(request, 401)
+
+    date = request.GET.get('date')
+
+    words_sql = '''
+        SELECT
+            to_char(us.created_on, 'hh24:mi') as "time",
+            w.word
+        FROM
+            user_solution us,
+            level_word lw,
+            words w
+        WHERE
+            us.user_id = %s and
+            lw.level_id = %s and
+            us.created_on::date = %s and
+            us.level_word_id = lw.id and
+            lw.word_id = w.id
+        ORDER BY us.created_on desc
+    '''
+
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(words_sql, [request.user.id, level_id, date])
+    words = cursor.fetchall()
+
+    return JsonResponse({'words': words})
 
 
 def profile(request, user_id):

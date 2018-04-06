@@ -277,7 +277,7 @@ function spawnLabel(reward) {
 
     div.css({
         top: `${y / 2 * Math.random() + y / 2}px`,
-        left: `${x / 2 * Math.random()}px`
+        left: `${x / 4 * 3 * Math.random()}px`
     });
 
     setTimeout(animateLabel.bind(null, div), 10);

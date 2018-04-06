@@ -6,37 +6,37 @@
 <main>
   <div class="row">
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-      <div class="section-title">Топ-10 игроков по рейтингу</div>
-      <div class="stats-table">
-        <div class="stats-table__row stats-table__head">
-          <div class="stats-table__cell stats-table__place">№</div>
-          <div class="stats-table__cell stats-table__username">Игрок</div>
-          <div class="stats-table__cell stats-table__rating">Рейтинг</div>
+      <h2 class="section-title">Топ-10 игроков по рейтингу</h2>
+      <div class="table stats-table">
+        <div class="table__row table__head">
+          <div class="table__cell stats-table__place">№</div>
+          <div class="table__cell stats-table__username">Игрок</div>
+          <div class="table__cell stats-table__rating">Рейтинг</div>
         </div>{% for player in top_rating %}
-        <div class="stats-table__row">
-          <div class="stats-table__cell stats-table__place">{{ player.place }}</div>
-          <div class="stats-table__cell stats-table__username">{{ player.username }}</div>
-          <div class="stats-table__cell stats-table__rating">{{ player.rating }}</div>
+        <div class="table__row">
+          <div class="table__cell stats-table__place">{{ player.place }}</div>
+          <div class="table__cell stats-table__username">{{ player.username }}</div>
+          <div class="table__cell stats-table__rating">{{ player.rating }}</div>
         </div>{% endfor %}
       </div>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-      <div class="section-title">Топ-10 игроков по словам</div>
-      <div class="stats-table">
-        <div class="stats-table__row stats-table__head">
-          <div class="stats-table__cell stats-table__place">№</div>
-          <div class="stats-table__cell stats-table__username">Игрок</div>
-          <div class="stats-table__cell stats-table__rating">Слов отгадано</div>
+      <h2 class="section-title">Топ-10 игроков по словам</h2>
+      <div class="table stats-table">
+        <div class="table__row table__head">
+          <div class="table__cell stats-table__place">№</div>
+          <div class="table__cell stats-table__username">Игрок</div>
+          <div class="table__cell stats-table__rating">Слов отгадано</div>
         </div>{% for player in top_words %}
-        <div class="stats-table__row">
-          <div class="stats-table__cell stats-table__place">{{ player.place }}</div>
-          <div class="stats-table__cell stats-table__username">{{ player.username }}</div>
-          <div class="stats-table__cell stats-table__rating">{{ player.words }}</div>
+        <div class="table__row">
+          <div class="table__cell stats-table__place">{{ player.place }}</div>
+          <div class="table__cell stats-table__username">{{ player.username }}</div>
+          <div class="table__cell stats-table__rating">{{ player.words }}</div>
         </div>{% endfor %}
       </div>
     </div>{% if not user.is_anonymous %}
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-      <div class="section-title">Персональная статистика</div>
+      <h2 class="section-title">Персональная статистика</h2>
       <div class="tab-pane tab-person-stats" id="tab-person-stats">
         <div class="tab-pane__tabs">
           <div class="tab-pane__tab" title="Распределение количества отгаданных слов по длине слова">Длина слова</div>
