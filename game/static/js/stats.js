@@ -21,6 +21,7 @@ $(document).ready(() => {
 
     tabPersonStats = new TabPane("tab-person-stats", events);
     loadPersonalStats();
+    loadPopularWords();
 });
 
 $(window).resize(() => {
@@ -153,5 +154,30 @@ function loadPersonalStats() {
         });
 
         tabPersonStats.select(0);
+    });
+}
+
+function loadPopularWords() {
+    $.get("get_popular_words/").done(data => {
+        let tbody = $("#popular-words");
+        data.words.forEach(word => {
+            let row = $(document.createElement("div"));
+            row.addClass("table__row");
+
+            let cellWord = $(document.createElement("div"));
+            cellWord.addClass("table__cell");
+            cellWord.addClass("table__word");
+            cellWord.text(word["word"]);
+
+            let cellCount = $(document.createElement("div"));
+            cellCount.addClass("table__cell");
+            cellCount.addClass("table__count");
+            cellCount.text(word["count"]);
+
+            row.append(cellWord);
+            row.append(cellCount);
+
+            tbody.append(row);
+        });
     });
 }
