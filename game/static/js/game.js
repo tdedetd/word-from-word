@@ -12,17 +12,18 @@ const CYRILLIC = {
 let
     wordsSolved,    // Кол-во разгаданных слов
     wordInput,      // Jquery-объект поля ввода слова
-    words = [];          // Список разгаданных слов
+    solvedWords,    // Jquery-объект контейнера с отгаданными словами
+    words = [];     // Список разгаданных слов
 
 $(document).ready(() => {
-    let solvedWordsBlock = $("#solved-words");
-    solvedWordsBlock.children().each((curWordNumber, curWordName) => {
-        words.push(curWordName.innerText);
-    });
-
     wordsSolved = +$("#words-solved").text();
     wordInput = $("#word-input");
+    solvedWords = $("#solved-words");
     wordInput.val("");
+
+    solvedWords.children().each((curWordNumber, curWordName) => {
+        words.push(curWordName.innerText);
+    });
 
     $("#submit-word-button").on("click", () => {
         submitWord();
@@ -231,6 +232,10 @@ function spawnLabel(reward) {
     setTimeout(animateLabel.bind(null, div), 10);
 }
 
+/**
+ * Меняет свойства прозрачности и высоты выбранноо блока
+ * @param {*} div jquery-объект элемента
+ */
 function animateLabel(div) {
     div.css({
         top: "-50px",
@@ -238,6 +243,9 @@ function animateLabel(div) {
     });
 }
 
+/**
+ * Очищает всплывающие лейблы с нулевой прозрачностью
+ */
 function clearLabels() {
     const labelsElem = document.getElementById("labels");
     const labels = $(labelsElem).children();
@@ -257,4 +265,27 @@ function spawnLabelsTest(count) {
     for (let i = 0; i < count; i++) {
         spawnLabel(i);
     }
+}
+
+/**
+ * Выводит список отгаданных слов с учетом указанного фильтра
+ * @param {string} mask фильтр
+ */
+function filterWords(mask) {
+    solvedWords.empty();
+    words.forEach(item => {
+        if (item.indexOf(mask) == 0)
+            displayWord(item);
+    });
+}
+
+/**
+ * Добавляет указанное слово в контейнер отгаданных слов
+ * @param {string} word слово
+ */
+function displayWord(word) {
+    let wordElem = $(document.createElement("div"));
+    wordElem.addClass("solved-words__item");
+    wordElem.text(word);
+    solvedWords.append(wordElem);
 }
