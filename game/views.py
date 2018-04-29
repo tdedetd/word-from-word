@@ -113,12 +113,17 @@ def send_verification_email(request):
         return json(request, 401)
 
     expiration_interval = 12 # in hours
-    email = request.POST.get('email').lower()
+    email = request.POST.get('email')
+
+    if not email:
+        return json(request, 400, 'Email is not specified')
+    else:
+        email = email.lower()
 
     from .models import User
     user = User.objects.get(id=request.user.id)
     if user.is_verified:
-        return json(request, 400, 'Email has been already verified')
+        return json(request, 400, 'You have been already verified')
 
     user_email = User.objects.filter(email=email)
     if len(user_email) > 0:
