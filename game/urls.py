@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^auth/register/$', views.register, name='register'),
     url(r'^auth/register/checklogin/(?P<login>.+)/$', views.checklogin, name='checklogin'),
     url(r'^auth/email/send_verify_token/$', views.send_verification_email),
+    url(r'^auth/email/verify_email/$', views.verify_email, name='verify_email'),
     url(r'^get_xp_info/$', views.get_xp_info),
     url(r'^get_levels/$', views.get_levels),
     url(r'^game/$', views.levels, name='game'),

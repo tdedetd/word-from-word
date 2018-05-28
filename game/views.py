@@ -112,7 +112,6 @@ def send_verification_email(request):
     if request.user.is_anonymous:
         return json(request, 401)
 
-    expiration_interval = 12 # in hours
     email = request.POST.get('email')
 
     if not email:
@@ -133,11 +132,9 @@ def send_verification_email(request):
     token = get_random_string(length=64)
 
     from .models import EmailToken
-    from datetime import datetime, timedelta
     email_token = EmailToken(
         user_id=request.user.id,
         token=token,
-        expires=datetime.now() + timedelta(hours=expiration_interval),
         email=email
     )
     email_token.save(force_insert=True)
@@ -157,13 +154,37 @@ def verify_email(request):
     if request.user.is_anonymous:
         return json(request, 401)
 
+    token = request.GET.get('token')
+    if not token:
+        return json(request, 400, 'Token is not specified')
+
     # проверка на наличие указанного токена в базе
+    from .models import EmailToken
+    from django.core.exceptions import ObjectDoesNotExist
+    
+    try:
+        token_record = EmailToken.objects.get(token=token)
+    except ObjectDoesNotExist:
+        return json(request, 400, 'Invalid token')
 
     # проверка на то, что токен еще не истек
+    from datetime import datetime
+    if datetime.now() > token_record.expires:
+        return json(request, 400, 'Token expired')
 
     # проверка на то, что указанный ящик не используется
+    from .models import User
+    user_email = User.objects.filter(email=token_record.email)
+    if len(user_email) > 0:
+        return json(request, 400, 'The specified email already used')
 
     # подтверждение
+    user = User.objects.get(id=token_record.user_id)
+    user.email = token_record.email
+    user.is_verified = True
+    user.save(force_update=True)
+
+    token_record.delete()
 
     return json(request, 200)
 

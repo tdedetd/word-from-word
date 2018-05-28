@@ -44,7 +44,7 @@
         Для завершения подтверждения перейдите по ссылке ниже.
     </p>
     <br>
-    <a href="http://localhost:8000/auth/?token={{ token }}">
+    <a href="{{ host }}{% url 'verify_email' %}?token={{ token }}">
         <button style="
             background-color: #005998;
             color: #f6ba6d;

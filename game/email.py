@@ -1,5 +1,8 @@
 
 def send_verification_email(request, reciever_email, token):
+    """
+    Отправлет письмо с потверждением на указанный адрес
+    """
     import smtplib
     from django.conf import settings
 
@@ -10,7 +13,10 @@ def send_verification_email(request, reciever_email, token):
 
     subject = 'Word From Word: подтверждение электронной почты'
 
-    context = {'token': token}
+    context = {
+        'token': token,
+        'host': settings.HOST,
+    }
 
     from django.shortcuts import render
     content = render(request, 'email_verify.html', context).getvalue().decode('utf-8')

@@ -111,6 +111,14 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+
+# Other settings
+
+EMAIL_VERIFY_EXPIRATION_INTERVAL = 12 # in hours
+
+HOST = 'http://localhost:8000' # temp
+
+
 # Importing local and secret settings
 try:
     from .settings_secret import *
