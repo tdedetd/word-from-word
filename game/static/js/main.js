@@ -5,10 +5,13 @@ let feedbackModal;
 $(document).ready(() => {
     displayXpInfo();
 
-    feedbackModal = new Modal("feedback-modal");
-
-    $("#feedback-button").on("click", () => {
-        feedbackModal.show();
+    let modalObj, modalJquery;
+    $(".modal").each((index, item) => {
+        modalJquery = $(item);
+        modalObj = new Modal(modalJquery);
+        $("#" + modalJquery.attr("modal-for")).on("click", () => {
+            modalObj.show();
+        });
     });
 });
 
@@ -89,22 +92,21 @@ class TabPane {
 class Modal {
     /**
      * Инициализирует модальное окно
-     * @param {string} id id DOM'а
+     * @param {*} object jquery-объект на котором нужно создать диалоговое окно
      * @param {boolean} isShown показывать ли окно изначально
      */
-    constructor(id, isShown=false) {
+    constructor(object, isShown=false) {
 
-        this.id = id;
         this.isShown = isShown;
 
-        const object = $(`#${this.id}`);
-        if (object.get(0) == undefined)
-            throw `Объект с id "${this.id}" не найден.`;
+        this.window = $(object).find("div:first-child");
+        this.window.addClass("modal__win");
+        
+        this.bg = $(document.createElement("div"));
+        this.bg.addClass("modal__bg");
+        $(object).append(this.bg);
 
-        this.bg = $(object).find(".modal__bg");
-        this.window = $(object).find(".modal__win");
-
-        // Тут проверка на наличие bg или window
+        // Тут проверка на наличие window
 
         this.width = this.window.outerWidth();
         this.height = this.window.outerHeight();
