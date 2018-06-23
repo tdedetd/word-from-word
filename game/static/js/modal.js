@@ -17,8 +17,6 @@ class Modal {
      * @param {boolean} isShown показывать ли окно изначально
      */
     constructor(object, isShown=false) {
-        let self = this;
-
         this.isShown = isShown;
 
         this.window = $(object).find("div:first-child");
@@ -27,8 +25,6 @@ class Modal {
         this.bg = $(document.createElement("div"));
         this.bg.addClass("modal__bg");
         $(object).append(this.bg);
-
-        // Тут проверка на наличие window
 
         this.width = this.window.outerWidth();
         this.height = this.window.outerHeight();
