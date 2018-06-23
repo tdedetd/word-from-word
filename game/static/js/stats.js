@@ -33,9 +33,10 @@ $(window).resize(() => {
  * Загружает данные по персональной статистике и отображает их на графиках
  */
 function loadPersonalStats() {
-    const colorBlue = "#005998",
-          colorDarkBlue = "#003357",
-          colorLightOrange = "#f6ba6d";
+    const
+        colorBlue = "#005998",
+        colorDarkBlue = "#003357",
+        colorLightOrange = "#f6ba6d";
 
     $.get("get_personal_stats/").done(data => {
 
@@ -100,7 +101,7 @@ function loadPersonalStats() {
                 }
             ]
         });
-        
+
         chartFirstLetter = echarts.init(document.getElementById("chart-first-letter"));
         chartFirstLetter.setOption({
             title: {

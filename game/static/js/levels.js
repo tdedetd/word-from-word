@@ -2,8 +2,10 @@
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
-let lvlHtml, levels;
-let lvlCount = 0,
+let
+    lvlHtml,
+    levels,
+    lvlCount = 0,
     lvlLimit = 30;
 
 $(document).ready(() => {
@@ -67,7 +69,7 @@ function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
     div.className = LVL_CLASS;
     let level = $(div);
     level.html(lvlHtml);
-    
+
     level.find(".level__word").text(word.toUpperCase());
     level.find(".level__words-solved").text(wordsSolved);
     level.find(".level__words-total").text(wordsTotal);

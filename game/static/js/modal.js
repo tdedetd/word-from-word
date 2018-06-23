@@ -13,10 +13,11 @@ $(document).ready(() => {
 class Modal {
     /**
      * Инициализирует модальное окно
-     * @param {*} object jquery-объект на котором нужно создать диалоговое окно
+     * @param {Object} object jquery-объект на котором нужно создать диалоговое окно
      * @param {boolean} isShown показывать ли окно изначально
      */
     constructor(object, isShown=false) {
+        let self = this;
 
         this.isShown = isShown;
 

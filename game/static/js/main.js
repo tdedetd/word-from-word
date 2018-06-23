@@ -25,7 +25,7 @@ class TabPane {
     /**
      * Инициализирует tab pane
      * @param {string} id id таб пейна
-     * @param {*} events события по нажатию на вкладку
+     * @param {Object} events события по нажатию на вкладку
      */
     constructor(id, events=undefined) {
         this.classTabSelected = "tab-pane__tab_selected";

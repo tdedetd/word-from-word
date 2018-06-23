@@ -110,7 +110,7 @@ function submitWord() {
             displayXpInfo();
         }
 
-        spawnLabel(response["reward"]);
+        spawnRewardLabel(response["reward"]);
     });
 }
 
@@ -151,6 +151,7 @@ function enableAllLetters() {
  * В последствии этого он станет кликабельным.
  * Возаращает признак успешности.
  * @param {string} letter буква
+ * @returns {boolean} признак успешности активации буквы
  */
 function enableLetter(letter) {
     return toggleLetter(true, letter);
@@ -161,6 +162,7 @@ function enableLetter(letter) {
  * В последствии этого он станет некликабельным.
  * Возаращает признак успешности.
  * @param {string} letter буква
+ * @returns {boolean} признак успешности деактивации буквы
  */
 function disableLetter(letter) {
     return toggleLetter(false, letter);
@@ -171,6 +173,7 @@ function disableLetter(letter) {
  * Возаращает признак успешности.
  * @param {boolean} enable true - активировать, false - деактивировать
  * @param {string} letter буква
+ * @returns {boolean} признак успешности смены состояния буквы
  */
 function toggleLetter(enable, letter) {
     try {
@@ -206,7 +209,7 @@ function toggleLetter(enable, letter) {
  * Спавнит всплывающую надпись
  * @param {*} reward награда за отгаданное слово
  */
-function spawnLabel(reward) {
+function spawnRewardLabel(reward) {
     let div = $(document.createElement("div"));
     div.addClass("label");
     
@@ -263,7 +266,7 @@ function clearLabels() {
 
 function spawnLabelsTest(count) {
     for (let i = 0; i < count; i++) {
-        spawnLabel(i);
+        spawnRewardLabel(i);
     }
 }
 
