@@ -1,0 +1,3 @@
+*.pyc
+word_from_word/settings_secret.py
+word_from_word/settings_local.py
