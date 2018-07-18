@@ -6,18 +6,18 @@ def login(request):
     """
     Авторизует пользователя
     """
+    from django.contrib.auth import authenticate, login
+    from django.shortcuts import redirect, reverse
+
     username = request.POST.get('username')
     password = request.POST.get('password')
 
-    from django.contrib.auth import authenticate
     user = authenticate(request, username=username, password=password)
     if user is None:
         pass
     else:
-        from django.contrib.auth import login
         login(request, user)
 
-    from django.shortcuts import redirect, reverse
     return redirect(reverse('home'))
 
 
@@ -26,21 +26,25 @@ def logout(request):
     Деавторизует пользователя
     """
     from django.contrib.auth import logout
-    logout(request)
     from django.shortcuts import redirect, reverse
+
+    logout(request)
     return redirect(reverse('home'))
-    
+
 
 def signup(request):
     """
     Регистрирует пользователя, предварительно проводя валидацию логина и пароля
     """
+    import re
+    from .http import template
+    from .models import User
+
     username = request.POST.get('username')
     password = request.POST.get('password')
     password_conf = request.POST.get('password-conf')
 
     # validators
-    from .http import template
     fail = template(request, 400, 'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
 
     if not (username and password and password_conf):
@@ -49,7 +53,6 @@ def signup(request):
     if len(username) > 40:
         return fail
 
-    import re
     if re.match(r'^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$', username) is None:
         return fail
 
@@ -66,7 +69,6 @@ def signup(request):
         return fail
 
     # success
-    from .models import User
     User.objects.create_user(username=username, password=password)
     return login(request)
 
@@ -90,13 +92,14 @@ def if_login_exists(login):
     """
     Проверяет, присутствует ли пользователь с указанным логином в базе
     """
+    from django.db import connection
+
     login = login.lower()
     check_sql = '''
         SELECT EXISTS (
             SELECT FROM auth_user WHERE lower(username) = %s
         )
     '''
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(check_sql, [login])
     exists = cursor.fetchone()[0]
@@ -104,9 +107,13 @@ def if_login_exists(login):
 
 
 def send_verification_email(request):
-    from .http import json
+    from django.utils.crypto import get_random_string
+    from .http import json, template
+    from .models import User
+    from .models import EmailToken
+    from .email import send_verification_email
+
     if not request.is_ajax():
-        from .http import template
         return template(request, 404)
 
     if request.user.is_anonymous:
@@ -119,7 +126,6 @@ def send_verification_email(request):
     else:
         email = email.lower()
 
-    from .models import User
     user = User.objects.get(id=request.user.id)
     if user.is_verified:
         return json(request, 400, 'You have been already verified')
@@ -128,10 +134,8 @@ def send_verification_email(request):
     if len(user_email) > 0:
         return json(request, 400, 'The specified email already used')
 
-    from django.utils.crypto import get_random_string
     token = get_random_string(length=64)
 
-    from .models import EmailToken
     email_token = EmailToken(
         user_id=request.user.id,
         token=token,
@@ -139,16 +143,18 @@ def send_verification_email(request):
     )
     email_token.save(force_insert=True)
 
-    from .email import send_verification_email
     send_verification_email(request, email, token)
 
     return json(request, 200)
 
 
 def verify_email(request):
-    from .http import json
+    from datetime import datetime
+    from django.core.exceptions import ObjectDoesNotExist
+    from .http import json, template
+    from .models import EmailToken, User
+
     if not request.is_ajax():
-        from .http import template
         return template(request, 404)
 
     if request.user.is_anonymous:
@@ -159,21 +165,17 @@ def verify_email(request):
         return json(request, 400, 'Token is not specified')
 
     # проверка на наличие указанного токена в базе
-    from .models import EmailToken
-    from django.core.exceptions import ObjectDoesNotExist
-    
+
     try:
         token_record = EmailToken.objects.get(token=token)
     except ObjectDoesNotExist:
         return json(request, 400, 'Invalid token')
 
     # проверка на то, что токен еще не истек
-    from datetime import datetime
     if datetime.now() > token_record.expires:
         return json(request, 400, 'Token expired')
 
     # проверка на то, что указанный ящик не используется
-    from .models import User
     user_email = User.objects.filter(email=token_record.email)
     if len(user_email) > 0:
         return json(request, 400, 'The specified email already used')
@@ -199,18 +201,19 @@ def get_xp_info(request):
     """
     Возвращает информацию о рейтинге и уровне пользователя
     """
+    from django.http import JsonResponse
     from .http import template, json
+    from .xp import get_xp_info
+    from .models import User
+
     if not request.is_ajax():
         return template(request, 404)
 
     if request.user.is_anonymous:
         return json(request, 401)
 
-    from .xp import get_xp_info
-    from .models import User
     xp_info = get_xp_info(User.objects.get(id=request.user.id).rating)
 
-    from django.http import JsonResponse
     return JsonResponse({'xp_info': xp_info})
 
 
@@ -218,11 +221,11 @@ def levels(request):
     """
     Окно с выбором уровня
     """
-    if request.user.is_anonymous:
-        from django.shortcuts import redirect, reverse
-        return redirect(reverse('register'))
-
+    from django.shortcuts import redirect, reverse
     from django.db import connection
+
+    if request.user.is_anonymous:
+        return redirect(reverse('register'))
 
     order_types_sql = '''
         SELECT id, name FROM level_order_types ORDER BY nio
@@ -250,6 +253,8 @@ def get_levels(request):
     """
     Возвращает список уровней
     """
+    from django.db import connection
+    from django.http import JsonResponse
     from .http import template, json
 
     if not request.is_ajax():
@@ -279,12 +284,10 @@ def get_levels(request):
         FROM get_levels(%s, %s, %s, %s, %s)
     '''
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(levels_sql, params)
     levels = dictfetchall(cursor)
 
-    from django.http import JsonResponse
     return JsonResponse({'levels': levels})
 
 
@@ -292,8 +295,12 @@ def game(request, level_id):
     """
     Окно игры
     """
+    from django.db import connection
+    from django.shortcuts import redirect, reverse
+    from .http import template
+    from .models import Levels
+
     if request.user.is_anonymous:
-        from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
     word_sql = '''
@@ -302,13 +309,11 @@ def game(request, level_id):
         WHERE levels.id = %s and levels.word_id = words.id
     '''
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(word_sql, [level_id])
     word_result = cursor.fetchone()
 
     if word_result is None:
-        from .http import template
         return template(request, 404, 'Указанного уровня не существует')
     else:
         word = word_result[0]
@@ -332,10 +337,9 @@ def game(request, level_id):
     cursor.execute(words_sql, [request.user.id, level_id])
     solved_words = cursor.fetchall()
 
-    from .models import Levels
     word_count = Levels.objects.get(id=level_id).word_count
 
-    
+
     solve_history_sql = '''
         SELECT
             to_char(us.created_on::date, 'dd.mm.yyyy') as "date",
@@ -367,6 +371,7 @@ def submit_word(request, level_id):
     """
     Отправляет слово на проверку. Возвращает результат с признаком успешности и текущим уровнем пользователя.
     """
+    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
@@ -386,7 +391,6 @@ def submit_word(request, level_id):
 
     params = [request.user.id, int(level_id), word]
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(submit_word_sql, params)
     submit_result = cursor.fetchall()
@@ -403,6 +407,7 @@ def get_solved_words(request, level_id):
     """
     Возвращает список отгаданных слов указанного пользователя за указанную дату
     """
+    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
@@ -430,7 +435,6 @@ def get_solved_words(request, level_id):
         ORDER BY us.created_on desc
     '''
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(words_sql, [request.user.id, level_id, date])
     words = cursor.fetchall()
@@ -442,18 +446,20 @@ def profile(request, user_id):
     """
     Страница профиля
     """
+    from django.shortcuts import redirect, reverse
+    from django.db import connection
+    from .models import User
+    from .xp import get_xp_info
+
     if request.user.is_anonymous:
-        from django.shortcuts import redirect, reverse
         return redirect(reverse('register'))
 
-    from .models import User
     target_user = User.objects.get(id=user_id)
 
     profile_info_sql = '''
         SELECT name, val from public.get_profile_info(%s)
     '''
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(profile_info_sql, [user_id])
     profile_info = cursor.fetchall()
@@ -462,8 +468,6 @@ def profile(request, user_id):
     for profile_param in profile_info:
         profile_info_dict.update({profile_param[0]: profile_param[1]})
 
-    from .xp import get_xp_info
-    from .models import User
     xp_info = get_xp_info(User.objects.get(id=user_id).rating)
 
     profile_info_dict.update(xp_info)
@@ -472,7 +476,7 @@ def profile(request, user_id):
         'target_user': target_user,
         'profile_info_dict': profile_info_dict,
     }
-    
+
     return render(request, 'profile.html', context)
 
 
@@ -481,6 +485,7 @@ def stats(request):
     Экран глобальной статистики по всем игрокам
     """
     from django.db import connection
+
     cursor = connection.cursor()
     
     top_rating_sql = '''
@@ -514,9 +519,9 @@ def stats(request):
 
 
 def get_personal_stats(request):
-    if not request.user.is_anonymous:
+    from django.db import connection
 
-        from django.db import connection
+    if not request.user.is_anonymous:
         cursor = connection.cursor()
 
         word_len_distrib_sql = '''
@@ -537,7 +542,7 @@ def get_personal_stats(request):
 
         cursor.execute(word_len_distrib_sql, [request.user.id])
         word_len_distrib_res = cursor.fetchall()
-        
+
         word_len_distrib_names = []
         word_len_distrib_vals = []
         for current in word_len_distrib_res:
@@ -580,12 +585,13 @@ def get_personal_stats(request):
             'names': first_letter_names,
             'vals': first_letter_vals,
         }
-        
+
     return JsonResponse({'word_len_distrib': word_len_distrib,
                          'first_letter': first_letter})
 
-    
+
 def get_popular_words(request):
+    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
@@ -615,7 +621,6 @@ def get_popular_words(request):
         OFFSET %s LIMIT %s
     '''
 
-    from django.db import connection
     cursor = connection.cursor()
     cursor.execute(words_sql, [request.user.id, offset, limit])
     words = dictfetchall(cursor)
