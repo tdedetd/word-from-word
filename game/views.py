@@ -297,7 +297,7 @@ def game(request, level_id):
     from django.db import connection
     from django.shortcuts import redirect, reverse
     from .http import template
-    from .models import Levels
+    from .models import Level
 
     if request.user.is_anonymous:
         return redirect(reverse('register'))
@@ -336,7 +336,7 @@ def game(request, level_id):
     cursor.execute(words_sql, [request.user.id, level_id])
     solved_words = cursor.fetchall()
 
-    word_count = Levels.objects.get(id=level_id).word_count
+    word_count = Level.objects.get(id=level_id).word_count
 
     solve_history_sql = '''
         SELECT

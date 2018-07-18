@@ -11,7 +11,7 @@ class User(AbstractUser):
         managed = False
 
 
-class Levels(models.Model):
+class Level(models.Model):
     id = models.AutoField(primary_key=True)
     word_id = models.IntegerField()
     word_count = models.IntegerField()
