@@ -165,7 +165,6 @@ def verify_email(request):
         return json(request, 400, 'Token is not specified')
 
     # проверка на наличие указанного токена в базе
-
     try:
         token_record = EmailToken.objects.get(token=token)
     except ObjectDoesNotExist:
@@ -339,7 +338,6 @@ def game(request, level_id):
 
     word_count = Levels.objects.get(id=level_id).word_count
 
-
     solve_history_sql = '''
         SELECT
             to_char(us.created_on::date, 'dd.mm.yyyy') as "date",
@@ -499,7 +497,6 @@ def stats(request):
 
     cursor.execute(top_rating_sql)
     top_rating = dictfetchall(cursor)
-
 
     top_words_sql = '''
         SELECT
