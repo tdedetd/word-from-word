@@ -34,3 +34,22 @@ class EmailToken(models.Model):
     class Meta:
         db_table = '"public"."email_tokens"'
         managed = False
+
+
+class LevelOrderType(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+    nio = models.IntegerField()
+
+    class Meta:
+        db_table = '"public"."level_order_types"'
+        managed = False
+
+
+class LevelOrderDir(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+
+    class Meta:
+        db_table = '"public"."level_order_dirs"'
+        managed = False
