@@ -39,7 +39,11 @@
             <input class="auth-form__item input-light" type="password" name="password" placeholder="Пароль">
             <input class="auth-form__item input-light" type="submit" value="Войти">
           </form>
-          <a href="{% url 'register' %}" class="title-shadow">Зарегистрироваться</a>{% endif %}
+          {% comment %}
+          <!-- TEMPORARY COMMENTED REGISTRATION -->
+          <a href="{% url 'register' %}" class="title-shadow">Зарегистрироваться</a>
+          {% endcomment %}
+          {% endif %}
         </div>
       </header>
       <menu type="list">
