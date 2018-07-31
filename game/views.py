@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db import connection
 
 
 def login(request):
@@ -92,7 +93,6 @@ def if_login_exists(login):
     """
     Проверяет, присутствует ли пользователь с указанным логином в базе
     """
-    from django.db import connection
 
     login = login.lower()
     check_sql = '''
@@ -221,11 +221,11 @@ def levels(request):
     Окно с выбором уровня
     """
     from django.shortcuts import redirect, reverse
-    from django.db import connection
 
     if request.user.is_anonymous:
         return redirect(reverse('register'))
 
+    # from models
     order_types_sql = '''
         SELECT id, name FROM level_order_types ORDER BY nio
     '''
@@ -233,6 +233,7 @@ def levels(request):
     cursor.execute(order_types_sql)
     order_types = dictfetchall(cursor)
 
+    # from models
     order_dirs_sql = '''
         SELECT id, name FROM level_order_dirs ORDER BY id
     '''
@@ -252,7 +253,6 @@ def get_levels(request):
     """
     Возвращает список уровней
     """
-    from django.db import connection
     from django.http import JsonResponse
     from .http import template, json
 
@@ -294,7 +294,6 @@ def game(request, level_id):
     """
     Окно игры
     """
-    from django.db import connection
     from django.shortcuts import redirect, reverse
     from .http import template
     from .models import Level
@@ -369,7 +368,6 @@ def submit_word(request, level_id):
     """
     Отправляет слово на проверку. Возвращает результат с признаком успешности и текущим уровнем пользователя.
     """
-    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
@@ -405,7 +403,6 @@ def get_solved_words(request, level_id):
     """
     Возвращает список отгаданных слов указанного пользователя за указанную дату
     """
-    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
@@ -445,7 +442,6 @@ def profile(request, user_id):
     Страница профиля
     """
     from django.shortcuts import redirect, reverse
-    from django.db import connection
     from .models import User
     from .xp import get_xp_info
 
@@ -482,7 +478,6 @@ def stats(request):
     """
     Экран глобальной статистики по всем игрокам
     """
-    from django.db import connection
 
     cursor = connection.cursor()
     
@@ -516,10 +511,11 @@ def stats(request):
 
 
 def get_personal_stats(request):
-    from django.db import connection
 
     if not request.user.is_anonymous:
         cursor = connection.cursor()
+
+        # word length
 
         word_len_distrib_sql = '''
             SELECT
@@ -584,11 +580,10 @@ def get_personal_stats(request):
         }
 
     return JsonResponse({'word_len_distrib': word_len_distrib,
-                         'first_letter': first_letter})
+                            'first_letter': first_letter})
 
 
 def get_popular_words(request):
-    from django.db import connection
     from .http import template, json
 
     if not request.is_ajax():
