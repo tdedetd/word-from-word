@@ -200,7 +200,6 @@ def get_xp_info(request):
     """
     Возвращает информацию о рейтинге и уровне пользователя
     """
-    from django.http import JsonResponse
     from .http import template, json
     from .xp import get_xp_info
     from .models import User
@@ -241,10 +240,7 @@ def levels(request):
     cursor.execute(order_dirs_sql)
     order_dirs = dictfetchall(cursor)
 
-    context = {
-        'order_types': order_types,
-        'order_dirs': order_dirs,
-    }
+    context = {'order_types': order_types, 'order_dirs': order_dirs}
 
     return render(request, 'levels.html', context)
 
@@ -253,7 +249,6 @@ def get_levels(request):
     """
     Возвращает список уровней
     """
-    from django.http import JsonResponse
     from .http import template, json
 
     if not request.is_ajax():
@@ -366,7 +361,8 @@ def game(request, level_id):
 
 def submit_word(request, level_id):
     """
-    Отправляет слово на проверку. Возвращает результат с признаком успешности и текущим уровнем пользователя.
+    Отправляет слово на проверку.
+    Возвращает результат с признаком успешности и текущим уровнем пользователя.
     """
     from .http import template, json
 
@@ -466,10 +462,8 @@ def profile(request, user_id):
 
     profile_info_dict.update(xp_info)
 
-    context = {
-        'target_user': target_user,
-        'profile_info_dict': profile_info_dict,
-    }
+    context = {'target_user': target_user,
+                'profile_info_dict': profile_info_dict}
 
     return render(request, 'profile.html', context)
 
@@ -542,10 +536,8 @@ def get_personal_stats(request):
             word_len_distrib_names.append(current[0])
             word_len_distrib_vals.append(current[1])
 
-        word_len_distrib = {
-            'names': word_len_distrib_names,
-            'vals': word_len_distrib_vals,
-        }
+        word_len_distrib = {'names': word_len_distrib_names,
+                            'vals': word_len_distrib_vals}
 
         # first letter
 
