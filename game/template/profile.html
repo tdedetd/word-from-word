@@ -10,18 +10,20 @@
     <div class="profile__row">
       <div>Зарегистрирован:&nbsp;<b>{{ profile_info_dict.joined_on }}</b></div>
     </div>
+    {% comment %} 
     <div class="profile__row">
       <div>Email:&nbsp;<b>{{ profile_info_dict.email|default:'Не указан' }}</b></div>
       <!-- <div>
         <button>Потвердить</button>
       </div> -->
     </div>
+    {% endcomment %}
     <div class="points-info">
       <div class="points-info__item">Уровень:&nbsp;<b>{{ profile_info_dict.level }}</b></div>
       <div class="points-info__item">Рейтинг:&nbsp;<b>{{ profile_info_dict.rating }}</b></div>
-      <div class="points-info__item">Уровней опробовано:&nbsp;<b>{{ profile_info_dict.levels_played }}</b></div>
+      <div class="points-info__item">Уровней затронуто:&nbsp;<b>{{ profile_info_dict.levels_played }}</b></div>
       <div class="points-info__item">Слов отгадано:&nbsp;<b>{{ profile_info_dict.words_solved }}</b></div>
-      <div class="points-info__item">Рейтинг решаемости уровней:&nbsp;<b>{{ profile_info_dict.solve_rate }}%</b></div>
+      <div class="points-info__item" title="Средний процент отгаданных слов на всех уровнях за исключением нетронутых уровней">Рейтинг решаемости уровней:&nbsp;<b>{{ profile_info_dict.solve_rate }}%</b></div>
     </div>
   </div>
 </main>

@@ -478,6 +478,7 @@ def stats(request):
     top_rating_sql = '''
         SELECT
             row_number() OVER (ORDER BY rating DESC, username ASC) as place,
+            id,
             username,
             rating::int as rating
         FROM auth_user
@@ -490,6 +491,7 @@ def stats(request):
     top_words_sql = '''
         SELECT
             row_number() OVER (ORDER BY count(*) DESC, u.username) as place,
+            u.id,
             u.username,
             count(*) as words
         FROM user_solution us, auth_user u

@@ -13,11 +13,11 @@
           <div class="table__cell stats-table__username">Игрок</div>
           <div class="table__cell stats-table__rating">Рейтинг</div>
         </div>{% for player in top_rating %}
-        <div class="table__row">
+        <a href="{% url 'profile' player.id %}" class="table__row">
           <div class="table__cell stats-table__place">{{ player.place }}</div>
           <div class="table__cell stats-table__username">{{ player.username }}</div>
           <div class="table__cell stats-table__rating">{{ player.rating }}</div>
-        </div>{% endfor %}
+        </a>{% endfor %}
       </div>
     </div>
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -28,11 +28,11 @@
           <div class="table__cell stats-table__username">Игрок</div>
           <div class="table__cell stats-table__rating">Слов отгадано</div>
         </div>{% for player in top_words %}
-        <div class="table__row">
+        <a href="{% url 'profile' player.id %}" class="table__row">
           <div class="table__cell stats-table__place">{{ player.place }}</div>
           <div class="table__cell stats-table__username">{{ player.username }}</div>
           <div class="table__cell stats-table__rating">{{ player.words }}</div>
-        </div>{% endfor %}
+        </a>{% endfor %}
       </div>
     </div>{% if not user.is_anonymous %}
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
