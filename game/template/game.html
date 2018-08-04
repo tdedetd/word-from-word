@@ -11,14 +11,16 @@
     <div class="solved-words__item">{{ word.0 }}</div>{% endfor %}
   </div>
   <div class="status-wrapper">
+    {% csrf_token %}
     <div class="submit-word-form">
-      {% csrf_token %}
-      <input type="text" class="submit-word-form__item word-input" id="word-input">
+      <div class="word-input-wrapper submit-word-form__item">
+        <input type="text" class="word-input" id="word-input">
+      </div>
       <button class="submit-word-form__item" id="backspace-button" title="Стереть">
         <i class="fas fa-long-arrow-alt-left"></i>
       </button>
       <button class="submit-word-form__item" id="clear-button" title="Очистить поле">
-        <i class="fa fa-terminal" aria-hidden="true"></i>
+        <i class="fa fa-times" aria-hidden="true"></i>
       </button>
       <button class="submit-word-form__item" id="submit-word-button" title="Отправить">
         <i class="fa fa-check" aria-hidden="true"></i>
