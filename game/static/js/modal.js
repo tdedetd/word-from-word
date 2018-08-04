@@ -1,12 +1,17 @@
 $(document).ready(() => {
     // Инициализация всех элементов как модальных окон с классом modal
-    let modalObj, modalJquery;
+    let modal, modalEl, modalForId;
     $(".modal").each((index, item) => {
-        modalJquery = $(item);
-        modalObj = new Modal(modalJquery);
-        $("#" + modalJquery.attr("modal-for")).on("click", () => {
-            modalObj.show();
-        });
+        modalEl = $(item);
+        modalForId = modalEl.attr("modal-for");
+
+        if (modalEl != undefined) {
+            modal = new Modal(modalEl);
+
+            $("#" + modalForId).on("click", () => {
+                modal.show();
+            });
+        }
     });
 });
 
