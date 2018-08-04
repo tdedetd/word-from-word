@@ -193,7 +193,23 @@ def verify_email(request):
 # other
 
 def home(request):
-    return render(request, 'home.html')
+    activity_sql = '''
+        SELECT
+            to_char(us.created_on::date, 'dd.mm.yyyy') as "date",
+            count(*)
+        FROM user_solution us, level_word lw
+        WHERE
+            us.user_id = %s and
+            us.created_on > current_date::date - interval '1 week' and
+            us.level_word_id = lw.id
+        GROUP BY us.created_on::date
+        ORDER BY us.created_on::date desc
+    '''
+    cursor = connection.cursor()
+    cursor.execute(activity_sql, [request.user.id])
+    activity = dictfetchall(cursor)
+
+    return render(request, 'home.html', {'activity': activity})
 
 
 def get_xp_info(request):
