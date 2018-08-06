@@ -83,7 +83,8 @@ def register(request):
 
 def redirect_to_register(request):
     from django.shortcuts import redirect, reverse
-    return redirect(reverse('register'))
+    # return redirect(reverse('register'))
+    return redirect(reverse('home'))
 
 def checklogin(request, login):
     """
