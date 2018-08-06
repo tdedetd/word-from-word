@@ -6,12 +6,14 @@
     <h2>Регистрация всего в пару кликов!</h2>
     <form class="auth-form" action="{% url 'signup' %}" method="POST">
       {% csrf_token %}
-      <input class="auth-form__item" id="reg-user" type="text" name="username" placeholder="Логин" maxlength="40" autocomplete="false">
-      <div class="valid-msg" id="login-text"></div>
-      <input class="auth-form__item" id="reg-pass" type="password" name="password" placeholder="Пароль" autocomplete="false">
-      <input class="auth-form__item" id="reg-pass-conf" type="password" name="password-conf" placeholder="Потверждение пароля" autocomplete="false">
-      <div class="valid-msg" id="pass-text"></div>
-      <div class="g-recaptcha" data-sitekey="6LfHiWgUAAAAAHxImuNLCj7UI9VZkX-e-ojRhE_J"></div>
+      <div class="mrg-10">
+        <input class="auth-form__item" id="reg-user" type="text" name="username" placeholder="Логин" maxlength="40" autocomplete="false">
+        <div class="valid-msg" id="login-text"></div>
+        <input class="auth-form__item" id="reg-pass" type="password" name="password" placeholder="Пароль" autocomplete="false">
+        <input class="auth-form__item" id="reg-pass-conf" type="password" name="password-conf" placeholder="Потверждение пароля" autocomplete="false">
+        <div class="valid-msg" id="pass-text"></div>
+      </div>
+      <div class="g-recaptcha mrg-10" data-sitekey="6LfHiWgUAAAAAHxImuNLCj7UI9VZkX-e-ojRhE_J"></div>
       <input class="auth-form__item" id="reg-submit" type="submit" value="Зарегистрироваться" disabled="disabled">
     </form>
   </section>
