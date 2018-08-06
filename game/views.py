@@ -81,6 +81,10 @@ def register(request):
     return render(request, 'register.html')
 
 
+def redirect_to_register(request):
+    from django.shortcuts import redirect, reverse
+    return redirect(reverse('register'))
+
 def checklogin(request, login):
     """
     Проверяет, присутствует ли пользователь с указанным именем в базе
@@ -235,10 +239,8 @@ def levels(request):
     """
     Окно с выбором уровня
     """
-    from django.shortcuts import redirect, reverse
-
     if request.user.is_anonymous:
-        return redirect(reverse('register'))
+        return  redirect_to_register(request)
 
     # from models
     order_types_sql = '''
@@ -305,12 +307,11 @@ def game(request, level_id):
     """
     Окно игры
     """
-    from django.shortcuts import redirect, reverse
     from .http import template
     from .models import Level
 
     if request.user.is_anonymous:
-        return redirect(reverse('register'))
+        return redirect_to_register(request)
 
     word_sql = '''
         SELECT upper(word)
@@ -453,12 +454,11 @@ def profile(request, user_id):
     """
     Страница профиля
     """
-    from django.shortcuts import redirect, reverse
     from .models import User
     from .xp import get_xp_info
 
     if request.user.is_anonymous:
-        return redirect(reverse('register'))
+        return redirect_to_register(request)
 
     target_user = User.objects.get(id=user_id)
 
