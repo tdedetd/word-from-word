@@ -38,15 +38,22 @@ def signup(request):
     Регистрирует пользователя, предварительно проводя валидацию логина и пароля
     """
     import re
-    from .http import template
+    from django.conf import settings
+    from .http import template, post
     from .models import User
 
     username = request.POST.get('username')
     password = request.POST.get('password')
     password_conf = request.POST.get('password-conf')
 
+    recaptcha_params = {'secret': settings.RECAPTCHA_TOKEN,
+                        'response': 'g-recaptcha-response'}
+
+    post('google.com', '/recaptcha/api/siteverify', params=recaptcha_params)
+
     # validators
-    fail = template(request, 400, 'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
+    fail = template(request, 400,
+        'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
 
     if not (username and password and password_conf):
         return fail
