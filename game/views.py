@@ -49,7 +49,7 @@ def signup(request):
     recaptcha_params = {'secret': settings.RECAPTCHA_TOKEN,
                         'response': 'g-recaptcha-response'}
 
-    post('google.com', '/recaptcha/api/siteverify', params=recaptcha_params)
+    post('https://google.com', '/recaptcha/api/siteverify', params=recaptcha_params)
 
     # validators
     fail = template(request, 400,
@@ -91,6 +91,7 @@ def register(request):
 def redirect_to_register(request):
     from django.shortcuts import redirect, reverse
     return redirect(reverse('register'))
+
 
 def checklogin(request, login):
     """

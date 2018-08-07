@@ -52,3 +52,8 @@ def post(host, url, params=None):
 
 def request(method, host, url, params=None):
     params = params if params else {}
+
+    import urllib.request
+
+    request = urllib.request.urlopen(host + url)
+    print(request.read())
