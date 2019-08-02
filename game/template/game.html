@@ -49,6 +49,21 @@
         </div>
       </div>
       {% endif %}
+      <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <h2 class="section-title">Лидеры по разгаданным словам</h2>
+        <div class="table table-lvl-history">
+          <div class="table__row table__head">
+            <div class="table__cell table__date">Пользователь</div>
+            <div class="table__cell table__count">Кол-во слов</div>
+          </div>
+          {% for leader in leaders %}
+          <div class="table__row">
+            <div class="table__cell table__date">{{ leader.username }}</div>
+            <div class="table__cell table__count">{{ leader.count }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
   <div id="labels"></div>

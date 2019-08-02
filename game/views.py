@@ -374,12 +374,26 @@ def game(request, level_id):
     cursor.execute(solve_history_sql, [request.user.id, level_id])
     solve_history = dictfetchall(cursor)
 
+    leaders_sql = '''
+        SELECT au.username, lu.count FROM auth_user au, (
+            SELECT us.user_id, count(*)
+            FROM user_solution us, level_word lw
+            WHERE us.level_word_id = lw.id and lw.level_id = %s
+            GROUP BY us.user_id) lu
+        WHERE au.id = lu.user_id
+        ORDER BY count desc
+        LIMIT 10
+    '''
+    cursor.execute(leaders_sql, [level_id])
+    leaders = dictfetchall(cursor)
+
     context = {
         'level_id': level_id,
         'letters': letters,
         'solved_words': solved_words,
         'word_count': word_count,
         'solve_history': solve_history,
+        'leaders': leaders,
     }
     return render(request, 'game.html', context)
 
