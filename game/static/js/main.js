@@ -74,7 +74,7 @@ class TabPane {
     select(index) {
         this.hideAll();
         this.selectedIndex = index;
-        
+
         $(this.tabs[index]).addClass(this.classTabSelected);
         $(this.contents[index]).css({"display": "block"});
     }

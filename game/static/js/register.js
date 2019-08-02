@@ -3,27 +3,17 @@
 const loginValidators = [
     {
         message: "Пожалуйста, введите логин",
-        validate: (login) => {
-            if (login.length == 0)
-                return false;
-            return true;
-        }
+        validate: (login) => login.length !== 0
     },
     {
         message: "Логин не должен превышать длину в 40 символов",
-        validate: (login) => {
-            if (login.length > 40)
-                return false;
-            return true;
-        }
+        validate: (login) => login.length <= 40
     },
     {
         message: "Логин не должен начинаться с цифры и может состоять только из латинских букв (заглавных и строчных), а также цифр.",
         validate: (login) => {
             const pattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
-            if (!pattern.test(login))
-                return false;
-            return true;
+            return pattern.test(login);
         }
     }
 ];
@@ -31,35 +21,21 @@ const loginValidators = [
 const passValidators = [
     {
         message: "Пожалуйста, заполните оба поля ввода пароля",
-        validate: (pass1, pass2) => {
-            if (pass1.length == 0 || pass2.length == 0)
-                return false;
-            return true;
-        }
+        validate: (pass1, pass2) => pass1.length > 0 && pass2.length > 0
     },
     {
         message: "Пароли не совпадают",
-        validate: (pass1, pass2) => {
-            if (pass1 != pass2)
-                return false;
-            return true;
-        }
+        validate: (pass1, pass2) => pass1 === pass2
     },
     {
         message: "Пароль должен быть длиной не менее 4-х символов",
-        validate: (pass1, pass2) => {
-            if (pass1.length < 4)
-                return false;
-            return true;
-        }
+        validate: (pass1, pass2) => pass1.length >= 4
     },
     {
         message: "Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.",
         validate: (pass1, pass2) => {
             const pattern = /^([0-9]|[a-z]|[A-Z])+$/;
-            if (!pattern.test(pass1))
-                return false;
-            return true;
+            return pattern.test(pass1);
         }
     }
 ];
@@ -100,7 +76,7 @@ $(document).on("change", "#reg-user", function() {
 });
 
 $(document).on("change", "#reg-pass", () => {
-    if ($("#reg-pass-conf").val() != ""){
+    if ($("#reg-pass-conf").val() != "") {
         validatePassword();
     }
 });
@@ -132,8 +108,5 @@ function validatePassword() {
 }
 
 function updateSubmitEnabled() {
-    if (loginReady && passReady)
-        $("#reg-submit").prop("disabled", false);
-    else
-        $("#reg-submit").prop("disabled", true);
+    $("#reg-submit").prop("disabled", !(loginReady && passReady));
 }

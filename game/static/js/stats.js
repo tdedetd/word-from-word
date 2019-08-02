@@ -1,9 +1,6 @@
-// "use strict";
-
-let
-    tabPersonStats,
-    chartWordLength,
-    chartFirstLetter;
+let tabPersonStats;
+let chartWordLength;
+let chartFirstLetter;
 
 $(document).ready(() => {
     events = {

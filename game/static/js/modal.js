@@ -26,7 +26,7 @@ class Modal {
 
         this.window = $(object).find("div:first-child");
         this.window.addClass("modal__win");
-        
+
         this.bg = $(document.createElement("div"));
         this.bg.addClass("modal__bg");
         $(object).append(this.bg);

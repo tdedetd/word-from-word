@@ -9,11 +9,14 @@ const CYRILLIC = {
     1063: "Ч", 1064: "Ш", 1065: "Щ", 1066: "Ъ", 1067: "Ы", 1068: "Ь", 1069: "Э", 1070: "Ю", 1071: "Я"
 };
 
-let
-    wordsSolved,    // Кол-во разгаданных слов
-    wordInput,      // Jquery-объект поля ввода слова
-    solvedWords,    // Jquery-объект контейнера с отгаданными словами
-    words = [];     // Список разгаданных слов
+/** Кол-во разгаданных слов */
+let wordsSolved;
+/** Jquery-объект поля ввода слова */ 
+let wordInput; 
+/** Jquery-объект контейнера с отгаданными словами */
+let solvedWords;
+/** Список разгаданных слов */ 
+let words = [];
 
 $(document).ready(() => {
     wordsSolved = +$("#words-solved").text();
@@ -39,9 +42,9 @@ $(document).ready(() => {
     });
 
     wordInput.keypress(function(e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             submitWord();
-        } else if (e.keyCode == 8) {
+        } else if (e.keyCode === 8) {
             backspace(false);
         } else {
             disableLetter(CYRILLIC[e.which]);
@@ -49,7 +52,7 @@ $(document).ready(() => {
     });
 
     $("body").keypress(function(e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             submitWord();
         }
     });
@@ -64,7 +67,6 @@ $(document).ready(() => {
     });
 
     setInterval(clearLabels, 10000);
-
     $('#word-input').focus();
 });
 
@@ -73,13 +75,13 @@ $(document).ready(() => {
  * @param {boolean} removeLastLetter нужно ли удалять последнюю букву слова
  */
 function backspace(removeLastLetter) {
-    if (wordInput.val() == "") {
+    if (wordInput.val() === "") {
         return;
     }
 
     let word = wordInput.val();
     let lastLetter = word[word.length - 1];
-    if (lastLetter == "ё" || lastLetter == "Ё") {
+    if (lastLetter === "ё" || lastLetter === "Ё") {
         lastLetter = "е";
     }
     enableLetter(lastLetter);
@@ -96,7 +98,7 @@ function submitWord() {
     wordInput.val("");
     enableAllLetters();
 
-    if (word.trim() == "") return;
+    if (word.trim() === "") return;
 
     let csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
 
@@ -105,7 +107,7 @@ function submitWord() {
         "csrfmiddlewaretoken": csrfToken
     }).done(data => {
         const response = data["response"];
-        if (response["success"] == 1) {
+        if (response["success"] === 1) {
             wordsSolved++;
             $("#words-solved").text(wordsSolved);
             insertSolvedWord(word);
@@ -128,7 +130,7 @@ function insertSolvedWord(word) {
 
     let words = $("#solved-words").children();
 
-    if (words.length == 0 || word > words[words.length - 1].innerText) {
+    if (words.length === 0 || word > words[words.length - 1].innerText) {
         $("#solved-words").append(div);
     } else {
         let wordCount = 0;
@@ -136,7 +138,7 @@ function insertSolvedWord(word) {
             wordCount++;
         }
 
-        if (wordCount == 0) {
+        if (wordCount === 0) {
             $("#solved-words").prepend(div);
         } else {
             div.insertBefore($(words[wordCount]));
@@ -184,18 +186,18 @@ function toggleLetter(enable, letter) {
         if (e instanceof TypeError) return false;
         else throw e;
     }
-    
+
     let letters = $(".letters__item");
     let letterBlock, letterDisabled, letterSuits;
 
     for (let i = 0; i < letters.length; i++) {
         letterBlock = $(letters[i]);
-        
+
         letterDisabled = letterBlock.hasClass("letters__item_disabled");
         letterSuits = letterBlock.text().toLowerCase() == letter;
 
-        if (enable == letterDisabled && letterSuits) {
-            
+        if (enable === letterDisabled && letterSuits) {
+
             if (enable) {
                 letterBlock.removeClass("letters__item_disabled");
             } else {
@@ -214,13 +216,13 @@ function toggleLetter(enable, letter) {
 function spawnRewardLabel(reward) {
     let div = $(document.createElement("div"));
     div.addClass("label");
-    
-    if (reward == null) {
-        div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
-        div.addClass("label-fail");
-    } else {
+
+    if (reward) {
         div.text(`+${reward}`);
         div.addClass("label-success");
+    } else {
+        div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
+        div.addClass("label-fail");
     }
 
     $("#labels").append(div);
@@ -255,7 +257,7 @@ function clearLabels() {
     const labelsElem = document.getElementById("labels");
     const labels = $(labelsElem).children();
     let labelsToRemove = [];
-    
+
     for (let i = 0; i < labels.length; i++) {
         if ($(labels[i]).css("opacity") == 0)
             labelsToRemove.push(labels[i]);

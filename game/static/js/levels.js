@@ -2,25 +2,17 @@
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
-let
-    lvlHtml,
-    levels,
-    lvlCount = 0,
-    lvlLimit = 30;
+let lvlHtml;
+let levels;
+let lvlCount = 0;
+let lvlLimit = 30;
 
 $(document).ready(() => {
     lvlHtml = $("#level-sample").html();
     levels = $("#levels");
 
-    $("#select-order-types").on("change", () => {
-        resetLevels();
-        loadLevels();
-    });
-
-    $("#select-order-dirs").on("change", () => {
-        resetLevels();
-        loadLevels();
-    });
+    $("#select-order-types").on("change", resetLevels);
+    $("#select-order-dirs").on("change", resetLevels);
 
     loadLevels();
 });
@@ -51,9 +43,15 @@ function loadLevels() {
 /** 
  * Очищает окно со списком уровней
  */
-function resetLevels() {
+function clearLevels() {
     levels.empty();
     lvlCount = 0;
+}
+
+/** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
+function resetLevels() {
+    clearLevels();
+    loadLevels();
 }
 
 /**
