@@ -64,6 +64,8 @@ $(document).ready(() => {
     });
 
     setInterval(clearLabels, 10000);
+
+    $('#word-input').focus();
 });
 
 /**
