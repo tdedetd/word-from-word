@@ -63,12 +63,16 @@ function resetLevels() {
  * @param {string} lastActivity дата последней активности
  */
 function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.className = LVL_CLASS;
-    let level = $(div);
+    const level = $(div);
     level.html(lvlHtml);
 
-    level.find(".level__word").text(word.toUpperCase());
+    const wordEl = level.find(".level__word");
+    const wordUpperCase = word.toUpperCase();
+
+    wordEl.text(wordUpperCase);
+    wordEl.prop("title", wordUpperCase);
     level.find(".level__words-solved").text(wordsSolved);
     level.find(".level__words-total").text(wordsTotal);
     level.find(".level__last-activity").text("Активность: " + lastActivity);
