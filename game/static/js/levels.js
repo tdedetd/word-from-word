@@ -6,7 +6,7 @@
     let lvlHtml;
     let levels;
     let lvlCount = 0;
-    let lvlLimit = 30;
+    let lvlLimit = 50;
 
     $(document).ready(() => {
         lvlHtml = $("#level-sample").html();

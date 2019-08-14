@@ -624,6 +624,7 @@ def get_popular_words(request):
 
     offset = request.GET.get('offset')
     limit = request.GET.get('limit')
+    limit = 20
 
     words_sql = '''
         SELECT
