@@ -206,16 +206,15 @@ def verify_email(request):
 
 def home(request):
     activity_sql = '''
-        SELECT
-            to_char(us.created_on::date, 'dd.mm.yyyy') as "date",
-            count(*)
-        FROM user_solution us, level_word lw
-        WHERE
-            us.user_id = %s and
-            us.created_on > current_date::date - interval '1 week' and
-            us.level_word_id = lw.id
-        GROUP BY us.created_on::date
-        ORDER BY us.created_on::date desc
+        SELECT "date", count
+        FROM (
+            SELECT to_char(us.created_on::date, 'dd.mm.yyyy') as "date", count(*)
+            FROM user_solution us
+            WHERE us.user_id = 13
+            GROUP BY us.created_on::date
+            ORDER BY us.created_on::date desc
+        ) usd
+        LIMIT 7
     '''
     cursor = connection.cursor()
     cursor.execute(activity_sql, [request.user.id])
@@ -367,7 +366,6 @@ def game(request, level_id):
             lw.level_id = %s and
             us.level_word_id = lw.id
         GROUP BY us.created_on::date
-        HAVING us.created_on::date != current_date
         ORDER BY us.created_on::date desc
     '''
 
