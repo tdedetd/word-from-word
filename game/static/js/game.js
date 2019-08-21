@@ -19,7 +19,11 @@
     /** Список разгаданных слов */ 
     let words = [];
 
+    let csrfToken;
+
     $(document).ready(() => {
+        csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
+
         wordsSolved = +$("#words-solved").text();
         wordInput = $("#word-input");
         solvedWords = $("#solved-words");
@@ -101,8 +105,6 @@
 
         if (word.trim() === "") return;
 
-        let csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
-
         $.post("submit_word/", {
             "word": word,
             "csrfmiddlewaretoken": csrfToken
@@ -112,7 +114,6 @@
                 wordsSolved++;
                 $("#words-solved").text(wordsSolved);
                 insertSolvedWord(word);
-                displayXpInfo();
             }
 
             spawnRewardLabel(response["reward"]);

@@ -21,13 +21,21 @@
 <link rel="stylesheet" href="{% static 'style/levels.css' %}">
 <script type="text/javascript" src="{% static 'js/levels.js' %}"></script>
 <main>
-  <div class="level-select-params">
-    <select id="select-order-types" class="level-select-params__item">{% for order_type in order_types %}
-      <option value="{{ order_type.id }}">{{ order_type.name }}</option>{% endfor %}
-    </select>
-    <select id="select-order-dirs" class="level-select-params__item">{% for order_dir in order_dirs %}
-      <option value="{{ order_dir.id }}">{{ order_dir.name }}</option>{% endfor %}
-    </select>
+  <div class="level-select-params row">
+    <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+      <div class="level-select-params__item">
+        <select id="select-order-types">{% for order_type in order_types %}
+          <option value="{{ order_type.id }}">{{ order_type.name }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+      <div class="level-select-params__item">
+        <select id="select-order-dirs">{% for order_dir in order_dirs %}
+          <option value="{{ order_dir.id }}">{{ order_dir.name }}</option>{% endfor %}
+        </select>
+      </div>
+    </div>
   </div>
   <div class="levels-wrapper">
     <div class="row" id="levels"></div>

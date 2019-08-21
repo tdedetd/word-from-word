@@ -210,7 +210,7 @@ def home(request):
         FROM (
             SELECT to_char(us.created_on::date, 'dd.mm.yyyy') as "date", count(*)
             FROM user_solution us
-            WHERE us.user_id = 13
+            WHERE us.user_id = %s
             GROUP BY us.created_on::date
             ORDER BY us.created_on::date desc
         ) usd
