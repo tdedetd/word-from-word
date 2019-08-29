@@ -6,14 +6,17 @@
     let lvlHtml;
     let levels;
     let lvlCount = 0;
-    let lvlLimit = 50;
+    let lvlLimit = 20;
+    let moreLevelsContainer;
 
     $(document).ready(() => {
         lvlHtml = $("#level-sample").html();
         levels = $("#levels");
+        moreLevelsContainer = $("#container-more-levels");
 
         $("#select-order-types").on("change", resetLevels);
         $("#select-order-dirs").on("change", resetLevels);
+        $("#btn-more-levels").on("click", loadLevels);
 
         loadLevels();
     });
@@ -26,6 +29,7 @@
             "limit": lvlLimit
         }).done(data => {
             lvlCount += lvlLimit;
+            if (data.levels.length === 0) moreLevelsContainer.hide();
             data["levels"].forEach(level => {
                 displayLevel(
                     level["id"],
@@ -49,6 +53,7 @@
     /** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
     function resetLevels() {
         clearLevels();
+        moreLevelsContainer.show();
         loadLevels();
     }
 
