@@ -7,24 +7,39 @@
     let levels;
     let lvlCount = 0;
     let lvlLimit = 20;
+
     let moreLevelsContainer;
+    let btnTop;
+    let selectOrderTypes;
+    let selectOrderDirs;
 
     $(document).ready(() => {
         lvlHtml = $("#level-sample").html();
         levels = $("#levels");
         moreLevelsContainer = $("#container-more-levels");
+        btnTop = $("#btn-top");
+        selectOrderTypes = $("#select-order-types");
+        selectOrderDirs = $("#select-order-dirs");
 
-        $("#select-order-types").on("change", resetLevels);
-        $("#select-order-dirs").on("change", resetLevels);
+        selectOrderTypes.on("change", resetLevels);
+        selectOrderDirs.on("change", resetLevels);
         $("#btn-more-levels").on("click", loadLevels);
+        btnTop.on("click", () => {
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+        });
 
+        window.addEventListener("scroll", () => {
+            updateOntopButton(window.scrollY);
+        });
+
+        updateOntopButton(0);
         loadLevels();
     });
 
     function loadLevels() {
         $.get("/get_levels/", {
-            "type_id": $("#select-order-types").val(),
-            "dir_id": $("#select-order-dirs").val(),
+            "type_id": selectOrderTypes.val(),
+            "dir_id": selectOrderDirs.val(),
             "offset": lvlCount,
             "limit": lvlLimit
         }).done(data => {
@@ -88,5 +103,10 @@
         level.find("a.level-link").attr("href", `/game/${id}/`);
 
         levels.append(level);
+    }
+
+    function updateOntopButton(pageY) {
+        if (pageY > 200) btnTop.show();
+        else btnTop.hide();
     }
 })();
