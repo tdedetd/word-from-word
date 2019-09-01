@@ -287,6 +287,7 @@ def get_levels(request):
     dir_id = request.GET.get("dir_id")
     offset = request.GET.get("offset")
     limit = request.GET.get("limit")
+    filter_text = request.GET.get("filter")
 
     params = [type_id, dir_id, offset, limit]
 
@@ -296,11 +297,11 @@ def get_levels(request):
         except ValueError:
             return json(request, 400, 'Wrong parameter(s)')
 
-    params = [user_id] + params
+    params = [user_id] + params + [filter_text]
 
     levels_sql = '''
         SELECT id, word, word_count, solved, last_activity
-        FROM get_levels(%s, %s, %s, %s, %s)
+        FROM get_levels(%s, %s, %s, %s, %s, %s)
     '''
 
     cursor = connection.cursor()

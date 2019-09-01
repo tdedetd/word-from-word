@@ -3,15 +3,16 @@
 
     const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
-    let lvlHtml;
     let levels;
     let lvlCount = 0;
     let lvlLimit = 20;
 
+    let lvlHtml;
     let moreLevelsContainer;
     let btnTop;
     let selectOrderTypes;
     let selectOrderDirs;
+    let inputSearch;
 
     $(document).ready(() => {
         lvlHtml = $("#level-sample").html();
@@ -20,10 +21,13 @@
         btnTop = $("#btn-top");
         selectOrderTypes = $("#select-order-types");
         selectOrderDirs = $("#select-order-dirs");
+        inputSearch = $("#input-search");
 
         selectOrderTypes.on("change", resetLevels);
         selectOrderDirs.on("change", resetLevels);
+        inputSearch.on("keyup", resetLevels);
         $("#btn-more-levels").on("click", loadLevels);
+
         btnTop.on("click", () => {
             $("html, body").animate({ scrollTop: 0 }, "fast");
         });
@@ -41,7 +45,8 @@
             "type_id": selectOrderTypes.val(),
             "dir_id": selectOrderDirs.val(),
             "offset": lvlCount,
-            "limit": lvlLimit
+            "limit": lvlLimit,
+            "filter": inputSearch.val().trim()
         }).done(data => {
             lvlCount += lvlLimit;
             if (data.levels.length === 0) moreLevelsContainer.hide();
