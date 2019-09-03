@@ -21,9 +21,11 @@
     <div class="points-info">
       <div class="points-info__item">Уровень:&nbsp;<b>{{ profile_info_dict.level }}</b></div>
       <div class="points-info__item">Рейтинг:&nbsp;<b>{{ profile_info_dict.rating }}</b></div>
-      <div class="points-info__item">Уровней затронуто:&nbsp;<b>{{ profile_info_dict.levels_played }}</b></div>
+      <div class="points-info__item">Уровней затронуто:&nbsp;<b>{{ profile_info_dict.levels_played }} / {{ profile_info_dict.levels_total }}</b></div>
       <div class="points-info__item">Слов отгадано:&nbsp;<b>{{ profile_info_dict.words_solved }}</b></div>
       <div class="points-info__item">Попыток отгадывания:&nbsp;<b>{{ profile_info_dict.word_submits }}</b></div>
+      <div class="points-info__item">Максимальное кол-во слов за один день:&nbsp;<b>{{ profile_info_dict.max_words_in_day }}</b></div>
+      <div class="points-info__item">Средняя длина отгаданных слов:&nbsp;<b>{{ profile_info_dict.avg_solved_words_length }}</b></div>
       <div class="points-info__item" title="Средний процент отгаданных слов на всех уровнях за исключением нетронутых уровней">Рейтинг решаемости уровней:&nbsp;<b>{{ profile_info_dict.solve_rate }}%</b></div>
     </div>
   </div>
