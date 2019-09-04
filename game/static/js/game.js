@@ -99,11 +99,15 @@
     }
 
     function submitWord() {
-        let word = wordInput.val().toLowerCase();
+        let word = wordInput.val().toLowerCase().trim();
         wordInput.val("");
         enableAllLetters();
 
-        if (word.trim() === "") return;
+        if (word === "") return;
+        if (wordExists(word)) {
+            spawnLabel("Уже отгадано!", false);
+            return;
+        }
 
         $.post("submit_word/", {
             "word": word,
@@ -114,38 +118,45 @@
                 wordsSolved++;
                 $("#words-solved").text(wordsSolved);
                 insertSolvedWord(word);
+                spawnLabel(`+${response["reward"]}`, true);
+            } else {
+                spawnLabel('cross', false);
             }
-
-            spawnRewardLabel(response["reward"]);
         });
+    }
+
+    function wordExists(word) {
+        return words.indexOf(word) !== -1;
     }
 
     /**
      * Добавляет указанное слово в список отгаданных слов
+     * в алфавитном порядке
      * @param {string} word слово
      */
     function insertSolvedWord(word) {
-        let div = $(document.createElement("div"));
+        const div = $(document.createElement("div"));
         div.addClass("solved-words__item");
         div.addClass("solved-words__item_new");
         div.text(word);
 
-        let words = $("#solved-words").children();
+        const wordsJquery = $("#solved-words").children();
 
-        if (words.length === 0 || word > words[words.length - 1].innerText) {
+        if (wordsJquery.length === 0 || word > wordsJquery[wordsJquery.length - 1].innerText) {
             $("#solved-words").append(div);
         } else {
             let wordCount = 0;
-            while (word > words[wordCount].innerText) {
+            while (word > wordsJquery[wordCount].innerText) {
                 wordCount++;
             }
 
             if (wordCount === 0) {
                 $("#solved-words").prepend(div);
             } else {
-                div.insertBefore($(words[wordCount]));
+                div.insertBefore($(wordsJquery[wordCount]));
             }
         }
+        words.push(word);
     }
 
     function enableAllLetters() {
@@ -213,29 +224,29 @@
 
     /**
      * Спавнит всплывающую надпись
-     * @param {number} reward награда за отгаданное слово
+     * @param {string} text текст сообщения
+     * @param {boolean} success несет надпись позитивный или негативный характер
      */
-    function spawnRewardLabel(reward) {
+    function spawnLabel(text, success) {
         let div = $(document.createElement("div"));
         div.addClass("label");
 
-        if (reward) {
-            div.text(`+${reward}`);
-            div.addClass("label-success");
-        } else {
-            div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
-            div.addClass("label-fail");
-        }
+        if (text === 'cross') div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
+        else div.text(text);
+
+        div.addClass(success ? "label-success" : "label-fail");
 
         $("#labels").append(div);
         div.addClass("label-anim");
 
-        const x = $(window).width(),
-              y = $(window).height();
+        const width = $(window).width(),
+              height = $(window).height(),
+              top = height / 2 * Math.random() + height / 2,
+              left = width / 4 * 3 * Math.random();
 
         div.css({
-            top: `${y / 2 * Math.random() + y / 2}px`,
-            left: `${x / 4 * 3 * Math.random()}px`
+            top: top + 'px',
+            left: left + 'px'
         });
 
         setTimeout(animateLabel.bind(null, div), 10);
