@@ -44,7 +44,7 @@
         </div>
       </header>
       <menu type="list">
-        <a href="{% url 'game' %}">
+        <a href="{% url 'levels' %}">
           <li class="menu-item">Играть</li>
         </a>{% if not user.is_anonymous %}
         <a href="{% url 'profile' user.id %}">

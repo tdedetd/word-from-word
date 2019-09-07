@@ -311,6 +311,41 @@ def get_levels(request):
     return JsonResponse({'levels': levels})
 
 
+def redirect_to_random_level(request):
+    import random
+    from django.shortcuts import redirect, reverse
+
+    if request.user.is_anonymous:
+        return  redirect_to_register(request)
+
+    unplayed_levels_sql = '''
+        SELECT l.id as level_id
+        FROM levels l
+            LEFT JOIN (SELECT lw.level_id
+            FROM user_solution us
+                join level_word lw on us.level_word_id = lw.id
+            WHERE us.user_id = %s
+            GROUP BY lw.level_id) played_levels on l.id = played_levels.level_id
+        WHERE played_levels.level_id is null
+    '''
+
+    cursor = connection.cursor()
+    cursor.execute(unplayed_levels_sql, [request.user.id])
+    levels = dictfetchall(cursor)
+    levels_ids = list(map(lambda level: level['level_id'], levels))
+
+    if (len(levels_ids) > 0):
+        level_id = random.choice(levels_ids)
+        return redirect(reverse('game', args=(level_id,)))
+
+    from .models import Level
+    levels = Level.objects.all()
+    levels_ids = list(map(lambda level: level.id, levels))
+    level_id = random.choice(levels_ids)
+
+    return redirect(reverse('game', args=(level_id,)))
+
+
 def game(request, level_id):
     """
     Окно игры
