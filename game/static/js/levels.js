@@ -36,6 +36,13 @@
             updateOntopButton(window.scrollY);
         });
 
+        $("#btn-reset-filters").click(() => {
+            resetSelect(selectOrderTypes);
+            resetSelect(selectOrderDirs);
+            inputSearch.val('');
+            resetLevels();
+        });
+
         updateOntopButton(0);
         loadLevels();
     });
@@ -113,5 +120,15 @@
     function updateOntopButton(pageY) {
         if (pageY > 200) btnTop.show();
         else btnTop.hide();
+    }
+
+    // TODO: move out into common module
+    /**
+     * Сбрасывает значение select'а на первый в списке
+     * @param {object} selectJquery 
+     */
+    function resetSelect(selectJquery) {
+        const value = selectJquery.get()[0].children[0].value;
+        selectJquery.val(value);
     }
 })();
