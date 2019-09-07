@@ -242,6 +242,25 @@ def get_xp_info(request):
     return JsonResponse({'xp_info': xp_info})
 
 
+def news(request):
+    """
+    Возвращает страницу новостей
+    """
+
+    news_sql = '''
+        SELECT version, to_char(release_date, 'dd.mm.yyyy hh24:mi') as release_date, message
+        FROM updates
+        WHERE release_date IS NOT NULL
+        ORDER BY nio DESC
+    '''
+
+    cursor = connection.cursor()
+    cursor.execute(news_sql)
+    news = dictfetchall(cursor)
+
+    return render(request, 'news.html', context={'news': news})
+
+
 def levels(request):
     """
     Окно с выбором уровня

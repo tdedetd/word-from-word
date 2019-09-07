@@ -1,0 +1,29 @@
+@import "colors.less";
+
+.news-item {
+    margin: 10px;
+    padding: 20px;
+}
+
+.news-item:not(:last-child) {
+    border-bottom: solid 2px @blue;
+}
+
+.news-item__head {
+    margin: 10px;
+}
+
+.news-item__body {
+    margin: 20px;
+    word-break: keep-all;
+}
+
+.feature-list {
+    list-style-type: disc;
+    margin-left: 40px;
+}
+
+.feature-list > li {
+    list-style-type: disc;
+    margin: 10px 0;
+}

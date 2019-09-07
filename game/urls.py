@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^stats/$', views.stats, name='stats'),
     url(r'^stats/get_personal_stats/$', views.get_personal_stats),
     url(r'^stats/get_popular_words/$', views.get_popular_words),
+    url(r'^news/$', views.news, name='news'),
     url(r'^$', views.home, name='home'),
 ]

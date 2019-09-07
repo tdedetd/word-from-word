@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<link rel="stylesheet" href="{% static 'style/news.css' %}">
+<main>
+  <h2 class="text-center">Новости обновлений</h2>
+  <div class="news-container">{% for update in news %}
+    <div class="news-item">
+      <div class="news-item__head">
+        <b>v{{ update.version }}</b>&nbsp;<small>{{ update.release_date }}</small>
+      </div>
+      <div class="news-item__body">
+        {% autoescape off %}{{ update.message }}{% endautoescape %}
+      </div>
+    </div>{% endfor %}
+  </div>
+</main>
+{% endblock %}
