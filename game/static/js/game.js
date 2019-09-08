@@ -16,6 +16,8 @@
     let wordInput; 
     /** Jquery-объект контейнера с отгаданными словами */
     let solvedWords;
+    /** Элемент с буквами слова */
+    let letters;
     /** Список разгаданных слов */ 
     let words = [];
 
@@ -27,6 +29,7 @@
         wordsSolved = +$("#words-solved").text();
         wordInput = $("#word-input");
         solvedWords = $("#solved-words");
+        letters = document.getElementById("letters");
         wordInput.val("");
 
         solvedWords.children().each((curWordNumber, curWordName) => {
@@ -69,6 +72,10 @@
                 letterBlock.addClass("letters__item_disabled");
                 wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
             }
+        });
+
+        $("#shuffle-words-button").click(() => {
+            shuffleLetters();
         });
 
         setInterval(clearLabels, 10000);
@@ -290,5 +297,28 @@
         wordElem.addClass("solved-words__item");
         wordElem.text(word);
         solvedWords.append(wordElem);
-    }    
+    }
+
+    function shuffleLetters() {
+        const letterElements = Array.from(letters.children);
+        letters.innerHTML = "";
+        shuffle(letterElements).forEach(letter => letters.appendChild(letter));
+    }
+
+    function shuffle(array) {
+        let currentIndex = array.length;
+        let randomIndex;
+        let temp;
+
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            temp = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
+
+        return array;
+    }
 })();

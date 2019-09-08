@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{% static 'js/game.js' %}"></script>
 <div id="level-info" data-id="{{ level_id }}"></div>
 <main>
-  <div class="letters">{% for letter in letters %}
+  <div class="letters" id="letters">{% for letter in letters %}
     <div class="letters__item">{{ letter }}</div>{% endfor %}
   </div>
   <div class="solved-words box" id="solved-words">{% for word in solved_words %}
@@ -24,6 +24,9 @@
       </button>
       <button class="submit-word-form__item btn-green" id="submit-word-button" title="Отправить">
         <i class="fa fa-check" aria-hidden="true"></i>
+      </button>
+      <button class="submit-word-form__item" id="shuffle-words-button" title="Перемешать буквы в слове">
+        <i class="fa fa-random" aria-hidden="true"></i>
       </button>
     </div>
     <div class="level-status">
