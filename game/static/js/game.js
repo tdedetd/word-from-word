@@ -112,7 +112,7 @@
 
         if (word === "") return;
         if (wordExists(word)) {
-            spawnLabel("Уже отгадано!", false);
+            spawnLabel("Уже отгадано!", "label-neutral");
             return;
         }
 
@@ -125,9 +125,9 @@
                 wordsSolved++;
                 $("#words-solved").text(wordsSolved);
                 insertSolvedWord(word);
-                spawnLabel(`+${response["reward"]}`, true);
+                spawnLabel(`+${response["reward"]}`, "label-success");
             } else {
-                spawnLabel('cross', false);
+                spawnLabel("cross", "label-fail");
             }
         });
     }
@@ -232,16 +232,16 @@
     /**
      * Спавнит всплывающую надпись
      * @param {string} text текст сообщения
-     * @param {boolean} success несет надпись позитивный или негативный характер
+     * @param {boolean} cssClass cssClass
      */
-    function spawnLabel(text, success) {
+    function spawnLabel(text, cssClass) {
         let div = $(document.createElement("div"));
         div.addClass("label");
 
-        if (text === 'cross') div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
+        if (text === "cross") div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
         else div.text(text);
 
-        div.addClass(success ? "label-success" : "label-fail");
+        div.addClass(cssClass);
 
         $("#labels").append(div);
         div.addClass("label-anim");
@@ -252,8 +252,8 @@
               left = width / 4 * 3 * Math.random();
 
         div.css({
-            top: top + 'px',
-            left: left + 'px'
+            top: top + "px",
+            left: left + "px"
         });
 
         setTimeout(animateLabel.bind(null, div), 10);
@@ -261,7 +261,7 @@
 
     /**
      * Меняет свойства прозрачности и высоты выбранноо блока
-     * @param {*} div jquery-объект элемента
+     * @param {object} div jquery-объект элемента
      */
     function animateLabel(div) {
         div.css({
