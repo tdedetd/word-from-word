@@ -327,7 +327,9 @@ def get_levels(request):
     cursor.execute(levels_sql, params)
     levels = dictfetchall(cursor)
 
-    return JsonResponse({'levels': levels})
+    end_of_list = len(levels) < int(limit)
+
+    return JsonResponse({'levels': levels, 'end': end_of_list})
 
 
 def redirect_to_random_level(request):

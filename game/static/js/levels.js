@@ -56,7 +56,7 @@
             "filter": inputSearch.val().trim()
         }).done(data => {
             lvlCount += lvlLimit;
-            if (data.levels.length === 0) moreLevelsContainer.hide();
+            if (data.levels.length === 0 || data.end) moreLevelsContainer.hide();
             data["levels"].forEach(level => {
                 displayLevel(
                     level["id"],
