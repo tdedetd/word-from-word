@@ -23,6 +23,10 @@
         selectOrderDirs = $("#select-order-dirs");
         inputSearch = $("#input-search");
 
+        selectOrderTypes.val(sessionStorage.getItem("selectOrderType"));
+        selectOrderDirs.val(sessionStorage.getItem("selectOrderDir"));
+        inputSearch.val(sessionStorage.getItem("searchFilter"));
+
         selectOrderTypes.on("change", resetLevels);
         selectOrderDirs.on("change", resetLevels);
         inputSearch.on("keyup", resetLevels);
@@ -69,9 +73,7 @@
         });
     }
 
-    /** 
-     * Очищает окно со списком уровней
-     */
+    /** Очищает окно со списком уровней */
     function clearLevels() {
         levels.empty();
         lvlCount = 0;
@@ -79,6 +81,10 @@
 
     /** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
     function resetLevels() {
+        sessionStorage.setItem('selectOrderType', selectOrderTypes.val());
+        sessionStorage.setItem('selectOrderDir', selectOrderDirs.val());
+        sessionStorage.setItem('searchFilter', inputSearch.val().trim());
+
         clearLevels();
         moreLevelsContainer.show();
         loadLevels();
