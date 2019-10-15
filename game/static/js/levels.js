@@ -23,9 +23,14 @@
         selectOrderDirs = $("#select-order-dirs");
         inputSearch = $("#input-search");
 
-        selectOrderTypes.val(sessionStorage.getItem("selectOrderType"));
-        selectOrderDirs.val(sessionStorage.getItem("selectOrderDir"));
-        inputSearch.val(sessionStorage.getItem("searchFilter"));
+        if (sessionStorage.getItem("selectOrderType") !== null &&
+            sessionStorage.getItem("selectOrderDir") !== null &&
+            sessionStorage.getItem("searchFilter") !== null) {
+
+            selectOrderTypes.val(sessionStorage.getItem("selectOrderType"));
+            selectOrderDirs.val(sessionStorage.getItem("selectOrderDir"));
+            inputSearch.val(sessionStorage.getItem("searchFilter"));
+        }
 
         selectOrderTypes.on("change", resetLevels);
         selectOrderDirs.on("change", resetLevels);
