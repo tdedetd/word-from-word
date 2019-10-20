@@ -13,6 +13,7 @@
     let selectOrderTypes;
     let selectOrderDirs;
     let inputSearch;
+    let loadingContainer;
 
     $(document).ready(() => {
         lvlHtml = $("#level-sample").html();
@@ -22,6 +23,7 @@
         selectOrderTypes = $("#select-order-types");
         selectOrderDirs = $("#select-order-dirs");
         inputSearch = $("#input-search");
+        loadingContainer = $("#container-loading");
 
         if (sessionStorage.getItem("selectOrderType") !== null &&
             sessionStorage.getItem("selectOrderDir") !== null &&
@@ -48,7 +50,7 @@
         $("#btn-reset-filters").click(() => {
             resetSelect(selectOrderTypes);
             resetSelect(selectOrderDirs);
-            inputSearch.val('');
+            inputSearch.val("");
             resetLevels();
         });
 
@@ -57,6 +59,8 @@
     });
 
     function loadLevels() {
+        moreLevelsContainer.hide();
+        loadingContainer.show();
         $.get("/get_levels/", {
             "type_id": selectOrderTypes.val(),
             "dir_id": selectOrderDirs.val(),
@@ -65,7 +69,11 @@
             "filter": inputSearch.val().trim()
         }).done(data => {
             lvlCount += lvlLimit;
-            if (data.levels.length === 0 || data.end) moreLevelsContainer.hide();
+            if (data.levels.length !== 0 && !data.end) {
+                moreLevelsContainer.show();
+                loadingContainer.hide();
+            }
+
             data["levels"].forEach(level => {
                 displayLevel(
                     level["id"],
@@ -86,9 +94,9 @@
 
     /** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
     function resetLevels() {
-        sessionStorage.setItem('selectOrderType', selectOrderTypes.val());
-        sessionStorage.setItem('selectOrderDir', selectOrderDirs.val());
-        sessionStorage.setItem('searchFilter', inputSearch.val().trim());
+        sessionStorage.setItem("selectOrderType", selectOrderTypes.val());
+        sessionStorage.setItem("selectOrderDir", selectOrderDirs.val());
+        sessionStorage.setItem("searchFilter", inputSearch.val().trim());
 
         clearLevels();
         moreLevelsContainer.show();
