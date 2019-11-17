@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'game',
 ]
 
+INTERNAL_IPS = (
+    '127.0.0.1',
+)
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -117,6 +121,8 @@ STATIC_URL = '/static/'
 EMAIL_VERIFY_EXPIRATION_INTERVAL = 12 # in hours
 
 HOST = 'http://localhost:8000' # temp
+
+WEBPACK_HOST = 'http://localhost:8080'
 
 
 # Importing local and secret settings

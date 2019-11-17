@@ -1,6 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% block content %}
+{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
 <script src='https://www.google.com/recaptcha/api.js'></script>
-<script type="text/javascript" src="{% static 'js/register.js' %}"></script>
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
 <main class="content-center">
   <section class="text-center section-narrow">
     <h2>Регистрация всего в пару кликов!</h2>

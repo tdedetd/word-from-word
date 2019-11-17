@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load static %}{% block content %}
+{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
 <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-sample" style="display: none;">
   <a href="" class="level-link">
     <div class="level">
@@ -19,7 +19,7 @@
 
 <link rel="stylesheet" href="{% static 'style/grid.css' %}">
 <link rel="stylesheet" href="{% static 'style/levels.css' %}">
-<script type="text/javascript" src="{% static 'js/levels.js' %}"></script>
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
 <main>
   <div class="level-select-params row">
     <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">

@@ -1,4 +1,4 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}{% load webpack_url %}<!DOCTYPE html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{% static 'style/fontawesome-all.min.css' %}">
     <link rel="stylesheet" href="{% static 'style/main.css' %}">
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/modal.js' %}"></script>
+    <script type="text/javascript" src="{% if debug %}{% webpack_url '/main.js' %}{% else %}{% static 'js/main.js' %}{% endif %}"></script>
+    <script type="text/javascript" src="{% if debug %}{% webpack_url '/modal.js' %}{% else %}{% static 'js/modal.js' %}{% endif %}"></script>
   </head>
   <body>
     <div class="wrapper">
