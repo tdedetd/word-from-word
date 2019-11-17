@@ -2,16 +2,35 @@
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
-let levels;
 let lvlCount = 0;
+
 let lvlLimit = 20;
 
+/**
+ * Html-код уровня 
+ * @type {string}
+ */
 let lvlHtml;
+
+/** Jquery-контейнер с уровнями */
+let levels;
+
+/** Jquery-контейнер more levels */
 let moreLevelsContainer;
+
+/** Jquery-элемент */
 let btnTop;
+
+/** Jquery-элемент */
 let selectOrderTypes;
+
+/** Jquery-элемент */
 let selectOrderDirs;
+
+/** Jquery-элемент */
 let inputSearch;
+
+/** Jquery-элемент */
 let loadingContainer;
 
 $(document).ready(() => {

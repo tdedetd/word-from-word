@@ -1,5 +1,6 @@
 "use strict";
 
+/** @type {Object.<number, string>} */
 const CYRILLIC = {
     1072: "а", 1073: "б", 1074: "в", 1075: "г", 1076: "д", 1077: "е", 1105: "е", 1078: "ж", 1079: "з", 1080: "и", 1081: "й", 1082: "к",
     1083: "л", 1084: "м", 1085: "н", 1086: "о", 1087: "п", 1088: "р", 1089: "с", 1090: "т", 1091: "у", 1092: "ф", 1093: "х", 1094: "ц",
@@ -9,17 +10,31 @@ const CYRILLIC = {
     1063: "Ч", 1064: "Ш", 1065: "Щ", 1066: "Ъ", 1067: "Ы", 1068: "Ь", 1069: "Э", 1070: "Ю", 1071: "Я"
 };
 
-/** Кол-во разгаданных слов */
+/**
+ * Кол-во разгаданных слов
+ * @type {number}
+ */
 let wordsSolved;
+
 /** Jquery-объект поля ввода слова */ 
 let wordInput; 
+
 /** Jquery-объект контейнера с отгаданными словами */
 let solvedWords;
-/** Элемент с буквами слова */
+
+/**
+ * Элемент с буквами слова
+ * @type {HTMLElement}
+ */
 let letters;
-/** Список разгаданных слов */ 
+
+/**
+ * Список разгаданных слов
+ * @type {string[]}
+ */
 let words = [];
 
+/** @type {string} */
 let csrfToken;
 
 $(document).ready(() => {
@@ -131,6 +146,9 @@ function submitWord() {
     });
 }
 
+/**
+ * @param {string} word
+ */
 function wordExists(word) {
     return words.indexOf(word) !== -1;
 }
@@ -213,7 +231,7 @@ function toggleLetter(enable, letter) {
         letterBlock = $(letters[i]);
 
         letterDisabled = letterBlock.hasClass("letters__item_disabled");
-        letterSuits = letterBlock.text().toLowerCase() == letter;
+        letterSuits = letterBlock.text().toLowerCase() === letter;
 
         if (enable === letterDisabled && letterSuits) {
 
@@ -304,6 +322,10 @@ function shuffleLetters() {
     shuffle(letterElements).forEach(letter => letters.appendChild(letter));
 }
 
+/**
+ * @param {T} array
+ * @returns {T}
+ */
 function shuffle(array) {
     let currentIndex = array.length;
     let randomIndex;

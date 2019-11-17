@@ -21,38 +21,38 @@ const loginValidators = [
 const passValidators = [
     {
         message: "Пожалуйста, заполните оба поля ввода пароля",
-        validate: (pass1, pass2) => pass1.length > 0 && pass2.length > 0
+        validate: (password, passwordConfirm) => password.length > 0 && passwordConfirm.length > 0
     },
     {
         message: "Пароли не совпадают",
-        validate: (pass1, pass2) => pass1 === pass2
+        validate: (password, passwordConfirm) => password === passwordConfirm
     },
     {
         message: "Пароль должен быть длиной не менее 4-х символов",
-        validate: (pass) => pass.length >= 4
+        validate: (password) => password.length >= 4
     },
     {
         message: "Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.",
-        validate: (pass) => {
+        validate: (password) => {
             const pattern = /^([0-9]|[a-z]|[A-Z])+$/;
-            return pattern.test(pass);
+            return pattern.test(password);
         }
     }
 ];
 
-const check = "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>";
+const checkHtml = `<i class="fa fa-check" aria-hidden="true"></i>`;
 
-let loginReady = false,
-    passReady = false;
+let loginReady = false;
+let passReady = false;
 
 $(document).on("change", "#reg-user", function() {
-    let loginOutput = $("#login-text");
+    const loginOutput = $("#login-text");
     loginOutput.removeClass("text-fail");
     loginOutput.removeClass("text-success");
 
-    let login = $(this).val();
+    const login = $(this).val();
 
-    for (let validator of loginValidators) {
+    for (const validator of loginValidators) {
         if (!validator.validate(login)) {
             loginOutput.text(validator.message);
             loginOutput.addClass("text-fail");
@@ -67,7 +67,7 @@ $(document).on("change", "#reg-user", function() {
             loginOutput.addClass("text-fail");
             loginReady = false;
         } else {
-            loginOutput.html(check);
+            loginOutput.html(checkHtml);
             loginOutput.addClass("text-success");
             loginReady = true;
         }
@@ -84,15 +84,15 @@ $(document).on("change", "#reg-pass", () => {
 $(document).on("change", "#reg-pass-conf", validatePassword);
 
 function validatePassword() {
-    let passOutput = $("#pass-text");
+    const passOutput = $("#pass-text");
     passOutput.removeClass("text-fail");
     passOutput.removeClass("text-success");
 
-    let pass1 = $("#reg-pass").val(),
-        pass2 = $("#reg-pass-conf").val();
+    const password = $("#reg-pass").val();
+    const passwordConfirm = $("#reg-pass-conf").val();
 
-    for (let validator of passValidators) {
-        if (!validator.validate(pass1, pass2)) {
+    for (const validator of passValidators) {
+        if (!validator.validate(password, passwordConfirm)) {
             passOutput.text(validator.message);
             passOutput.addClass("text-fail");
             passReady = false;
@@ -101,7 +101,7 @@ function validatePassword() {
         }
     }
 
-    passOutput.html(check);
+    passOutput.html(checkHtml);
     passOutput.addClass("text-success");
     passReady = true;
     updateSubmitEnabled();
@@ -109,4 +109,4 @@ function validatePassword() {
 
 function updateSubmitEnabled() {
     $("#reg-submit").prop("disabled", !(loginReady && passReady));
-}    
+}

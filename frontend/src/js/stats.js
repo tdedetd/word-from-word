@@ -1,31 +1,33 @@
 import { TabPane } from './utlis/tab-pane';
 
-let tabPersonStats;
-let chartWordLength;
-let chartFirstLetter;
+/** @type {TabPane} */
+let personStatsTab;
+
+let wordLengthChart;
+let firstLetterChart;
 
 $(document).ready(() => {
     const events = {
         0: () => {
-            if (chartWordLength != undefined) {
-                chartWordLength.resize();
+            if (wordLengthChart != undefined) {
+                wordLengthChart.resize();
             }
         },
         1: () => {
-            if (chartFirstLetter != undefined) {
-                chartFirstLetter.resize();
+            if (firstLetterChart != undefined) {
+                firstLetterChart.resize();
             }
         }
     }
 
-    tabPersonStats = new TabPane("tab-person-stats", events);
+    personStatsTab = new TabPane("tab-person-stats", events);
     loadPersonalStats();
     loadPopularWords();
 });
 
 $(window).resize(() => {
-    chartWordLength.resize();
-    chartFirstLetter.resize();
+    wordLengthChart.resize();
+    firstLetterChart.resize();
 });
 
 /**
@@ -38,8 +40,8 @@ function loadPersonalStats() {
 
     $.get("get_personal_stats/").done(data => {
 
-        chartWordLength = echarts.init(document.getElementById("chart-word-length"));
-        chartWordLength.setOption({
+        wordLengthChart = echarts.init(document.getElementById("chart-word-length"));
+        wordLengthChart.setOption({
             title: {
                 text: "Распределение количества отгаданных",
                 subtext: "слов по длине слова",
@@ -100,8 +102,8 @@ function loadPersonalStats() {
             ]
         });
 
-        chartFirstLetter = echarts.init(document.getElementById("chart-first-letter"));
-        chartFirstLetter.setOption({
+        firstLetterChart = echarts.init(document.getElementById("chart-first-letter"));
+        firstLetterChart.setOption({
             title: {
                 text: "Распределение количества отгаданных",
                 subtext: "слов по первой букве",
@@ -152,23 +154,23 @@ function loadPersonalStats() {
             color: [colorBlue]
         });
 
-        tabPersonStats.select(0);
+        personStatsTab.select(0);
     });
 }
 
 function loadPopularWords() {
     $.get("get_popular_words/").done(data => {
-        let tbody = $("#popular-words");
+        const tbody = $("#popular-words");
         data.words.forEach(word => {
-            let row = $(document.createElement("div"));
+            const row = $(document.createElement("div"));
             row.addClass("table__row");
 
-            let cellWord = $(document.createElement("div"));
+            const cellWord = $(document.createElement("div"));
             cellWord.addClass("table__cell");
             cellWord.addClass("table__word");
             cellWord.text(word["word"]);
 
-            let cellCount = $(document.createElement("div"));
+            const cellCount = $(document.createElement("div"));
             cellCount.addClass("table__cell");
             cellCount.addClass("table__count");
             cellCount.text(word["count"]);
@@ -179,4 +181,4 @@ function loadPopularWords() {
             tbody.append(row);
         });
     });
-}    
+}

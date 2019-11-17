@@ -15,9 +15,9 @@ export class TabPane {
 
         this.hideAll();
 
-        if (this.tabs.length == 0)
+        if (this.tabs.length === 0)
             throw "Отсутствуют табы";
-        if (this.contents.length == 0)
+        if (this.contents.length === 0)
             throw "Отсутствует содержимое";
 
         if (this.tabs.length !== this.contents.length)
@@ -27,7 +27,7 @@ export class TabPane {
             $(this.tabs[i]).on("click", () => {
                 this.select(i);
 
-                if (events != undefined && events[i] != undefined) {
+                if (events && events[i]) {
                     events[i]();
                 }
             });

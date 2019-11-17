@@ -1,6 +1,14 @@
 $(document).ready(() => {
     // Инициализация всех элементов как модальных окон с классом modal
-    let modal, modalEl, modalForId;
+    /** @type {Modal} */
+    let modal;
+
+    /** Jquery-элемент */
+    let modalEl;
+
+    /** @type {string} */
+    let modalForId;
+
     $(".modal").each((_, item) => {
         modalEl = $(item);
         modalForId = modalEl.attr("modal-for");

@@ -1,5 +1,3 @@
-let feedbackModal;
-
 $(document).ready(() => {
     displayXpInfo();
 });
