@@ -1,18 +1,16 @@
-(function() {
-    $(document).ready(() => {
-        // Инициализация всех элементов как модальных окон с классом modal
-        let modal, modalEl, modalForId;
-        $(".modal").each((_, item) => {
-            modalEl = $(item);
-            modalForId = modalEl.attr("modal-for");
+$(document).ready(() => {
+    // Инициализация всех элементов как модальных окон с классом modal
+    let modal, modalEl, modalForId;
+    $(".modal").each((_, item) => {
+        modalEl = $(item);
+        modalForId = modalEl.attr("modal-for");
 
-            if (modalEl != undefined) {
-                modal = new Modal(modalEl);
-                $("#" + modalForId).on("click", () => modal.show());
-            }
-        });
+        if (modalEl != undefined) {
+            modal = new Modal(modalEl);
+            $("#" + modalForId).on("click", () => modal.show());
+        }
     });
-})();
+});
 
 class Modal {
     /**
