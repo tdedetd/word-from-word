@@ -12,10 +12,9 @@ body {
     height: 100%;
 }
 
-$bg-url: "/static/img/bg.jpg";
-
 body {
-    background: url($bg-url) $light-orange fixed;
+    background-color: $light-orange;
+    background-attachment: fixed;
     font-family: arial;
     font-size: 24px;
     color: $blue;
