@@ -3,3 +3,5 @@ word_from_word/settings_secret.py
 word_from_word/settings_local.py
 gunicorn.conf.py
 gunicorn_logs/
+*/node_modules/
+*/dist/
