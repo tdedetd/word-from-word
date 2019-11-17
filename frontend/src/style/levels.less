@@ -1,4 +1,4 @@
-@import "colors.scss";
+@import "colors.less";
 
 .level-select-params {
     margin: 5px;
@@ -24,9 +24,9 @@
 }
 
 .level {
-    background: $orange;
+    background: @orange;
     border-radius: 5px;
-    box-shadow: .5px .5px 3px $dark-blue;
+    box-shadow: .5px .5px 3px @dark-blue;
     margin: 9px 7px;
     cursor: pointer;
     font-weight: bold;
@@ -34,8 +34,8 @@
 }
 
 .level:hover {
-    box-shadow: 3px 3px 8px $dark-blue;
-    background-color: $dark-orange;
+    box-shadow: 3px 3px 8px @dark-blue;
+    background-color: @dark-orange;
 }
 
 .level__word,
@@ -50,7 +50,7 @@
 }
 
 .level__last-activity {
-    color: $accent-grey;
+    color: @accent-grey;
     font-size: 18px;
     text-align: right;
     padding-right: 10px;
@@ -74,11 +74,11 @@
 }
 
 .level__bar-solved {
-    background-color: $blue;
+    background-color: @blue;
 }
 
 .level__bar-unsolved {
-    background-color: $light-orange;
+    background-color: @light-orange;
 }
 
 .level__word-count {

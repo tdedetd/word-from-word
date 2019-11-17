@@ -1,4 +1,4 @@
-@import "colors.scss";
+@import "colors.less";
 
 .letters {
     display: flex;
@@ -7,8 +7,8 @@
 }
 
 .letters__item {
-    color: $light-orange;
-    background: $blue;
+    color: @light-orange;
+    background: @blue;
     padding: .325em .4166666em;
     border-radius: 0.2083333em;
     margin: 3px;
@@ -29,7 +29,7 @@
     left: 45%;
     width: 10%;
     height: 100%;
-    background: $accent-red;
+    background: @accent-red;
 }
 
 .letters__item_disabled::before {
@@ -79,7 +79,7 @@
 }
 
 .solved-words__item_new {
-    color: $dark-blue;
+    color: @dark-blue;
 }
 
 .status-wrapper {
@@ -107,7 +107,7 @@
 }
 
 .level-status {
-    color: $blue;
+    color: @blue;
     font-weight: bold;
     margin: 20px;
 }
@@ -120,15 +120,15 @@
 }
 
 .label-success {
-    color: $accent-green;
+    color: @accent-green;
 }
 
 .label-fail {
-    color: $accent-red;
+    color: @accent-red;
 }
 
 .label-neutral {
-    color: $blue;
+    color: @blue;
 }
 
 .label-anim {

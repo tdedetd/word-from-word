@@ -10,12 +10,12 @@ module.exports = isProd => ({
     'modal.js': './src/js/modal.js',
     'register.js': './src/js/register.js',
     'stats.js': './src/js/stats.js',
-    game: './src/style/game.scss',
-    levels: './src/style/levels.scss',
-    main: './src/style/main.scss',
-    news: './src/style/news.scss',
-    profile: './src/style/profile.scss',
-    stats: './src/style/stats.scss',
+    game: './src/style/game.less',
+    levels: './src/style/levels.less',
+    main: './src/style/main.less',
+    news: './src/style/news.less',
+    profile: './src/style/profile.less',
+    stats: './src/style/stats.less',
     grid: './src/style/grid.less'
   },
   output: {
@@ -34,25 +34,6 @@ module.exports = isProd => ({
             plugins: 'transform-class-properties'
           }
         }
-      },
-      {
-        test: /\.scss$/,
-        include: path.resolve(__dirname, 'src/style'),
-        use: ExtractTextWebpackPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                url: false
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: { sourceMap: true }
-            }
-          ]
-        })
       },
       {
         test: /\.less$/,
