@@ -1,4 +1,4 @@
-@import "colors.less";
+@import "colors.scss";
 
 .profile {
     margin: 10px;
@@ -22,16 +22,16 @@
     margin: 3px 5px;
     padding: 5px 10px;
     border-radius: 5px;
-    color: @light-blue;
+    color: $light-blue;
 }
 
 .points-info {
     padding: 5px 0;
     text-align: center;
-    // background: @light-orange;
-    // border: solid 1px @blue;
+    // background: $light-orange;
+    // border: solid 1px $blue;
     // border-radius: 10px;
-    // box-shadow: inset 1px 1px 5px @dark-blue;
+    // box-shadow: inset 1px 1px 5px $dark-blue;
 }
 
 .points-info__item {

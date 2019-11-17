@@ -1,6 +1,4 @@
-@import "colors.less";
-
-@static-url: "/static/";
+@import "colors.scss";
 
 /* Tags */
 
@@ -14,13 +12,13 @@ body {
     height: 100%;
 }
 
-@bg-url: "@{static-url}img/bg.jpg";
+$bg-url: "/static/img/bg.jpg";
 
 body {
-    background: url(@bg-url) @light-orange fixed;
+    background: url($bg-url) $light-orange fixed;
     font-family: arial;
     font-size: 24px;
-    color: @blue;
+    color: $blue;
 }
 
 a {
@@ -35,8 +33,8 @@ li {
 header {
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: @blue;
-    color: @light-blue;
+    background-color: $blue;
+    color: $light-blue;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -45,14 +43,14 @@ header {
 
 textarea {
     -webkit-appearance: none;
-    color: @blue;
-    background: @orange;
+    color: $blue;
+    background: $orange;
     font-size: inherit;
     font-family: inherit;
     border: none;
     padding: .3em .5em;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: 1px 1px 3px $dark-blue;
     resize: none;
 }
 
@@ -61,13 +59,13 @@ textarea {
 input[type="text"],
 input[type="password"] {
     -webkit-appearance: none;
-    color: @blue;
-    background: @orange;
+    color: $blue;
+    background: $orange;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: 1px 1px 3px $dark-blue;
 }
 
 /* Button styling */
@@ -76,40 +74,40 @@ input[type="button"],
 input[type="submit"],
 button {
     -webkit-appearance: none;
-    color: @light-orange;
-    background-color: @blue;
-    -webkit-background-color: @blue;
+    color: $light-orange;
+    background-color: $blue;
+    -webkit-background-color: $blue;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: 1px 1px 3px $dark-blue;
     transition: background-color .3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 input[type="button"]:hover,
 input[type="submit"]:hover,
 button:hover {
-    background-color: @middle-light-blue;
+    background-color: $middle-light-blue;
 }
 
 input[type="button"]:disabled,
 input[type="submit"]:disabled,
 button:disabled {
     cursor: default;
-    color: @accent-grey;
+    color: $accent-grey;
     box-shadow: none;
 }
 
-.btn-green { background: @accent-green-bg; }
-.btn-green:hover { background: @accent-green-bg-hover; }
+.btn-green { background: $accent-green-bg; }
+.btn-green:hover { background: $accent-green-bg-hover; }
 
-.btn-red { background: @accent-red-bg; }
-.btn-red:hover { background: @accent-red-bg-hover; }
+.btn-red { background: $accent-red-bg; }
+.btn-red:hover { background: $accent-red-bg-hover; }
 
-.btn-orange { background: @orange-bg; }
-.btn-orange:hover { background: @orange-bg-hover; }
+.btn-orange { background: $orange-bg; }
+.btn-orange:hover { background: $orange-bg-hover; }
 
 /* select styling */
 
@@ -120,14 +118,14 @@ select {
     font-weight: bold;
     border: none;
     border-radius: .29167em;
-    background: @orange;
-    color: @blue;
+    background: $orange;
+    color: $blue;
     padding: .35em .5em;
     // padding-right: 32px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: 1px 1px 3px $dark-blue;
     // background-image:
-    //     linear-gradient(75deg, transparent 50%, @blue 50%),
-    //     linear-gradient(105deg, @blue 50%, transparent 50%);
+    //     linear-gradient(75deg, transparent 50%, $blue 50%),
+    //     linear-gradient(105deg, $blue 50%, transparent 50%);
     // background-position: calc(100% - 7px) center, calc(100% - 4px) center;
     // background-size: 8px 22px, 8px 22px;
     // background-repeat: no-repeat;
@@ -136,8 +134,8 @@ select {
 /* Input styling */
 
 input.input-light {
-    color: @blue;
-    background-color: @light-orange;
+    color: $blue;
+    background-color: $light-orange;
 }
 
 /* other */
@@ -191,8 +189,8 @@ input.input-light {
 menu {
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: @dark-blue;
-    color: @light-blue;
+    background-color: $dark-blue;
+    color: $light-blue;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -202,22 +200,22 @@ menu {
 nav {
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: @light-orange;
+    background-color: $light-orange;
 }
 
 main {
     flex-grow: 1;
     flex-shrink: 0;
     padding: 5px;
-    background-color: @light-orange;
+    background-color: $light-orange;
 }
 
 footer {
     flex-grow: 0;
     flex-shrink: 0;
-    background-color: @blue;
-    color: @light-blue;
-    border-top: solid 7px @dark-blue;
+    background-color: $blue;
+    color: $light-blue;
+    border-top: solid 7px $dark-blue;
 }
 
 .footer-wrapper {
@@ -238,7 +236,7 @@ footer {
 }
 
 .footer-wrapper__item_link:hover {
-    background: @middle-light-blue;
+    background: $middle-light-blue;
 }
 
 h1 {
@@ -260,11 +258,11 @@ h2 {
 }
 
 .text-success {
-    color: @accent-green;
+    color: $accent-green;
 }
 
 .text-fail {
-    color: @accent-red;
+    color: $accent-red;
 }
 
 .content-center {
@@ -292,11 +290,11 @@ h2 {
 }
 
 .title-shadow {
-    text-shadow: 4px 4px 0px @dark-blue;
+    text-shadow: 4px 4px 0px $dark-blue;
 }
 
 .title-small-shadow {
-    text-shadow: 2px 2px 0px @dark-blue;
+    text-shadow: 2px 2px 0px $dark-blue;
 }
 
 .user-panel {
@@ -334,13 +332,13 @@ input.auth-form__item {
 .xp-bar__filled {
     width: 0%;
     height: 13px;
-    background-color: @dark-blue;
+    background-color: $dark-blue;
 }
 
 .xp-bar__empty {
     width: 100%;
     height: 13px;
-    background-color: @light-blue;
+    background-color: $light-blue;
 }
 
 .menu-item {
@@ -351,7 +349,7 @@ input.auth-form__item {
 }
 
 .menu-item:hover {
-    background-color: @blue;
+    background-color: $blue;
 }
 
 /* commons */
@@ -359,17 +357,17 @@ input.auth-form__item {
 .box,
 .box-dark {
     padding: 20px 30px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: 1px 1px 3px $dark-blue;
     border-radius: 15px;
 }
 
 .box {
-    background: @orange;
+    background: $orange;
 }
 
 .box-dark {
-    background: @blue;
-    color: @orange;
+    background: $blue;
+    color: $orange;
 }
 
 .section-title {
@@ -400,15 +398,15 @@ input.auth-form__item {
 }
 
 .tab-pane__tab:hover {
-    background: @orange;
+    background: $orange;
 }
 
 .tab-pane__tab_selected {
-    background: @orange;
+    background: $orange;
 }
 
 .tab-pane__contents {
-    background: @orange;
+    background: $orange;
     padding: 10px;
 }
 
@@ -421,16 +419,16 @@ input.auth-form__item {
     left: 0;
     width: 100%;
     height: 100%;
-    background: @dark-blue;
+    background: $dark-blue;
     opacity: .5;
 }
 
 .modal__win {
     position: fixed;
     z-index: 145;
-    background: @light-orange;
-    border-top: solid 5px @dark-blue;
-    border-bottom: solid 5px @dark-blue;
+    background: $light-orange;
+    border-top: solid 5px $dark-blue;
+    border-bottom: solid 5px $dark-blue;
     padding: 20px 10px;
     text-align: center;
     transition: top 1s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -444,12 +442,12 @@ input.auth-form__item {
 }
 
 .table__row:nth-child(2n+3) {
-    background: @orange;
+    background: $orange;
 }
 
 .table__head {
-    color: @light-blue;
-    background: @blue;
+    color: $light-blue;
+    background: $blue;
 }
 
 .table__cell {

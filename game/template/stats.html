@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<link rel="stylesheet" href="{% static 'style/grid.css' %}">
-<link rel="stylesheet" href="{% static 'style/stats.css' %}">
-<script type="text/javascript" src="{% static 'js_lib/echarts.min.js' %}"></script>
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/grid.css' %}{% else %}{% static 'js/grid.css' %}{% endif %}">
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/stats.css' %}{% else %}{% static 'js/stats.css' %}{% endif %}">
+<script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 <main>
   <div class="row">

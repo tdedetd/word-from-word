@@ -1,4 +1,4 @@
-@import "colors.less";
+@import "colors.scss";
 
 .news-item {
     margin: 10px;
@@ -6,7 +6,7 @@
 }
 
 .news-item:not(:last-child) {
-    border-bottom: solid 2px @blue;
+    border-bottom: solid 2px $blue;
 }
 
 .news-item__head {
