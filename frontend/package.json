@@ -1,8 +1,8 @@
 {
-  "name": "cube-web",
+  "name": "word-from-word-web",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": "true",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
@@ -14,6 +14,7 @@
     "babel-loader": "7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "less": "^3.10.3",

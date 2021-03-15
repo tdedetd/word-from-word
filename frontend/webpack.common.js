@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = isProd => ({
   entry: {
@@ -57,6 +58,7 @@ module.exports = isProd => ({
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new ExtractTextWebpackPlugin({
       filename: '[name].css',
       allChunks: true
