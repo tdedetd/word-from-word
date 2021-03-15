@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/grid.css' %}{% else %}{% static 'js/grid.css' %}{% endif %}">
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/grid.css' %}{% else %}{% static 'style/grid.css' %}{% endif %}">
 <main>
   <div class="row">
     <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">

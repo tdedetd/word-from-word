@@ -1,8 +1,8 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/grid.css' %}{% else %}{% static 'js/grid.css' %}{% endif %}">
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/stats.css' %}{% else %}{% static 'js/stats.css' %}{% endif %}">
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/grid.css' %}{% else %}{% static 'style/grid.css' %}{% endif %}">
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/stats.css' %}{% else %}{% static 'style/stats.css' %}{% endif %}">
 <script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 <main>
   <div class="row">
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">

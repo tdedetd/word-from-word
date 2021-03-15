@@ -17,9 +17,9 @@
   </a>
 </div>
 
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/grid.css' %}{% else %}{% static 'js/grid.css' %}{% endif %}">
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/levels.css' %}{% else %}{% static 'js/levels.css' %}{% endif %}">
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/grid.css' %}{% else %}{% static 'style/grid.css' %}{% endif %}">
+<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/levels.css' %}{% else %}{% static 'style/levels.css' %}{% endif %}">
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
 <main>
   <div class="level-select-params row">
     <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">

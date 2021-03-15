@@ -1,7 +1,7 @@
 const path = require('path');
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = isProd => ({
   entry: {
@@ -21,7 +21,7 @@ module.exports = isProd => ({
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name]'
+    filename: 'js/[name]'
   },
   module: {
     rules: [
@@ -39,30 +39,28 @@ module.exports = isProd => ({
       {
         test: /\.less$/,
         include: path.resolve(__dirname, 'src/style'),
-        use: ExtractTextWebpackPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                url: false
-              }
-            },
-            {
-              loader: 'less-loader',
-              options: { sourceMap: true }
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              url: false
             }
-          ]
-        })
+          },
+          {
+            loader: 'less-loader',
+            options: { sourceMap: true }
+          }
+        ]
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new ExtractTextWebpackPlugin({
-      filename: '[name].css',
-      allChunks: true
-    }),
-    new FixStyleOnlyEntriesPlugin()
+    new FixStyleOnlyEntriesPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'style/[name].css'
+    })
   ]
 });
