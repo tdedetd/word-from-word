@@ -1,5 +1,4 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<script src='https://www.google.com/recaptcha/api.js'></script>
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
 <main class="content-center">
   <section class="text-center section-narrow">
@@ -13,7 +12,6 @@
         <input class="auth-form__item" id="reg-pass-conf" type="password" name="password-conf" placeholder="Потверждение пароля" autocomplete="false">
         <div class="valid-msg" id="pass-text"></div>
       </div>
-      <div class="g-recaptcha mrg-10" data-sitekey="6LfHiWgUAAAAAHxImuNLCj7UI9VZkX-e-ojRhE_J"></div>
       <input class="auth-form__item" id="reg-submit" type="submit" value="Зарегистрироваться" disabled="disabled">
     </form>
   </section>

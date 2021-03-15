@@ -46,11 +46,6 @@ def signup(request):
     password = request.POST.get('password')
     password_conf = request.POST.get('password-conf')
 
-    # recaptcha_params = {'secret': settings.RECAPTCHA_TOKEN,
-    #                     'response': 'g-recaptcha-response'}
-
-    # post('https://google.com', '/recaptcha/api/siteverify', params=recaptcha_params)
-
     # validators
     fail = template(request, 400,
         'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
