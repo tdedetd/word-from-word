@@ -5,23 +5,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
-    'game.js': './src/js/game.js',
-    'levels.js': './src/js/levels.js',
-    'main.js': './src/js/main.js',
-    'modal.js': './src/js/modal.js',
-    'register.js': './src/js/register.js',
-    'stats.js': './src/js/stats.js',
-    game: './src/style/game.less',
-    levels: './src/style/levels.less',
-    main: './src/style/main.less',
-    news: './src/style/news.less',
-    profile: './src/style/profile.less',
-    stats: './src/style/stats.less',
-    grid: './src/style/grid.less'
+    game: './src/js/game.js',
+    levels: './src/js/levels.js',
+    main: './src/js/main.js',
+    modal: './src/js/modal.js',
+    register: './src/js/register.js',
+    stats: './src/js/stats.js',
+    styles: './src/styles.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name]'
+    filename: 'js/[name].js'
   },
   module: {
     rules: [
@@ -60,7 +54,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'style/[name].css'
+      filename: '[name].css'
     })
   ]
 };

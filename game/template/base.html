@@ -7,7 +7,7 @@
     <title>Word from word</title>
     <link rel="stylesheet" href="{% static 'lib/fontawesome-all.min.css' %}">
     <link rel="stylesheet" href="{% static 'lib/bg.css' %}">
-    <link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/main.css' %}{% else %}{% static 'style/main.css' %}{% endif %}">
+    <link rel="stylesheet" href="{% if debug %}{% webpack_url '/styles.css' %}{% else %}{% static 'styles.css' %}{% endif %}">
     <script type="text/javascript" src="{% static 'lib/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/main.js' %}{% else %}{% static 'js/main.js' %}{% endif %}"></script>
     <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/modal.js' %}{% else %}{% static 'js/modal.js' %}{% endif %}"></script>

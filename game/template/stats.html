@@ -1,6 +1,4 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/grid.css' %}{% else %}{% static 'style/grid.css' %}{% endif %}">
-<link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/stats.css' %}{% else %}{% static 'style/stats.css' %}{% endif %}">
 <script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 <main>
