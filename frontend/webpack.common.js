@@ -3,7 +3,7 @@ const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = isProd => ({
+module.exports = {
   entry: {
     'game.js': './src/js/game.js',
     'levels.js': './src/js/levels.js',
@@ -63,4 +63,4 @@ module.exports = isProd => ({
       filename: 'style/[name].css'
     })
   ]
-});
+};
