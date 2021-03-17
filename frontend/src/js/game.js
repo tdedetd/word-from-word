@@ -37,308 +37,311 @@ let words = [];
 /** @type {string} */
 let csrfToken;
 
-$(document).ready(() => {
-    csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
+import('jquery').then(m => m.default).then($ => {
 
-    wordsSolved = +$("#words-solved").text();
-    wordInput = $("#word-input");
-    solvedWords = $("#solved-words");
-    letters = document.getElementById("letters");
-    wordInput.val("");
+    $(() => {
+        csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
 
-    solvedWords.children().each((curWordNumber, curWordName) => {
-        words.push(curWordName.innerText);
+        wordsSolved = +$("#words-solved").text();
+        wordInput = $("#word-input");
+        solvedWords = $("#solved-words");
+        letters = document.getElementById("letters");
+        wordInput.val("");
+
+        solvedWords.children().each((curWordNumber, curWordName) => {
+            words.push(curWordName.innerText);
+        });
+
+        $("#submit-word-button").on("click", () => {
+            submitWord();
+        });
+
+        $("#backspace-button").on("click", () => {
+            backspace(true);
+        });
+
+        $("#clear-button").on("click", () => {
+            wordInput.val("");
+            enableAllLetters();
+        });
+
+        wordInput.keypress(function(e) {
+            if (e.keyCode === 13) {
+                submitWord();
+            } else if (e.keyCode === 8) {
+                backspace(false);
+            } else {
+                disableLetter(CYRILLIC[e.which]);
+            }
+        });
+
+        $("body").keypress(function(e) {
+            if (e.keyCode === 13) {
+                submitWord();
+            }
+        });
+
+        $(".letters__item").on("click", function() {
+            let letterBlock = $(this);
+
+            if (!letterBlock.hasClass("letters__item_disabled")) {
+                letterBlock.addClass("letters__item_disabled");
+                wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
+            }
+        });
+
+        $("#shuffle-words-button").click(() => {
+            shuffleLetters();
+        });
+
+        setInterval(clearLabels, 10000);
+        $('#word-input').focus();
     });
 
-    $("#submit-word-button").on("click", () => {
-        submitWord();
-    });
+    /**
+     * Разоблокирует последнюю букву в поле ввода.
+     * @param {boolean} removeLastLetter нужно ли удалять последнюю букву слова
+     */
+    function backspace(removeLastLetter) {
+        if (wordInput.val() === "") {
+            return;
+        }
 
-    $("#backspace-button").on("click", () => {
-        backspace(true);
-    });
+        let word = wordInput.val();
+        let lastLetter = word[word.length - 1];
+        if (lastLetter === "ё" || lastLetter === "Ё") {
+            lastLetter = "е";
+        }
+        enableLetter(lastLetter);
 
-    $("#clear-button").on("click", () => {
+        if (removeLastLetter) {
+            word = word.substr(0, word.length - 1);
+        }
+
+        wordInput.val(word);
+    }
+
+    function submitWord() {
+        let word = wordInput.val().toLowerCase().trim();
         wordInput.val("");
         enableAllLetters();
-    });
 
-    wordInput.keypress(function(e) {
-        if (e.keyCode === 13) {
-            submitWord();
-        } else if (e.keyCode === 8) {
-            backspace(false);
-        } else {
-            disableLetter(CYRILLIC[e.which]);
-        }
-    });
-
-    $("body").keypress(function(e) {
-        if (e.keyCode === 13) {
-            submitWord();
-        }
-    });
-
-    $(".letters__item").on("click", function() {
-        let letterBlock = $(this);
-
-        if (!letterBlock.hasClass("letters__item_disabled")) {
-            letterBlock.addClass("letters__item_disabled");
-            wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
-        }
-    });
-
-    $("#shuffle-words-button").click(() => {
-        shuffleLetters();
-    });
-
-    setInterval(clearLabels, 10000);
-    $('#word-input').focus();
-});
-
-/**
- * Разоблокирует последнюю букву в поле ввода.
- * @param {boolean} removeLastLetter нужно ли удалять последнюю букву слова
- */
-function backspace(removeLastLetter) {
-    if (wordInput.val() === "") {
-        return;
-    }
-
-    let word = wordInput.val();
-    let lastLetter = word[word.length - 1];
-    if (lastLetter === "ё" || lastLetter === "Ё") {
-        lastLetter = "е";
-    }
-    enableLetter(lastLetter);
-
-    if (removeLastLetter) {
-        word = word.substr(0, word.length - 1);
-    }
-
-    wordInput.val(word);
-}
-
-function submitWord() {
-    let word = wordInput.val().toLowerCase().trim();
-    wordInput.val("");
-    enableAllLetters();
-
-    if (word === "") return;
-    if (wordExists(word)) {
-        spawnLabel("Уже отгадано!", "label-neutral");
-        return;
-    }
-
-    $.post("submit_word/", {
-        "word": word,
-        "csrfmiddlewaretoken": csrfToken
-    }).done(data => {
-        const response = data["response"];
-        if (response["success"] === 1) {
-            wordsSolved++;
-            $("#words-solved").text(wordsSolved);
-            insertSolvedWord(word);
-            spawnLabel(`+${response["reward"]}`, "label-success");
-        } else {
-            spawnLabel("cross", "label-fail");
-        }
-    });
-}
-
-/**
- * @param {string} word
- */
-function wordExists(word) {
-    return words.indexOf(word) !== -1;
-}
-
-/**
- * Добавляет указанное слово в список отгаданных слов
- * в алфавитном порядке
- * @param {string} word слово
- */
-function insertSolvedWord(word) {
-    const div = $(document.createElement("div"));
-    div.addClass("solved-words__item");
-    div.addClass("solved-words__item_new");
-    div.text(word);
-
-    const wordsJquery = $("#solved-words").children();
-
-    if (wordsJquery.length === 0 || word > wordsJquery[wordsJquery.length - 1].innerText) {
-        $("#solved-words").append(div);
-    } else {
-        let wordCount = 0;
-        while (word > wordsJquery[wordCount].innerText) {
-            wordCount++;
+        if (word === "") return;
+        if (wordExists(word)) {
+            spawnLabel("Уже отгадано!", "label-neutral");
+            return;
         }
 
-        if (wordCount === 0) {
-            $("#solved-words").prepend(div);
-        } else {
-            div.insertBefore($(wordsJquery[wordCount]));
-        }
-    }
-    words.push(word);
-}
-
-function enableAllLetters() {
-    $(".letters__item").removeClass("letters__item_disabled");
-}
-
-/**
- * Активирует первый втретившийся неактивный блок с указанной буквой.
- * В последствии этого он станет кликабельным.
- * Возаращает признак успешности.
- * @param {string} letter буква
- * @returns {boolean} признак успешности активации буквы
- */
-function enableLetter(letter) {
-    return toggleLetter(true, letter);
-}
-
-/**
- * Деактивирует первый втретившийся активный блок с указанной буквой.
- * В последствии этого он станет некликабельным.
- * Возаращает признак успешности.
- * @param {string} letter буква
- * @returns {boolean} признак успешности деактивации буквы
- */
-function disableLetter(letter) {
-    return toggleLetter(false, letter);
-}
-
-/**
- * Меняет состояние блока с первой встретившейся указанной буквой на указанное.
- * Возаращает признак успешности.
- * @param {boolean} enable true - активировать, false - деактивировать
- * @param {string} letter буква
- * @returns {boolean} признак успешности смены состояния буквы
- */
-function toggleLetter(enable, letter) {
-    try {
-        letter = letter.toLowerCase();
-    } catch (e) {
-        if (e instanceof TypeError) return false;
-        else throw e;
-    }
-
-    let letters = $(".letters__item");
-    let letterBlock, letterDisabled, letterSuits;
-
-    for (let i = 0; i < letters.length; i++) {
-        letterBlock = $(letters[i]);
-
-        letterDisabled = letterBlock.hasClass("letters__item_disabled");
-        letterSuits = letterBlock.text().toLowerCase() === letter;
-
-        if (enable === letterDisabled && letterSuits) {
-
-            if (enable) {
-                letterBlock.removeClass("letters__item_disabled");
+        $.post("submit_word/", {
+            "word": word,
+            "csrfmiddlewaretoken": csrfToken
+        }).done(data => {
+            const response = data["response"];
+            if (response["success"] === 1) {
+                wordsSolved++;
+                $("#words-solved").text(wordsSolved);
+                insertSolvedWord(word);
+                spawnLabel(`+${response["reward"]}`, "label-success");
             } else {
-                letterBlock.addClass("letters__item_disabled");
+                spawnLabel("cross", "label-fail");
             }
-            return true;
+        });
+    }
+
+    /**
+     * @param {string} word
+     */
+    function wordExists(word) {
+        return words.indexOf(word) !== -1;
+    }
+
+    /**
+     * Добавляет указанное слово в список отгаданных слов
+     * в алфавитном порядке
+     * @param {string} word слово
+     */
+    function insertSolvedWord(word) {
+        const div = $(document.createElement("div"));
+        div.addClass("solved-words__item");
+        div.addClass("solved-words__item_new");
+        div.text(word);
+
+        const wordsJquery = $("#solved-words").children();
+
+        if (wordsJquery.length === 0 || word > wordsJquery[wordsJquery.length - 1].innerText) {
+            $("#solved-words").append(div);
+        } else {
+            let wordCount = 0;
+            while (word > wordsJquery[wordCount].innerText) {
+                wordCount++;
+            }
+
+            if (wordCount === 0) {
+                $("#solved-words").prepend(div);
+            } else {
+                div.insertBefore($(wordsJquery[wordCount]));
+            }
         }
-    }
-    return false;
-}
-
-/**
- * Спавнит всплывающую надпись
- * @param {string} text текст сообщения
- * @param {boolean} cssClass cssClass
- */
-function spawnLabel(text, cssClass) {
-    let div = $(document.createElement("div"));
-    div.addClass("label");
-
-    if (text === "cross") div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
-    else div.text(text);
-
-    div.addClass(cssClass);
-
-    $("#labels").append(div);
-    div.addClass("label-anim");
-
-    const width = $(window).width(),
-            height = $(window).height(),
-            top = height / 2 * Math.random() + height / 2,
-            left = width / 4 * 3 * Math.random();
-
-    div.css({
-        top: top + "px",
-        left: left + "px"
-    });
-
-    setTimeout(animateLabel.bind(null, div), 10);
-}
-
-/**
- * Меняет свойства прозрачности и высоты выбранноо блока
- * @param {object} div jquery-объект элемента
- */
-function animateLabel(div) {
-    div.css({
-        top: "-50px",
-        opacity: 0
-    });
-}
-
-/**
- * Очищает всплывающие лейблы с нулевой прозрачностью
- */
-function clearLabels() {
-    const labelsElem = document.getElementById("labels");
-    const labels = $(labelsElem).children();
-    let labelsToRemove = [];
-
-    for (let i = 0; i < labels.length; i++) {
-        if ($(labels[i]).css("opacity") == 0)
-            labelsToRemove.push(labels[i]);
+        words.push(word);
     }
 
-    labelsToRemove.forEach(label => {
-        labelsElem.removeChild(label);
-    });
-}
-
-/**
- * Добавляет указанное слово в контейнер отгаданных слов
- * @param {string} word слово
- */
-function displayWord(word) {
-    let wordElem = $(document.createElement("div"));
-    wordElem.addClass("solved-words__item");
-    wordElem.text(word);
-    solvedWords.append(wordElem);
-}
-
-function shuffleLetters() {
-    const letterElements = Array.from(letters.children);
-    letters.innerHTML = "";
-    shuffle(letterElements).forEach(letter => letters.appendChild(letter));
-}
-
-/**
- * @param {T} array
- * @returns {T}
- */
-function shuffle(array) {
-    let currentIndex = array.length;
-    let randomIndex;
-    let temp;
-
-    while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        temp = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temp;
+    function enableAllLetters() {
+        $(".letters__item").removeClass("letters__item_disabled");
     }
 
-    return array;
-}
+    /**
+     * Активирует первый втретившийся неактивный блок с указанной буквой.
+     * В последствии этого он станет кликабельным.
+     * Возаращает признак успешности.
+     * @param {string} letter буква
+     * @returns {boolean} признак успешности активации буквы
+     */
+    function enableLetter(letter) {
+        return toggleLetter(true, letter);
+    }
+
+    /**
+     * Деактивирует первый втретившийся активный блок с указанной буквой.
+     * В последствии этого он станет некликабельным.
+     * Возаращает признак успешности.
+     * @param {string} letter буква
+     * @returns {boolean} признак успешности деактивации буквы
+     */
+    function disableLetter(letter) {
+        return toggleLetter(false, letter);
+    }
+
+    /**
+     * Меняет состояние блока с первой встретившейся указанной буквой на указанное.
+     * Возаращает признак успешности.
+     * @param {boolean} enable true - активировать, false - деактивировать
+     * @param {string} letter буква
+     * @returns {boolean} признак успешности смены состояния буквы
+     */
+    function toggleLetter(enable, letter) {
+        try {
+            letter = letter.toLowerCase();
+        } catch (e) {
+            if (e instanceof TypeError) return false;
+            else throw e;
+        }
+
+        let letters = $(".letters__item");
+        let letterBlock, letterDisabled, letterSuits;
+
+        for (let i = 0; i < letters.length; i++) {
+            letterBlock = $(letters[i]);
+
+            letterDisabled = letterBlock.hasClass("letters__item_disabled");
+            letterSuits = letterBlock.text().toLowerCase() === letter;
+
+            if (enable === letterDisabled && letterSuits) {
+
+                if (enable) {
+                    letterBlock.removeClass("letters__item_disabled");
+                } else {
+                    letterBlock.addClass("letters__item_disabled");
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Спавнит всплывающую надпись
+     * @param {string} text текст сообщения
+     * @param {boolean} cssClass cssClass
+     */
+    function spawnLabel(text, cssClass) {
+        let div = $(document.createElement("div"));
+        div.addClass("label");
+
+        if (text === "cross") div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
+        else div.text(text);
+
+        div.addClass(cssClass);
+
+        $("#labels").append(div);
+        div.addClass("label-anim");
+
+        const width = $(window).width(),
+                height = $(window).height(),
+                top = height / 2 * Math.random() + height / 2,
+                left = width / 4 * 3 * Math.random();
+
+        div.css({
+            top: top + "px",
+            left: left + "px"
+        });
+
+        setTimeout(animateLabel.bind(null, div), 10);
+    }
+
+    /**
+     * Меняет свойства прозрачности и высоты выбранноо блока
+     * @param {object} div jquery-объект элемента
+     */
+    function animateLabel(div) {
+        div.css({
+            top: "-50px",
+            opacity: 0
+        });
+    }
+
+    /**
+     * Очищает всплывающие лейблы с нулевой прозрачностью
+     */
+    function clearLabels() {
+        const labelsElem = document.getElementById("labels");
+        const labels = $(labelsElem).children();
+        let labelsToRemove = [];
+
+        for (let i = 0; i < labels.length; i++) {
+            if ($(labels[i]).css("opacity") == 0)
+                labelsToRemove.push(labels[i]);
+        }
+
+        labelsToRemove.forEach(label => {
+            labelsElem.removeChild(label);
+        });
+    }
+
+    /**
+     * Добавляет указанное слово в контейнер отгаданных слов
+     * @param {string} word слово
+     */
+    function displayWord(word) {
+        let wordElem = $(document.createElement("div"));
+        wordElem.addClass("solved-words__item");
+        wordElem.text(word);
+        solvedWords.append(wordElem);
+    }
+
+    function shuffleLetters() {
+        const letterElements = Array.from(letters.children);
+        letters.innerHTML = "";
+        shuffle(letterElements).forEach(letter => letters.appendChild(letter));
+    }
+
+    /**
+     * @param {T} array
+     * @returns {T}
+     */
+    function shuffle(array) {
+        let currentIndex = array.length;
+        let randomIndex;
+        let temp;
+
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            temp = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
+
+        return array;
+    }
+});
