@@ -20,17 +20,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        include: path.resolve(__dirname, 'src/js'),
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: 'env',
-            plugins: 'transform-class-properties'
-          }
-        }
-      },
-      {
         test: /\.less$/,
         include: path.resolve(__dirname, 'src/style'),
         use: [
