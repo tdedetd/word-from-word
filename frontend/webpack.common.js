@@ -19,6 +19,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
         test: /\.less$/,
         include: path.resolve(__dirname, 'src/style'),
         use: [
