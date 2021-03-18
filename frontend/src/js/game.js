@@ -82,7 +82,7 @@ import('jquery').then(m => m.default).then($ => {
         });
 
         $(".letters__item").on("click", function() {
-            let letterBlock = $(this);
+            const letterBlock = $(this);
 
             if (!letterBlock.hasClass("letters__item_disabled")) {
                 letterBlock.addClass("letters__item_disabled");
@@ -226,7 +226,7 @@ import('jquery').then(m => m.default).then($ => {
             else throw e;
         }
 
-        let letters = $(".letters__item");
+        const letters = $(".letters__item");
         let letterBlock, letterDisabled, letterSuits;
 
         for (let i = 0; i < letters.length; i++) {
@@ -254,7 +254,7 @@ import('jquery').then(m => m.default).then($ => {
      * @param {boolean} cssClass cssClass
      */
     function spawnLabel(text, cssClass) {
-        let div = $(document.createElement("div"));
+        const div = $(document.createElement("div"));
         div.addClass("label");
 
         if (text === "cross") div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
@@ -312,7 +312,7 @@ import('jquery').then(m => m.default).then($ => {
      * @param {string} word слово
      */
     function displayWord(word) {
-        let wordElem = $(document.createElement("div"));
+        const wordElem = $(document.createElement("div"));
         wordElem.addClass("solved-words__item");
         wordElem.text(word);
         solvedWords.append(wordElem);
@@ -329,7 +329,7 @@ import('jquery').then(m => m.default).then($ => {
      * @returns {T}
      */
     function shuffle(array) {
-        let currentIndex = array.length;
+        const currentIndex = array.length;
         let randomIndex;
         let temp;
 

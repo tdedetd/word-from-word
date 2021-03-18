@@ -60,28 +60,10 @@
       <footer>
         <div class="footer-wrapper">
           <div class="footer-wrapper__item">Copyright© TDEDETD, 2018-{% now 'Y' %}</div>
-          {% comment %}
-          <div class="footer-wrapper__item footer-wrapper__item_link" id="feedback-button">Написать нам</div>
-          {% endcomment %}
         </div>
       </footer>
-      {% comment %}
-      <div class="modal" modal-for="feedback-button">
-        <div>
-          <p>Не хватает какого-то слова или хотите оставить отзыв?</p>
-          <p>Напишите нам!</p>
-          <p>&nbsp;</p>
-          <textarea cols="30" rows="6"></textarea>
-          <p>&nbsp;</p>
-          <div>
-            <button>Отправить</button>
-          </div>
-        </div>
-      </div>
-      {% endcomment %}
     </div>
 
     <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/main.js' %}{% else %}{% static 'js/main.js' %}{% endif %}"></script>
-    <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/modal.js' %}{% else %}{% static 'js/modal.js' %}{% endif %}"></script>
   </body>
 </html>

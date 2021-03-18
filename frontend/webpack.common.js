@@ -7,7 +7,6 @@ module.exports = {
     game: './src/js/game.js',
     levels: './src/js/levels.js',
     main: './src/js/main.js',
-    modal: './src/js/modal.js',
     register: './src/js/register.js',
     stats: './src/js/stats.js',
     styles: './src/styles.js',

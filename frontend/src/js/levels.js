@@ -2,9 +2,10 @@
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
-let lvlCount = 0;
+/** Количество прогружаемых уровней за раз */
+const lvlLimit = 20;
 
-let lvlLimit = 20;
+let lvlCount = 0;
 
 /**
  * Html-код уровня
@@ -169,5 +170,5 @@ import('jquery').then(m => m.default).then($ => {
     function resetSelect(selectJquery) {
         const value = selectJquery.get()[0].children[0].value;
         selectJquery.val(value);
-    }    
+    }
 });

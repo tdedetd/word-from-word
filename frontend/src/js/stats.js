@@ -240,5 +240,5 @@ import('jquery').then(m => m.default).then($ => {
                 tbody.append(row);
             });
         });
-    }    
+    }
 });
