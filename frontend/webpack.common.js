@@ -3,13 +3,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  context: path.resolve(__dirname, 'src'),
   entry: {
-    game: './src/js/game.js',
-    levels: './src/js/levels.js',
-    main: './src/js/main.js',
-    register: './src/js/register.js',
-    stats: './src/js/stats.js',
-    styles: './src/styles.js',
+    game: './js/game.js',
+    levels: './js/levels.js',
+    main: './js/main.js',
+    register: './js/register.js',
+    stats: './js/stats.js',
+    styles: './styles.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -28,7 +29,6 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        include: path.resolve(__dirname, 'src/style'),
         use: [
           MiniCssExtractPlugin.loader,
           {
