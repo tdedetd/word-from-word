@@ -1,30 +1,14 @@
 "use strict";
 
-/** @type {Object.<number, string>} */
-const CYRILLIC = {
-    1072: "а", 1073: "б", 1074: "в", 1075: "г", 1076: "д", 1077: "е", 1105: "е", 1078: "ж", 1079: "з", 1080: "и", 1081: "й", 1082: "к",
-    1083: "л", 1084: "м", 1085: "н", 1086: "о", 1087: "п", 1088: "р", 1089: "с", 1090: "т", 1091: "у", 1092: "ф", 1093: "х", 1094: "ц",
-    1095: "ч", 1096: "ш", 1097: "щ", 1098: "ъ", 1099: "ы", 1100: "ь", 1101: "э", 1102: "ю", 1103: "я",
-    1040: "А", 1041: "Б", 1042: "В", 1043: "Г", 1044: "Д", 1045: "Е", 1025: "Е", 1046: "Ж", 1047: "З", 1048: "И", 1049: "Й", 1050: "К",
-    1051: "Л", 1052: "М", 1053: "Н", 1054: "О", 1055: "П", 1056: "Р", 1057: "С", 1058: "Т", 1059: "У", 1060: "Ф", 1061: "Х", 1062: "Ц",
-    1063: "Ч", 1064: "Ш", 1065: "Щ", 1066: "Ъ", 1067: "Ы", 1068: "Ь", 1069: "Э", 1070: "Ю", 1071: "Я"
-};
-
 /**
- * Кол-во разгаданных слов
- * @type {number}
+ * Jquery-объект поля ввода слова
+ * @type {JQuery<HTMLInputElement>}
  */
-let wordsSolved;
-
-/** Jquery-объект поля ввода слова */ 
 let wordInput; 
-
-/** Jquery-объект контейнера с отгаданными словами */
-let solvedWords;
 
 /**
  * Элемент с буквами слова
- * @type {HTMLElement}
+ * @type {HTMLDivElement}
  */
 let letters;
 
@@ -37,18 +21,16 @@ let words = [];
 /** @type {string} */
 let csrfToken;
 
-import('jquery').then(m => m.default).then($ => {
+import("jquery").then(m => m.default).then($ => {
 
     $(() => {
         csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
 
-        wordsSolved = +$("#words-solved").text();
         wordInput = $("#word-input");
-        solvedWords = $("#solved-words");
         letters = document.getElementById("letters");
         wordInput.val("");
 
-        solvedWords.children().each((curWordNumber, curWordName) => {
+        $("#solved-words").children().each((curWordNumber, curWordName) => {
             words.push(curWordName.innerText);
         });
 
@@ -57,7 +39,7 @@ import('jquery').then(m => m.default).then($ => {
         });
 
         $("#backspace-button").on("click", () => {
-            backspace(true);
+            backspace();
         });
 
         $("#clear-button").on("click", () => {
@@ -65,24 +47,25 @@ import('jquery').then(m => m.default).then($ => {
             enableAllLetters();
         });
 
-        wordInput.keypress(function(e) {
-            if (e.keyCode === 13) {
+        wordInput.on("keydown", e => {
+            if (e.key === "Enter") {
                 submitWord();
-            } else if (e.keyCode === 8) {
-                backspace(false);
+            } else if (e.key === "Backspace") {
+                e.preventDefault();
+                backspace();
             } else {
-                disableLetter(CYRILLIC[e.which]);
+                disableLetter(e.key);
             }
         });
 
-        $("body").keypress(function(e) {
-            if (e.keyCode === 13) {
+        $("body").on("keydown", e => {
+            if (e.key === "Enter") {
                 submitWord();
             }
         });
 
-        $(".letters__item").on("click", function() {
-            const letterBlock = $(this);
+        $(".letters__item").on("click", e => {
+            const letterBlock = $(e.originalEvent.target);
 
             if (!letterBlock.hasClass("letters__item_disabled")) {
                 letterBlock.addClass("letters__item_disabled");
@@ -90,34 +73,31 @@ import('jquery').then(m => m.default).then($ => {
             }
         });
 
-        $("#shuffle-words-button").click(() => {
+        $("#shuffle-words-button").on("click", () => {
             shuffleLetters();
         });
 
         setInterval(clearLabels, 10000);
-        $('#word-input').focus();
+        $("#word-input").trigger("focus");
     });
 
     /**
      * Разоблокирует последнюю букву в поле ввода.
-     * @param {boolean} removeLastLetter нужно ли удалять последнюю букву слова
      */
-    function backspace(removeLastLetter) {
+    function backspace() {
         if (wordInput.val() === "") {
             return;
         }
 
+        /** @type {string} */
         let word = wordInput.val();
-        let lastLetter = word[word.length - 1];
+        let lastLetter = word.slice(-1);
         if (lastLetter === "ё" || lastLetter === "Ё") {
             lastLetter = "е";
         }
         enableLetter(lastLetter);
 
-        if (removeLastLetter) {
-            word = word.substr(0, word.length - 1);
-        }
-
+        word = word.slice(0, -1);
         wordInput.val(word);
     }
 
@@ -133,14 +113,13 @@ import('jquery').then(m => m.default).then($ => {
         }
 
         $.post("submit_word/", {
-            "word": word,
-            "csrfmiddlewaretoken": csrfToken
+            word,
+            csrfmiddlewaretoken: csrfToken
         }).done(data => {
             const response = data["response"];
             if (response["success"] === 1) {
-                wordsSolved++;
-                $("#words-solved").text(wordsSolved);
                 insertSolvedWord(word);
+                $("#words-solved").text(words.length);
                 spawnLabel(`+${response["reward"]}`, "label-success");
             } else {
                 spawnLabel("cross", "label-fail");
@@ -226,6 +205,8 @@ import('jquery').then(m => m.default).then($ => {
             else throw e;
         }
 
+        if (letter === "ё") letter = "е";
+
         const letters = $(".letters__item");
         let letterBlock, letterDisabled, letterSuits;
 
@@ -307,17 +288,6 @@ import('jquery').then(m => m.default).then($ => {
         });
     }
 
-    /**
-     * Добавляет указанное слово в контейнер отгаданных слов
-     * @param {string} word слово
-     */
-    function displayWord(word) {
-        const wordElem = $(document.createElement("div"));
-        wordElem.addClass("solved-words__item");
-        wordElem.text(word);
-        solvedWords.append(wordElem);
-    }
-
     function shuffleLetters() {
         const letterElements = Array.from(letters.children);
         letters.innerHTML = "";
@@ -329,7 +299,7 @@ import('jquery').then(m => m.default).then($ => {
      * @returns {T}
      */
     function shuffle(array) {
-        const currentIndex = array.length;
+        let currentIndex = array.length;
         let randomIndex;
         let temp;
 

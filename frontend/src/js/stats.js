@@ -4,7 +4,7 @@ let personStatsTab;
 let wordLengthChart;
 let firstLetterChart;
 
-import('jquery').then(m => m.default).then($ => {
+import("jquery").then(m => m.default).then($ => {
 
     class TabPane {
         /**
@@ -12,7 +12,7 @@ import('jquery').then(m => m.default).then($ => {
          * @param {string} id id таб пейна
          * @param {Object.<number, Function>} events события по нажатию на вкладку
          */
-        constructor(id, events=undefined) {
+        constructor(id, events=null) {
             this.classTabSelected = "tab-pane__tab_selected";
             this.classTab = "tab-pane__tab";
             this.classContent = "tab-pane__content";
@@ -84,7 +84,7 @@ import('jquery').then(m => m.default).then($ => {
         loadPopularWords();
     });
 
-    $(window).resize(() => {
+    $(window).on("resize", () => {
         wordLengthChart.resize();
         firstLetterChart.resize();
     });

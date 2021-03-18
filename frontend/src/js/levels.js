@@ -34,7 +34,7 @@ let inputSearch;
 /** Jquery-элемент */
 let loadingContainer;
 
-import('jquery').then(m => m.default).then($ => {
+import("jquery").then(m => m.default).then($ => {
 
     $(() => {
         lvlHtml = $("#level-template").html();

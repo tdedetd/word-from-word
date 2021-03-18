@@ -45,14 +45,14 @@ const checkHtml = `<i class="fa fa-check" aria-hidden="true"></i>`;
 let loginReady = false;
 let passReady = false;
 
-import('jquery').then(m => m.default).then($ => {
+import("jquery").then(m => m.default).then($ => {
 
-    $(document).on("change", "#reg-user", function() {
+    $("#reg-user").on("change", e => {
         const loginOutput = $("#login-text");
         loginOutput.removeClass("text-fail");
         loginOutput.removeClass("text-success");
 
-        const login = $(this).val();
+        const login = $(e.originalEvent.target).val();
 
         for (const validator of loginValidators) {
             if (!validator.validate(login)) {

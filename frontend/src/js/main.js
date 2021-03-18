@@ -1,4 +1,4 @@
-import('jquery').then(m => m.default).then($ => {
+import("jquery").then(m => m.default).then($ => {
     $(() => {
         displayXpInfo();
     });
