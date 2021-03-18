@@ -1,4 +1,7 @@
 @import "colors.less";
+@import "./common//input.less";
+@import "./common/tab.less";
+@import "./common/table.less";
 
 /* Tags */
 
@@ -53,65 +56,6 @@ textarea {
     resize: none;
 }
 
-/* Other */
-
-input[type="text"],
-input[type="password"] {
-    -webkit-appearance: none;
-    color: @blue;
-    background: @orange;
-    font-size: inherit;
-    border: none;
-    padding: .3em .5em;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px @dark-blue;
-}
-
-/* Button styling */
-
-input[type="button"],
-input[type="submit"],
-button {
-    -webkit-appearance: none;
-    color: @light-orange;
-    background-color: @blue;
-    -webkit-background-color: @blue;
-    font-size: inherit;
-    border: none;
-    padding: .3em .5em;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 1px 1px 3px @dark-blue;
-    transition: background-color .3s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-input[type="button"]:hover,
-input[type="submit"]:hover,
-button:hover {
-    background-color: @middle-light-blue;
-}
-
-input[type="button"]:disabled,
-input[type="submit"]:disabled,
-button:disabled {
-    cursor: default;
-    color: @accent-grey;
-    box-shadow: none;
-}
-
-:focus {
-    outline: none;
-}
-
-.btn-green { background: @accent-green-bg; }
-.btn-green:hover { background: @accent-green-bg-hover; }
-
-.btn-red { background: @accent-red-bg; }
-.btn-red:hover { background: @accent-red-bg-hover; }
-
-.btn-orange { background: @orange-bg; }
-.btn-orange:hover { background: @orange-bg-hover; }
-
 /* select styling */
 
 select {
@@ -123,13 +67,6 @@ select {
     color: @blue;
     padding: .35em .5em;
     box-shadow: 1px 1px 3px @dark-blue;
-}
-
-/* Input styling */
-
-input.input-light {
-    color: @blue;
-    background-color: @light-orange;
 }
 
 /* other */
@@ -375,55 +312,4 @@ input.auth-form__item {
 
 .m-1 {
     margin: 1rem;
-}
-
-/* Tab pane */
-
-.tab-pane__tabs {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.tab-pane__tab {
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    -webkit-transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.tab-pane__tab:hover {
-    background: @orange;
-}
-
-.tab-pane__tab_selected {
-    background: @orange;
-}
-
-.tab-pane__contents {
-    background: @orange;
-    padding: 10px;
-}
-
-/* Table */
-
-.table__row {
-    border-radius: 5px;
-    display: flex;
-}
-
-.table__row:nth-child(2n+3) {
-    background: @orange;
-}
-
-.table__head {
-    color: @light-blue;
-    background: @blue;
-}
-
-.table__cell {
-    padding: 3px 5px;
-    text-align: center;
-    flex-grow: 1;
 }

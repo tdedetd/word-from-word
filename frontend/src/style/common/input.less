@@ -1,0 +1,61 @@
+@import "../colors.less";
+
+input[type="text"],
+input[type="password"] {
+    -webkit-appearance: none;
+    color: @blue;
+    background: @orange;
+    font-size: inherit;
+    border: none;
+    padding: .3em .5em;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px @dark-blue;
+}
+
+input[type="button"],
+input[type="submit"],
+button {
+    -webkit-appearance: none;
+    color: @light-orange;
+    background-color: @blue;
+    -webkit-background-color: @blue;
+    font-size: inherit;
+    border: none;
+    padding: .3em .5em;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px @dark-blue;
+    transition: background-color .3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+button:hover {
+    background-color: @middle-light-blue;
+}
+
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+button:disabled {
+    cursor: default;
+    color: @accent-grey;
+    box-shadow: none;
+}
+
+input.input-light {
+    color: @blue;
+    background-color: @light-orange;
+}
+
+.btn-green { background: @accent-green-bg; }
+.btn-green:hover { background: @accent-green-bg-hover; }
+
+.btn-red { background: @accent-red-bg; }
+.btn-red:hover { background: @accent-red-bg-hover; }
+
+.btn-orange { background: @orange-bg; }
+.btn-orange:hover { background: @orange-bg-hover; }
+
+:focus {
+    outline: none;
+}

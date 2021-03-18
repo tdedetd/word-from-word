@@ -1,0 +1,28 @@
+@import "../colors.less";
+
+.tab-pane__tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.tab-pane__tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    -webkit-transition: background-color .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.tab-pane__tab:hover {
+    background: @orange;
+}
+
+.tab-pane__tab_selected {
+    background: @orange;
+}
+
+.tab-pane__contents {
+    background: @orange;
+    padding: 10px;
+}

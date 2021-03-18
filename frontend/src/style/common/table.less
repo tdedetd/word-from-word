@@ -1,0 +1,21 @@
+@import "../colors.less";
+
+.table__row {
+    border-radius: 5px;
+    display: flex;
+}
+
+.table__row:nth-child(2n+3) {
+    background: @orange;
+}
+
+.table__head {
+    color: @light-blue;
+    background: @blue;
+}
+
+.table__cell {
+    padding: 3px 5px;
+    text-align: center;
+    flex-grow: 1;
+}
