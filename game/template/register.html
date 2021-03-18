@@ -1,11 +1,10 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
 <main class="content-center">
   <section class="text-center section-narrow">
     <h2>Регистрация всего в пару кликов!</h2>
     <form class="auth-form" action="{% url 'signup' %}" method="POST">
       {% csrf_token %}
-      <div class="mrg-10">
+      <div class="m-1">
         <input class="auth-form__item" id="reg-user" type="text" name="username" placeholder="Логин" maxlength="40" autocomplete="false">
         <div class="valid-msg" id="login-text"></div>
         <input class="auth-form__item" id="reg-pass" type="password" name="password" placeholder="Пароль" autocomplete="false">
@@ -16,4 +15,6 @@
     </form>
   </section>
 </main>
+
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
 {% endblock %}

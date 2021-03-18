@@ -1,5 +1,4 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/game.js' %}{% else %}{% static 'js/game.js' %}{% endif %}"></script>
 <div id="level-info" data-id="{{ level_id }}"></div>
 <main>
   <div class="letters" id="letters">{% for letter in letters %}
@@ -35,7 +34,7 @@
     <div class="row">
       {% if solve_history|length > 0 %}
       <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h2 class="section-title">История разгадывания слова</h2>
+        <h2 class="section-title">История</h2>
         <div class="table table-lvl-history">
           <div class="table__row table__head">
             <div class="table__cell table__date">Дата</div>
@@ -51,7 +50,7 @@
       </div>
       {% endif %}
       <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h2 class="section-title">Лидеры по разгаданным словам</h2>
+        <h2 class="section-title">Лидеры</h2>
         <div class="table table-lvl-history">
           <div class="table__row table__head">
             <div class="table__cell table__date">Пользователь</div>
@@ -69,4 +68,6 @@
   </div>
   <div id="labels"></div>
 </main>
+
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/game.js' %}{% else %}{% static 'js/game.js' %}{% endif %}"></script>
 {% endblock %}

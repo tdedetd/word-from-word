@@ -1,6 +1,4 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 <main>
   <div class="row">
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -64,4 +62,7 @@
     </div>{% endif %}
   </div>
 </main>
+
+<script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 {% endblock %}

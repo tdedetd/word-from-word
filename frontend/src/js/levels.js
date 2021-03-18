@@ -36,7 +36,7 @@ let loadingContainer;
 import('jquery').then(m => m.default).then($ => {
 
     $(() => {
-        lvlHtml = $("#level-sample").html();
+        lvlHtml = $("#level-template").html();
         levels = $("#levels");
         moreLevelsContainer = $("#container-more-levels");
         btnTop = $("#btn-top");

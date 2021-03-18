@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-sample" style="display: none;">
+<div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-template" style="display: none;">
   <a href="" class="level-link">
     <div class="level">
       <div class="level__word"></div>
@@ -17,7 +17,6 @@
   </a>
 </div>
 
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
 <main>
   <div class="level-select-params row">
     <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
@@ -65,4 +64,6 @@
     <i class="fa fa-angle-up" aria-hidden="true"></i>
   </button>
 </main>
+
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
 {% endblock %}

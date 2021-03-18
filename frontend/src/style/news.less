@@ -1,12 +1,25 @@
 @import "colors.less";
 
-.news-item {
-    margin: 10px;
-    padding: 20px;
+@media (min-width: 650px) {
+    .news-item {
+        margin: 2rem 5rem;
+        padding: 1.5rem 3rem;
+    }
+
+    .feature-list {
+        margin-left: 2rem;
+    }
 }
 
-.news-item:not(:last-child) {
-    border-bottom: solid 2px @blue;
+@media (max-width: 649px) {
+    .news-item {
+        margin: 2rem 1rem;
+        padding: 1rem 1rem;
+    }
+
+    .feature-list {
+        margin-left: 1rem;
+    }
 }
 
 .news-item__head {
@@ -16,11 +29,6 @@
 .news-item__body {
     margin: 20px;
     word-break: keep-all;
-}
-
-.feature-list {
-    list-style-type: disc;
-    margin-left: 40px;
 }
 
 .feature-list > li {
