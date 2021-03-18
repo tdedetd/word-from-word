@@ -31,18 +31,19 @@ module.exports = {
         test: /\.less$/,
         use: [
           MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              url: false
-            }
-          },
-          {
-            loader: 'less-loader',
-            options: { sourceMap: true }
-          }
+          'css-loader',
+          'less-loader'
         ]
+      },
+      {
+        test: /\.(jpg|png)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'assets'
+          }
+        },
       }
     ]
   },
