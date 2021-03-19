@@ -91,6 +91,7 @@ import("jquery").then(m => m.default).then($ => {
             if (!letterBlock.hasClass("letters__item_disabled")) {
                 letterBlock.addClass("letters__item_disabled");
                 wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
+                filterWords();
             }
         });
 
