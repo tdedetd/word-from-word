@@ -58,6 +58,7 @@ import("jquery").then(m => m.default).then($ => {
 
         $("#backspace-button").on("click", () => {
             backspace();
+            filterWords();
         });
 
         $("#clear-button").on("click", () => {
@@ -130,7 +131,7 @@ import("jquery").then(m => m.default).then($ => {
         const filter = wordInput.val().toLowerCase().trim();
         solvedWordsContainer.html("");
         words.forEach(solvedWord => {
-            if (solvedWord.word.includes(filter)) {
+            if (solvedWord.word.indexOf(filter) === 0) {
                 insertSolvedWord(solvedWord);
             }
         });
