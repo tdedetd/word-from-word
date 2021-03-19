@@ -1,10 +1,16 @@
 "use strict";
 
-/**
- * Jquery-объект поля ввода слова
- * @type {JQuery<HTMLInputElement>}
- */
-let wordInput; 
+class SolvedWord {
+
+    /**
+     * @param {string} word 
+     * @param {boolean} isNew 
+     */
+    constructor(word, isNew) {
+        this.word = word;
+        this.isNew = isNew;
+    }
+}
 
 /**
  * Элемент с буквами слова
@@ -13,10 +19,21 @@ let wordInput;
 let letters;
 
 /**
- * Список разгаданных слов
- * @type {string[]}
+ * @type {JQuery<HTMLDivElement>}
  */
-let words = [];
+let solvedWordsContainer;
+
+/**
+ * Jquery-объект поля ввода слова
+ * @type {JQuery<HTMLInputElement>}
+ */
+ let wordInput;
+
+/**
+ * Список разгаданных слов
+ * @type {SolvedWord[]}
+ */
+const words = [];
 
 /** @type {string} */
 let csrfToken;
@@ -29,9 +46,10 @@ import("jquery").then(m => m.default).then($ => {
         wordInput = $("#word-input");
         letters = document.getElementById("letters");
         wordInput.val("");
+        solvedWordsContainer = $("#solved-words");
 
-        $("#solved-words").children().each((curWordNumber, curWordName) => {
-            words.push(curWordName.innerText);
+        solvedWordsContainer.children().each((curWordNumber, curWordName) => {
+            words.push(new SolvedWord(curWordName.innerText, false));
         });
 
         $("#submit-word-button").on("click", () => {
@@ -45,6 +63,7 @@ import("jquery").then(m => m.default).then($ => {
         $("#clear-button").on("click", () => {
             wordInput.val("");
             enableAllLetters();
+            filterWords();
         });
 
         wordInput.on("keydown", e => {
@@ -56,6 +75,8 @@ import("jquery").then(m => m.default).then($ => {
             } else {
                 disableLetter(e.key);
             }
+
+            setTimeout(() => filterWords());
         });
 
         $("body").on("keydown", e => {
@@ -101,8 +122,21 @@ import("jquery").then(m => m.default).then($ => {
         wordInput.val(word);
     }
 
+    /**
+     * Фильтрует слова в списке отгаданных в соответствии с заданным фильтром
+     */
+    function filterWords() {
+        const filter = wordInput.val().toLowerCase().trim();
+        solvedWordsContainer.html("");
+        words.forEach(solvedWord => {
+            if (solvedWord.word.includes(filter)) {
+                insertSolvedWord(solvedWord);
+            }
+        });
+    }
+
     function submitWord() {
-        let word = wordInput.val().toLowerCase().trim();
+        const word = wordInput.val().toLowerCase().trim();
         wordInput.val("");
         enableAllLetters();
 
@@ -118,7 +152,9 @@ import("jquery").then(m => m.default).then($ => {
         }).done(data => {
             const response = data["response"];
             if (response["success"] === 1) {
-                insertSolvedWord(word);
+                const solvedWord = new SolvedWord(word, true);
+                insertSolvedWord(solvedWord);
+                words.push(solvedWord);
                 $("#words-solved").text(words.length);
                 spawnLabel(`+${response["reward"]}`, "label-success");
             } else {
@@ -131,24 +167,30 @@ import("jquery").then(m => m.default).then($ => {
      * @param {string} word
      */
     function wordExists(word) {
-        return words.indexOf(word) !== -1;
+        for (let solvedWord of words) {
+            if (solvedWord.word === word) return true;
+        }
+
+        return false;
     }
 
     /**
      * Добавляет указанное слово в список отгаданных слов
      * в алфавитном порядке
-     * @param {string} word слово
+     * @param {SolvedWord} solvedWord
      */
-    function insertSolvedWord(word) {
+    function insertSolvedWord(solvedWord) {
+        const word = solvedWord.word;
         const div = $(document.createElement("div"));
         div.addClass("solved-words__item");
-        div.addClass("solved-words__item_new");
+
+        if (solvedWord.isNew) div.addClass("solved-words__item_new");
         div.text(word);
 
-        const wordsJquery = $("#solved-words").children();
+        const wordsJquery = solvedWordsContainer.children();
 
         if (wordsJquery.length === 0 || word > wordsJquery[wordsJquery.length - 1].innerText) {
-            $("#solved-words").append(div);
+            solvedWordsContainer.append(div);
         } else {
             let wordCount = 0;
             while (word > wordsJquery[wordCount].innerText) {
@@ -156,12 +198,11 @@ import("jquery").then(m => m.default).then($ => {
             }
 
             if (wordCount === 0) {
-                $("#solved-words").prepend(div);
+                solvedWordsContainer.prepend(div);
             } else {
                 div.insertBefore($(wordsJquery[wordCount]));
             }
         }
-        words.push(word);
     }
 
     function enableAllLetters() {
