@@ -220,7 +220,7 @@ import("jquery").then(m => m.default).then($ => {
     function loadPopularWords() {
         $.get("get_popular_words/").done(data => {
             const tbody = $("#popular-words");
-            data.words.forEach(word => {
+            data.forEach(word => {
                 const row = $(document.createElement("div"));
                 row.addClass("table__row");
 

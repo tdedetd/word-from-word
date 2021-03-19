@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'^game/random_level/$', views.redirect_to_random_level, name='random_level'),
     url(r'^game/(?P<level_id>\d+)/$', views.game, name='game'),
     url(r'^game/(?P<level_id>\d+)/submit_word/$', views.submit_word),
-    url(r'^game/(?P<level_id>\d+)/get_solved_words/$', views.get_solved_words),
     url(r'^profile(?P<user_id>\d+)/$', views.profile, name='profile'),
     url(r'^stats/$', views.stats, name='stats'),
     url(r'^stats/get_personal_stats/$', views.get_personal_stats),

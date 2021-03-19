@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db import connection
 
 
@@ -93,7 +93,7 @@ def checklogin(request, login):
     Проверяет, присутствует ли пользователь с указанным именем в базе
     и возвращает json-ответ.
     """
-    return JsonResponse({'response': if_login_exists(login)})
+    return JsonResponse({'exists': if_login_exists(login)})
 
 
 def if_login_exists(login):
@@ -115,16 +115,13 @@ def if_login_exists(login):
 
 def send_verification_email(request):
     from django.utils.crypto import get_random_string
-    from .http import json, template
+    from .http import json
     from .models import User
     from .models import EmailToken
     from .email import send_verification_email
 
-    if not request.is_ajax():
-        return template(request, 404)
-
     if request.user.is_anonymous:
-        return json(request, 401)
+        return HttpResponse(status=401)
 
     email = request.POST.get('email')
 
@@ -158,11 +155,8 @@ def send_verification_email(request):
 def verify_email(request):
     from datetime import datetime
     from django.core.exceptions import ObjectDoesNotExist
-    from .http import json, template
+    from .http import json
     from .models import EmailToken, User
-
-    if not request.is_ajax():
-        return template(request, 404)
 
     if request.user.is_anonymous:
         return json(request, 401)
@@ -222,19 +216,14 @@ def get_xp_info(request):
     """
     Возвращает информацию о рейтинге и уровне пользователя
     """
-    from .http import template, json
     from .xp import get_xp_info
     from .models import User
 
-    if not request.is_ajax():
-        return template(request, 404)
-
     if request.user.is_anonymous:
-        return json(request, 401)
+        return HttpResponse(status=401)
 
     xp_info = get_xp_info(User.objects.get(id=request.user.id).rating)
-
-    return JsonResponse({'xp_info': xp_info})
+    return JsonResponse(xp_info)
 
 
 def news(request):
@@ -288,17 +277,12 @@ def get_levels(request):
     """
     Возвращает список уровней
     """
-    from .http import template, json
-
-    if not request.is_ajax():
-        return template(request, 404)
-
     if request.user.is_anonymous:
-        return json(request, 401)
+        return HttpResponse(status=401)
 
     user_id = request.user.id
-    type_id = request.GET.get("type_id")
-    dir_id = request.GET.get("dir_id")
+    type_id = request.GET.get("typeId")
+    dir_id = request.GET.get("dirId")
     offset = request.GET.get("offset")
     limit = request.GET.get("limit")
     filter_text = request.GET.get("filter")
@@ -309,7 +293,7 @@ def get_levels(request):
         try:
             int(param)
         except ValueError:
-            return json(request, 400, 'Wrong parameter(s)')
+            return HttpResponse(status=400)
 
     params = [user_id] + params + [filter_text]
 
@@ -453,18 +437,13 @@ def submit_word(request, level_id):
     Отправляет слово на проверку.
     Возвращает результат с признаком успешности и текущим уровнем пользователя.
     """
-    from .http import template, json
-
-    if not request.is_ajax():
-        return template(request, 404)
-
     if request.user.is_anonymous:
-        return json(request, 401)
+        return HttpResponse(status=401)
 
     word = request.POST.get('word')
 
     if word is None or word.strip() == '':
-        return json(request, 400)
+        return HttpResponse(status=400)
 
     submit_word_sql = '''
         SELECT key, val FROM submit_word(%s, %s, %s)
@@ -481,45 +460,7 @@ def submit_word(request, level_id):
     for row in submit_result:
         submit_result_dict.update({row[0]: row[1]})
 
-    return json(request, 200, submit_result_dict)
-
-
-def get_solved_words(request, level_id):
-    """
-    Возвращает список отгаданных слов указанного пользователя за указанную дату
-    """
-    from .http import template, json
-
-    if not request.is_ajax():
-        return template(request, 404)
-
-    if request.user.is_anonymous:
-        return json(request, 401)
-
-    date = request.GET.get('date')
-
-    words_sql = '''
-        SELECT
-            to_char(us.created_on, 'hh24:mi') as "time",
-            w.word
-        FROM
-            user_solution us,
-            level_word lw,
-            words w
-        WHERE
-            us.user_id = %s and
-            lw.level_id = %s and
-            us.created_on::date = %s and
-            us.level_word_id = lw.id and
-            lw.word_id = w.id
-        ORDER BY us.created_on desc
-    '''
-
-    cursor = connection.cursor()
-    cursor.execute(words_sql, [request.user.id, level_id, date])
-    words = cursor.fetchall()
-
-    return JsonResponse({'words': words})
+    return JsonResponse(submit_result_dict)
 
 
 def profile(request, user_id):
@@ -666,13 +607,9 @@ def get_personal_stats(request):
 
 
 def get_popular_words(request):
-    from .http import template, json
-
-    if not request.is_ajax():
-        return template(request, 404)
 
     if request.user.is_anonymous:
-        return json(request, 401)
+        return HttpResponse(staatus=401)
 
     offset = request.GET.get('offset')
     limit = request.GET.get('limit')
@@ -700,7 +637,7 @@ def get_popular_words(request):
     cursor.execute(words_sql, [request.user.id, offset, limit])
     words = dictfetchall(cursor)
 
-    return JsonResponse({'words': words})
+    return JsonResponse(words, safe=False)
 
 
 def dictfetchall(cursor):

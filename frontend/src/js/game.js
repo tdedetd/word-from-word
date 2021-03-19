@@ -152,13 +152,12 @@ import("jquery").then(m => m.default).then($ => {
             word,
             csrfmiddlewaretoken: csrfToken
         }).done(data => {
-            const response = data["response"];
-            if (response["success"] === 1) {
+            if (data.success === 1) {
                 const solvedWord = new SolvedWord(word, true);
                 insertSolvedWord(solvedWord);
                 words.push(solvedWord);
                 $("#words-solved").text(words.length);
-                spawnLabel(`+${response["reward"]}`, "label-success");
+                spawnLabel(`+${data.reward}`, "label-success");
             } else {
                 spawnLabel("cross", "label-fail");
             }

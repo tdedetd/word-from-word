@@ -64,7 +64,7 @@ import("jquery").then(m => m.default).then($ => {
             }
         }
         $.get(`/auth/register/checklogin/${login}/`).done(data => {
-            if (data["response"]) {
+            if (data.exists) {
                 loginOutput.text("Пользователь с таким именем уже зарегистрирован");
                 loginOutput.addClass("text-fail");
                 loginReady = false;

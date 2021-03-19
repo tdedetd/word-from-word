@@ -83,11 +83,11 @@ import("jquery").then(m => m.default).then($ => {
         moreLevelsContainer.hide();
         loadingContainer.show();
         $.get("/get_levels/", {
-            "type_id": selectOrderTypes.val(),
-            "dir_id": selectOrderDirs.val(),
-            "offset": lvlCount,
-            "limit": lvlLimit,
-            "filter": inputSearch.val().trim()
+            typeId: selectOrderTypes.val(),
+            dirId: selectOrderDirs.val(),
+            offset: lvlCount,
+            limit: lvlLimit,
+            filter: inputSearch.val().trim()
         }).done(data => {
             lvlCount += lvlLimit;
             if (data.levels.length !== 0 && !data.end) {
