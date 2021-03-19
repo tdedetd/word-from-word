@@ -4,6 +4,7 @@ word_from_word/settings_local.py
 gunicorn.conf.py
 gunicorn_logs/
 
+.vscode/
 */static/js/
 */static/style/
 */node_modules/
