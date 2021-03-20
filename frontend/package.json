@@ -30,6 +30,7 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "jquery": "^3.6.0"
   }
 }

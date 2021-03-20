@@ -73,11 +73,11 @@ import("jquery").then(m => m.default).then($ => {
             } else if (e.key === "Backspace") {
                 e.preventDefault();
                 backspace();
+                setTimeout(() => filterWords());
             } else {
                 disableLetter(e.key);
+                setTimeout(() => filterWords());
             }
-
-            setTimeout(() => filterWords());
         });
 
         $("body").on("keydown", e => {
@@ -141,6 +141,7 @@ import("jquery").then(m => m.default).then($ => {
         const word = wordInput.val().toLowerCase().trim();
         wordInput.val("");
         enableAllLetters();
+        filterWords();
 
         if (word === "") return;
         if (wordExists(word)) {

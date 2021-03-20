@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Word from word</title>
-    <link rel="stylesheet" href="{% static 'lib/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% if debug %}{% webpack_url '/fontawesome.css' %}{% else %}{% static 'fontawesome.css' %}{% endif %}">
     <link rel="stylesheet" href="{% if debug %}{% webpack_url '/styles.css' %}{% else %}{% static 'styles.css' %}{% endif %}">
   </head>
   <body>
