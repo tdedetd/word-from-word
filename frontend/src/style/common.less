@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-@import "./colors.less";
+@import "./variables.less";
 @import "./common/input.less";
 @import "./common/tab.less";
 @import "./common/table.less";
@@ -52,22 +52,8 @@ textarea {
     font-family: inherit;
     border: none;
     padding: .3em .5em;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: @shadow;
     resize: none;
-}
-
-/* select styling */
-
-select {
-    font-size: inherit;
-    font-weight: bold;
-    border: none;
-    border-radius: .29167em;
-    background: @orange;
-    color: @blue;
-    padding: .35em .5em;
-    box-shadow: 1px 1px 3px @dark-blue;
 }
 
 /* other */
@@ -286,8 +272,7 @@ input.auth-form__item {
 .box,
 .box-dark {
     padding: 20px 30px;
-    box-shadow: 1px 1px 3px @dark-blue;
-    border-radius: 15px;
+    box-shadow: @shadow;
 }
 
 .box {

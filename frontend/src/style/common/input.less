@@ -1,15 +1,15 @@
-@import "../colors.less";
+@import "../variables.less";
 
 input[type="text"],
 input[type="password"] {
     -webkit-appearance: none;
     color: @blue;
     background: @orange;
+    font-family: 'Roboto', arial;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: @shadow;
 }
 
 input[type="button"],
@@ -19,12 +19,12 @@ button {
     color: @light-orange;
     background-color: @blue;
     -webkit-background-color: @blue;
+    font-family: 'Roboto', arial;
     font-size: inherit;
     border: none;
     padding: .3em .5em;
-    border-radius: 5px;
     cursor: pointer;
-    box-shadow: 1px 1px 3px @dark-blue;
+    box-shadow: @shadow;
     transition: background-color .3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
@@ -58,4 +58,15 @@ input.input-light {
 
 :focus {
     outline: none;
+}
+
+select {
+    font-family: 'Roboto', arial;
+    font-size: inherit;
+    font-weight: bold;
+    border: none;
+    background: @orange;
+    color: @blue;
+    padding: .35em .5em;
+    box-shadow: @shadow;
 }

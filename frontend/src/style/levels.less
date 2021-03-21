@@ -1,4 +1,4 @@
-@import "./colors.less";
+@import "./variables.less";
 
 .level-select-params {
     margin: 5px;
@@ -25,8 +25,7 @@
 
 .level {
     background: @orange;
-    border-radius: 5px;
-    box-shadow: .5px .5px 3px @dark-blue;
+    box-shadow: @shadow;
     margin: 9px 7px;
     cursor: pointer;
     font-weight: bold;
@@ -34,7 +33,7 @@
 }
 
 .level:hover {
-    box-shadow: 3px 3px 8px @dark-blue;
+    box-shadow: @shadow-hover;
     background-color: @dark-orange;
 }
 
