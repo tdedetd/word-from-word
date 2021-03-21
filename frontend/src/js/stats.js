@@ -97,7 +97,7 @@ Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]
     function loadPersonalStats() {
         const colorBlue = "#005998";
         const colorDarkBlue = "#003357";
-        const colorLightOrange = "#f6ba6d";
+        const colorLines = "#b4b4b4";
 
         $.get("get_personal_stats/").done(data => {
 
@@ -109,12 +109,12 @@ Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]
                     textStyle: {
                         color: colorDarkBlue,
                         fontSize: 18,
-                        fontWeight: "bold"
+                        fontWeight: "lighter"
                     },
                     subtextStyle: {
                         color: colorDarkBlue,
                         fontSize: 18,
-                        fontWeight: "bold"
+                        fontWeight: "lighter"
                     },
                     x: "center"
                 },
@@ -148,7 +148,7 @@ Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]
                         type : "value",
                         splitLine: {
                             lineStyle: {
-                                color: colorLightOrange
+                                color: colorLines
                             }
                         }
                     }
@@ -171,12 +171,12 @@ Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]
                     textStyle: {
                         color: colorDarkBlue,
                         fontSize: 18,
-                        fontWeight: "bold"
+                        fontWeight: "lighter"
                     },
                     subtextStyle: {
                         color: colorDarkBlue,
                         fontSize: 18,
-                        fontWeight: "bold"
+                        fontWeight: "lighter"
                     },
                     x: "center"
                 },
@@ -197,7 +197,7 @@ Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]
                     boundaryGap: [0, 0.01],
                     splitLine: {
                         lineStyle: {
-                            color: colorLightOrange
+                            color: colorLines
                         }
                     }
                 },
