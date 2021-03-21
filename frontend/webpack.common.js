@@ -53,5 +53,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css'
     })
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      name: 'shared'
+    }
+  }
 };

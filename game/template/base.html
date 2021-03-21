@@ -63,6 +63,7 @@
       </footer>
     </div>
 
+    <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/shared.js' %}{% else %}{% static 'js/shared.js' %}{% endif %}"></script>
     <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/main.js' %}{% else %}{% static 'js/main.js' %}{% endif %}"></script>
   </body>
 </html>
