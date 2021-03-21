@@ -38,16 +38,22 @@
         <input type="text" id="input-search" placeholder="Поиск">
       </div>
     </div>
-    <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+  </div>
+  <div class="level-select-params row">
+    <div class="col col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
       <div class="level-select-params__item">
-        <button class="w-100">
-          <a href="{% url 'random_level' %}">Случайный уровень</a>
+        <button class="w-100" title="Случайный уровень">
+          <a href="{% url 'random_level' %}" class="w-100 level-select-params__link">
+            <i class="fa fa-random" aria-hidden="true"></i>
+          </a>
         </button>
       </div>
     </div>
-    <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+    <div class="col col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
       <div class="level-select-params__item">
-        <button class="w-100" id="btn-reset-filters">Сбросить</button>
+        <button class="w-100" id="btn-reset-filters" title="Сбросить">
+          <i class="fa fa-undo" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
   </div>
