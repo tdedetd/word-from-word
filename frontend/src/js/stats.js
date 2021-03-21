@@ -4,7 +4,9 @@ let personStatsTab;
 let wordLengthChart;
 let firstLetterChart;
 
-import("jquery").then(m => m.default).then($ => {
+Promise.all([import('jquery'), import('echarts')]).then(m => [m[0].default, m[1]]).then(libs => {
+    const $ = libs[0];
+    const echarts = libs[1];
 
     class TabPane {
         /**

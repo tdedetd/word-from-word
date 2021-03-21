@@ -63,6 +63,5 @@
   </div>
 </main>
 
-<script type="text/javascript" src="{% static 'lib/echarts.min.js' %}"></script>
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/stats.js' %}{% else %}{% static 'js/stats.js' %}{% endif %}"></script>
 {% endblock %}
