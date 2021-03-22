@@ -8,24 +8,53 @@
     </div>
     <div class="profile__row">
       <div>Зарегистрирован:&nbsp;</div>
-      <div><b>{{ profile_info_dict.joined_on }}</b></div>
+      <div><span class="profile-info-item__value">{{ profile_info_dict.joined_on }}</span></div>
     </div>
     {% comment %} 
     <div class="profile__row">
-      <div>Email:&nbsp;<b>{{ profile_info_dict.email|default:'Не указан' }}</b></div>
+      <div>Email:&nbsp;<span class="profile-info-item__value">{{ profile_info_dict.email|default:'Не указан' }}</span></div>
     </div>
     {% endcomment %}
-    <ul class="points-info">
-      <li class="points-info__item">Уровень:&nbsp;<b>{{ profile_info_dict.level }}</b></li>
-      <li class="points-info__item">Рейтинг:&nbsp;<b>{{ profile_info_dict.rating }}</b></li>
-      <li class="points-info__item">Уровней затронуто:&nbsp;<b>{{ profile_info_dict.levels_played }} / {{ profile_info_dict.levels_total }}</b></li>
-      <li class="points-info__item">Слов отгадано:&nbsp;<b>{{ profile_info_dict.words_solved }}</b></li>
-      <li class="points-info__item">Неповторяющихся слов отгадано:&nbsp;<b>{{ profile_info_dict.different_words_solved }}</b></li>
-      <li class="points-info__item">Вводов слов:&nbsp;<b>{{ profile_info_dict.word_submits }}</b></li>
-      <li class="points-info__item">Максимальное отгадано за сутки:&nbsp;<b>{{ profile_info_dict.max_words_in_day }}</b></li>
-      <li class="points-info__item">Средняя длина отгаданных слов:&nbsp;<b>{{ profile_info_dict.avg_solved_words_length }}</b></li>
-      <li class="points-info__item">Процент отгаданных слов:&nbsp;<b>{{ profile_info_dict.solve_rate }}%</b></li>
+
+    <ul>
+      <li class="profile-info-item">
+        Уровень:
+        <span class="profile-info-item__value">{{ profile_info_dict.level }}</span>
+      </li>
+      <li class="profile-info-item">
+        Рейтинг:
+        <span class="profile-info-item__value">{{ profile_info_dict.rating }}</span>
+      </li>
+      <li class="profile-info-item">
+        Уровней затронуто:
+        <span class="profile-info-item__value">{{ profile_info_dict.levels_played }} / {{ profile_info_dict.levels_total }}</span>
+      </li>
+      <li class="profile-info-item">
+        Слов отгадано:
+        <span class="profile-info-item__value">{{ profile_info_dict.words_solved }}</span>
+      </li>
+      <li class="profile-info-item">
+        Неповторяющихся слов отгадано:
+        <span class="profile-info-item__value">{{ profile_info_dict.different_words_solved }}</span>
+      </li>
+      <li class="profile-info-item">
+        Вводов слов:
+        <span class="profile-info-item__value">{{ profile_info_dict.word_submits }}</span>
+      </li>
+      <li class="profile-info-item">
+        Максимальное отгадано за сутки:
+        <span class="profile-info-item__value">{{ profile_info_dict.max_words_in_day }}</span>
+      </li>
+      <li class="profile-info-item">
+        Средняя длина отгаданных слов:
+        <span class="profile-info-item__value">{{ profile_info_dict.avg_solved_words_length }}</span>
+      </li>
+      <li class="profile-info-item">
+        Процент отгаданных слов:
+        <span class="profile-info-item__value">{{ profile_info_dict.solve_rate }}%</span>
+      </li>
     </ul>
+
   </div>
 </main>
 {% endblock %}
