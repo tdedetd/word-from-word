@@ -159,7 +159,7 @@ function submitWord() {
             $("#words-solved").text(words.length);
             spawnLabel(`+${data.reward}`, "label-success");
         } else {
-            spawnLabel("cross", "label-fail");
+            spawnLabel("cross", "label-neutral");
         }
     });
 }
