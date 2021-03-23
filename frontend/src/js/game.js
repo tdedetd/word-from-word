@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { displayXpInfo } from './shared/xp';
 "use strict";
 
 class SolvedWord {
@@ -158,6 +159,7 @@ function submitWord() {
             words.push(solvedWord);
             $("#words-solved").text(words.length);
             spawnLabel(`+${data.reward}`, "label-success");
+            displayXpInfo();
         } else {
             spawnLabel("cross", "label-neutral");
         }

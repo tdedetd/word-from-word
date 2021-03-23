@@ -151,7 +151,7 @@ function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
     level.find(".level__bar-unsolved").css("width", `${100 - perc}%`);
 
     level.find(".level__bar").attr("title", perc.toFixed(2) + "%");
-    level.find("a.level-link").attr("href", `/game/${id}/`);
+    level.find("a").attr("href", `/game/${id}/`);
 
     levels.append(level);
 }
