@@ -46,68 +46,71 @@ const checkHtml = `<i class="fa fa-check" aria-hidden="true"></i>`;
 let loginReady = false;
 let passReady = false;
 
-$("#reg-user").on("change", e => {
-    const loginOutput = $("#login-text");
-    loginOutput.removeClass("text-fail");
-    loginOutput.removeClass("text-success");
+$(() => {
 
-    const login = $(e.originalEvent.target).val();
+    $("#reg-user").on("change", e => {
+        const loginOutput = $("#login-text");
+        loginOutput.removeClass("text-fail");
+        loginOutput.removeClass("text-success");
 
-    for (const validator of loginValidators) {
-        if (!validator.validate(login)) {
-            loginOutput.text(validator.message);
-            loginOutput.addClass("text-fail");
-            loginReady = false;
+        const login = $(e.originalEvent.target).val();
+
+        for (const validator of loginValidators) {
+            if (!validator.validate(login)) {
+                loginOutput.text(validator.message);
+                loginOutput.addClass("text-fail");
+                loginReady = false;
+                updateSubmitEnabled();
+                return;
+            }
+        }
+        $.get(`/auth/register/checklogin/${login}/`).done(data => {
+            if (data.exists) {
+                loginOutput.text("Пользователь с таким именем уже зарегистрирован");
+                loginOutput.addClass("text-fail");
+                loginReady = false;
+            } else {
+                loginOutput.html(checkHtml);
+                loginOutput.addClass("text-success");
+                loginReady = true;
+            }
             updateSubmitEnabled();
-            return;
-        }
-    }
-    $.get(`/auth/register/checklogin/${login}/`).done(data => {
-        if (data.exists) {
-            loginOutput.text("Пользователь с таким именем уже зарегистрирован");
-            loginOutput.addClass("text-fail");
-            loginReady = false;
-        } else {
-            loginOutput.html(checkHtml);
-            loginOutput.addClass("text-success");
-            loginReady = true;
-        }
-        updateSubmitEnabled();
+        });
     });
-});
 
-$(document).on("change", "#reg-pass", () => {
-    if ($("#reg-pass-conf").val() != "") {
-        validatePassword();
-    }
-});
-
-$(document).on("change", "#reg-pass-conf", validatePassword);
-
-function validatePassword() {
-    const passOutput = $("#pass-text");
-    passOutput.removeClass("text-fail");
-    passOutput.removeClass("text-success");
-
-    const password = $("#reg-pass").val();
-    const passwordConfirm = $("#reg-pass-conf").val();
-
-    for (const validator of passValidators) {
-        if (!validator.validate(password, passwordConfirm)) {
-            passOutput.text(validator.message);
-            passOutput.addClass("text-fail");
-            passReady = false;
-            updateSubmitEnabled();
-            return;
+    $("#reg-pass").on("change", () => {
+        if ($("#reg-pass-conf").val() !== "") {
+            validatePassword();
         }
+    });
+
+    $("#reg-pass-conf").on("change", validatePassword);
+
+    function validatePassword() {
+        const passOutput = $("#pass-text");
+        passOutput.removeClass("text-fail");
+        passOutput.removeClass("text-success");
+
+        const password = $("#reg-pass").val();
+        const passwordConfirm = $("#reg-pass-conf").val();
+
+        for (const validator of passValidators) {
+            if (!validator.validate(password, passwordConfirm)) {
+                passOutput.text(validator.message);
+                passOutput.addClass("text-fail");
+                passReady = false;
+                updateSubmitEnabled();
+                return;
+            }
+        }
+
+        passOutput.html(checkHtml);
+        passOutput.addClass("text-success");
+        passReady = true;
+        updateSubmitEnabled();
     }
 
-    passOutput.html(checkHtml);
-    passOutput.addClass("text-success");
-    passReady = true;
-    updateSubmitEnabled();
-}
-
-function updateSubmitEnabled() {
-    $("#reg-submit").prop("disabled", !(loginReady && passReady));
-}
+    function updateSubmitEnabled() {
+        $("#reg-submit").prop("disabled", !(loginReady && passReady));
+    }
+});

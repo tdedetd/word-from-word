@@ -5,4 +5,5 @@ import "./style/grid.less";
 import "./style/levels.less";
 import "./style/news.less";
 import "./style/profile.less";
+import "./style/register.less";
 import "./style/stats.less";
