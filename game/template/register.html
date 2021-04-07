@@ -1,19 +1,34 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
-<main class="content-center">
-  <section class="text-center section-narrow">
-    <h2>Регистрация всего в пару кликов!</h2>
-    <form class="auth-form" action="{% url 'signup' %}" method="POST">
-      {% csrf_token %}
-      <div class="reg-form-content m-1">
-        <input class="auth-form__item" id="reg-user" type="text" name="username" placeholder="Логин" maxlength="40" autocomplete="false">
-        <div class="valid-msg" id="login-text"></div>
-        <input class="auth-form__item" id="reg-pass" type="password" name="password" placeholder="Пароль" autocomplete="false">
-        <input class="auth-form__item" id="reg-pass-conf" type="password" name="password-conf" placeholder="Потверждение пароля" autocomplete="false">
-        <div class="valid-msg" id="pass-text"></div>
+<main class="">
+  <h2 class="text-center m-1">Регистрация</h2>
+  <form id="reg-item" class="reg-form" action="{% url 'signup' %}" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="reg-item">
+      <div class="reg-item__caption">Логин</div>
+      <div class="reg-item__value">
+        <input class="reg-form__input" type="text" name="username" placeholder="Логин" autocomplete="off">
+        <div id="login-exists" class="reg-item__errors hidden">Такой логин уже зарегистрирован</div>
       </div>
-      <input class="auth-form__item" id="reg-submit" type="submit" value="Зарегистрироваться" disabled="disabled">
-    </form>
-  </section>
+    </div>
+    <div class="reg-item">
+      <div class="reg-item__caption">Пароль</div>
+      <div class="reg-item__value">
+        <input class="reg-form__input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+      </div>
+    </div>
+    <div class="reg-item">
+      <div class="reg-item__caption">Подтверждение пароля</div>
+      <div class="reg-item__value">
+        <input class="reg-form__input" type="password" name="password-conf" placeholder="Пароль" autocomplete="off">
+      </div>
+    </div>
+    <div class="reg-item">
+      <ul class="reg-item__errors" id="reg-errors"></ul>
+    </div>
+    <div class="reg-item reg-item__sumit text-center">
+      <input type="submit" value="Зарегистрироваться">
+    </div>
+  </form>
 </main>
 
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>

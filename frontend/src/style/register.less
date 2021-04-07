@@ -1,5 +1,32 @@
-.reg-form-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@import "./variables.less";
+
+.reg-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.reg-item {
+    margin: 1rem;
+    font-size: 1.1rem;
+}
+
+.reg-item__sumit {
+    margin-top: 2rem;
+}
+
+.reg-item__caption {
+    margin-bottom: .4rem;
+}
+
+.reg-form__input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.reg-item__errors {
+    color: @accent-red-bg;
+}
+
+.reg-item__errors > li {
+    margin-top: .8rem;
 }

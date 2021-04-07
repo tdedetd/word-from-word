@@ -1,116 +1,75 @@
 import $ from 'jquery';
-"use strict";
-
-const loginValidators = [
-    {
-        message: "Пожалуйста, введите логин",
-        validate: (login) => login.length !== 0
-    },
-    {
-        message: "Логин не должен превышать длину в 40 символов",
-        validate: (login) => login.length <= 40
-    },
-    {
-        message: "Логин не должен начинаться с цифры и может состоять только из латинских букв (заглавных и строчных), а также цифр.",
-        validate: (login) => {
-            const pattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
-            return pattern.test(login);
-        }
-    }
-];
-
-const passValidators = [
-    {
-        message: "Пожалуйста, заполните оба поля ввода пароля",
-        validate: (password, passwordConfirm) => password.length > 0 && passwordConfirm.length > 0
-    },
-    {
-        message: "Пароли не совпадают",
-        validate: (password, passwordConfirm) => password === passwordConfirm
-    },
-    {
-        message: "Пароль должен быть длиной не менее 4-х символов",
-        validate: (password) => password.length >= 4
-    },
-    {
-        message: "Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.",
-        validate: (password) => {
-            const pattern = /^([0-9]|[a-z]|[A-Z])+$/;
-            return pattern.test(password);
-        }
-    }
-];
-
-const checkHtml = `<i class="fa fa-check" aria-hidden="true"></i>`;
-
-let loginReady = false;
-let passReady = false;
 
 $(() => {
+    /** @type {JQuery<HTMLFormElement>} */
+    const form = $('#reg-item');
+    const validators = getValidators(form);
+    const errorList = $('#reg-errors');
 
-    $("#reg-user").on("change", e => {
-        const loginOutput = $("#login-text");
-        loginOutput.removeClass("text-fail");
-        loginOutput.removeClass("text-success");
-
-        const login = $(e.originalEvent.target).val();
-
-        for (const validator of loginValidators) {
-            if (!validator.validate(login)) {
-                loginOutput.text(validator.message);
-                loginOutput.addClass("text-fail");
-                loginReady = false;
-                updateSubmitEnabled();
-                return;
-            }
-        }
-        $.get(`/auth/register/checklogin/${login}/`).done(data => {
+    form.find('[name=username]').on('change', event => {
+        $.get(`/auth/register/checklogin/${event.originalEvent.target.value}/`).done(data => {
             if (data.exists) {
-                loginOutput.text("Пользователь с таким именем уже зарегистрирован");
-                loginOutput.addClass("text-fail");
-                loginReady = false;
+                $('#login-exists').removeClass('hidden');
             } else {
-                loginOutput.html(checkHtml);
-                loginOutput.addClass("text-success");
-                loginReady = true;
+                $('#login-exists').addClass('hidden');
             }
-            updateSubmitEnabled();
         });
     });
 
-    $("#reg-pass").on("change", () => {
-        if ($("#reg-pass-conf").val() !== "") {
-            validatePassword();
+    form.on('submit', event => {
+        const errors = validators.filter(validator => !validator.fn());
+
+        errorList.empty();
+        if (errors.length > 0) {
+            errors.forEach(error => {
+                errorList.append(`<li>${error.message}</li>`);
+            });
+
+            event.preventDefault();
         }
     });
-
-    $("#reg-pass-conf").on("change", validatePassword);
-
-    function validatePassword() {
-        const passOutput = $("#pass-text");
-        passOutput.removeClass("text-fail");
-        passOutput.removeClass("text-success");
-
-        const password = $("#reg-pass").val();
-        const passwordConfirm = $("#reg-pass-conf").val();
-
-        for (const validator of passValidators) {
-            if (!validator.validate(password, passwordConfirm)) {
-                passOutput.text(validator.message);
-                passOutput.addClass("text-fail");
-                passReady = false;
-                updateSubmitEnabled();
-                return;
-            }
-        }
-
-        passOutput.html(checkHtml);
-        passOutput.addClass("text-success");
-        passReady = true;
-        updateSubmitEnabled();
-    }
-
-    function updateSubmitEnabled() {
-        $("#reg-submit").prop("disabled", !(loginReady && passReady));
-    }
 });
+
+function getValidators(form) {
+
+    /** @type {JQuery<HTMLInputElement>} */
+    const username = form.find('[name=username]');
+    /** @type {JQuery<HTMLInputElement>} */
+    const password = form.find('[name=password]');
+    /** @type {JQuery<HTMLInputElement>} */
+    const passwordConfirm = form.find('[name=password-conf]');
+
+    const loginPattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
+    const passwordPattern = /^([0-9]|[a-z]|[A-Z])+$/;
+
+    return [
+        {
+            fn: () => username.val().trim().length > 0,
+            message: 'Заполните поле "Логин"'
+        },
+        {
+            fn: () => username.val().trim().length <= 40,
+            message: 'Логин не должен превышать длину в 40 символов'
+        },
+        {
+            fn: () => loginPattern.test(username.val().trim()),
+            message: 'Логин не должен начинаться с цифры и может состоять только из латинских букв (заглавных и строчных), а также цифр.'
+        },
+        {
+            fn: () => password.val().length > 0 && passwordConfirm.val().length > 0,
+            message: 'Пожалуйста, заполните оба поля ввода пароля'
+        },
+        {
+            fn: () => password.val() === passwordConfirm.val(),
+            message: 'Пароли не совпадают'
+        },
+        {
+            fn: () => password.val().length >= 4,
+            message: 'Пароль должен быть длиной не менее 4-х символов'
+        },
+        {
+            fn: () => passwordPattern.test(password.val()),
+            message: 'Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.'
+        }
+    ];
+}
