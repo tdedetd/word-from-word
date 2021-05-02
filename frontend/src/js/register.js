@@ -57,7 +57,7 @@ function getValidators(form) {
         },
         {
             fn: () => password.val().length > 0 && passwordConfirm.val().length > 0,
-            message: 'Пожалуйста, заполните оба поля ввода пароля'
+            message: 'Необходимо заполнить оба поля ввода пароля'
         },
         {
             fn: () => password.val() === passwordConfirm.val(),
