@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -55,7 +56,15 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'style/[name].css'
-    })
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src', 'assets', 'captcha.png'),
+          to: 'assets/[name][ext]'
+        },
+      ],
+    }),
   ],
   optimization: {
     splitChunks: {
