@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
+from .captcha import captcha
 
 
 def login(request):
@@ -111,6 +112,23 @@ def if_login_exists(login):
     cursor.execute(check_sql, [login])
     exists = cursor.fetchone()[0]
     return exists
+
+
+def get_captcha_image(request):
+    words_sql = '''
+        select word from words
+        where length(word) > 8 and length(word) < 10 and language_id = 1 and status_id = 1
+        order by random()
+        limit 3
+    '''
+    cursor = connection.cursor()
+    cursor.execute(words_sql)
+    words = list(map(lambda w: w['word'], dictfetchall(cursor)))
+
+    response = HttpResponse(content_type='image/png')
+    img = captcha.generate(list(words))
+    img.save(response, 'PNG')
+    return response
 
 
 def send_verification_email(request):

@@ -25,7 +25,8 @@
     <div class="reg-item">
       <div class="reg-item__caption" id="chaptcha-task">Введите текст с картинки</div>
       <div class="reg-item__value">
-        <img class="reg-item__img" id="chaptcha-img" src="{% if debug %}{% webpack_url '/assets/captcha.png' %}{% else %}{% static 'assets/captcha.png' %}{% endif %}" alt="img">
+        <!-- <img class="reg-item__img" id="chaptcha-img" src="{% if debug %}{% webpack_url '/assets/captcha.png' %}{% else %}{% static 'assets/captcha.png' %}{% endif %}" alt="img"> -->
+        <img class="reg-item__img" id="chaptcha-img" src="/auth/get_captcha_image" alt="img">
         <input class="reg-form__input" type="text" name="captcha" placeholder="Решение" autocomplete="off">
       </div>
     </div>
