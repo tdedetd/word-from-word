@@ -25,7 +25,6 @@ class Level(models.Model):
 class Captcha(models.Model):
     id = models.CharField(max_length=40, primary_key=True)
     answer = models.CharField(max_length=128)
-    has_given = models.BooleanField(default=False)
     expires = models.DateTimeField()
 
     class Meta:

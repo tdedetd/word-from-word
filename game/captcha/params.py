@@ -1,7 +1,7 @@
 # text
 X_START = (10, 30)
 Y_START = (0, 10)
-CHAR_SPACING = (10, 35)
+CHAR_SPACING = (15, 35)
 LINE_SPACING = (0, 12)
 FONT_SIZE = (20, 38)
 LETTER_COLOR = (0, 255)
@@ -14,8 +14,8 @@ TRIANGLE_MAX_SPREAD = (-40, 40)
 
 # background
 BG_COLOR = (0, 255)
-NOISE_ALPHA = (0, 10)
+NOISE_ALPHA = (5, 15)
 
 # lines
 LINE_Y_DIFF = (-55, 55)
-LINE_WIDTH = (1, 4)
+LINE_WIDTH = (1, 3)

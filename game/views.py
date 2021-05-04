@@ -128,7 +128,7 @@ def new_captcha(request):
     words = list(map(lambda w: w['word'], dictfetchall(cursor)))
 
     captcha_id, answer_hash, message = generate_captcha(words)
-    expires = datetime.now() + timedelta(minutes=settings.CAPTHCA_EXPIRATION_INTERVAL)
+    expires = datetime.now() + timedelta(seconds=settings.CAPTHCA_EXPIRATION_INTERVAL)
 
     new_captcha = Captcha(id=captcha_id,
                           answer=answer_hash,
@@ -159,9 +159,9 @@ def update_captcha(request):
     try:
         captcha = Captcha.objects.get(id=captcha_id)
     except Captcha.DoesNotExist:
-        pass
+        return HttpResponse(status=403)
 
-    if captcha is None:
+    if datetime.now() > captcha.expires:
         return HttpResponse(status=403)
 
     captcha.delete()
@@ -169,12 +169,24 @@ def update_captcha(request):
     return new_captcha(request)
 
 
-def get_captcha_image(request):
+def captcha_image(request):
     captcha_id = request.COOKIES.get('captchaid', None)
     if captcha_id is None:
         return HttpResponse(status=403)
 
+    captcha = None
+    try:
+        captcha = Captcha.objects.get(id=captcha_id)
+    except Captcha.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if datetime.now() > captcha.expires:
+        return HttpResponse(status=403)
+
     img = get_captcha_image(captcha_id)
+    if img is None:
+        return HttpResponse(status=404)
+
     response = HttpResponse(content_type='image/png')
     img.save(response, 'PNG')
     return response

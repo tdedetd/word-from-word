@@ -25,8 +25,14 @@
     <div class="reg-item">
       <div class="reg-item__caption" id="chaptcha-task">Введите текст с картинки</div>
       <div class="reg-item__value">
-        <!-- <img class="reg-item__img" id="chaptcha-img" src="{% if debug %}{% webpack_url '/assets/captcha.png' %}{% else %}{% static 'assets/captcha.png' %}{% endif %}" alt="img"> -->
-        <img class="reg-item__img" id="chaptcha-img" src="/auth/get_captcha_image" alt="img">
+        <div class="reg-item__chaptcha-container">
+          <div class="reg-item__chaptcha-img-container" id="chaptcha-img-container">
+            <img class="reg-item__img" src="{% if debug %}{% webpack_url '/assets/captcha.png' %}{% else %}{% static 'assets/captcha.png' %}{% endif %}" alt="img">
+          </div>
+          <button id="refresh-captcha-btn" class="reg-item__refresh-btn" title="Не вижу код">
+            <i class="fa fa-sync" aria-hidden="true"></i>
+          </button>
+        </div>
         <input class="reg-form__input" type="text" name="captcha" placeholder="Решение" autocomplete="off">
       </div>
     </div>
