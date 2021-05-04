@@ -120,6 +120,8 @@ STATIC_URL = '/static/'
 
 EMAIL_VERIFY_EXPIRATION_INTERVAL = 12 # in hours
 
+CAPTHCA_EXPIRATION_INTERVAL = 5 # in minutes
+
 HOST = 'http://localhost:8000' # temp
 
 WEBPACK_HOST = 'http://localhost:8080'

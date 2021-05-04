@@ -1,7 +1,10 @@
+from datetime import datetime, timedelta
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
-from .captcha import captcha
+from django.conf import settings
+from .models import Captcha
+from .captcha.captcha import generate as generate_captcha, delete_captcha_image, get_captcha_image
 
 
 def login(request):
@@ -39,7 +42,6 @@ def signup(request):
     Регистрирует пользователя, предварительно проводя валидацию логина и пароля
     """
     import re
-    from django.conf import settings
     from .http import template, post
     from .models import User
 
@@ -114,10 +116,10 @@ def if_login_exists(login):
     return exists
 
 
-def get_captcha_image(request):
+def new_captcha(request):
     words_sql = '''
         select word from words
-        where length(word) > 8 and length(word) < 10 and language_id = 1 and status_id = 1
+        where length(word) between 8 and 11 and language_id = 1 and status_id = 1
         order by random()
         limit 3
     '''
@@ -125,8 +127,55 @@ def get_captcha_image(request):
     cursor.execute(words_sql)
     words = list(map(lambda w: w['word'], dictfetchall(cursor)))
 
+    captcha_id, answer_hash, message = generate_captcha(words)
+    expires = datetime.now() + timedelta(minutes=settings.CAPTHCA_EXPIRATION_INTERVAL)
+
+    new_captcha = Captcha(id=captcha_id,
+                          answer=answer_hash,
+                          expires=expires)
+    new_captcha.save(force_insert=True)
+    response = JsonResponse({ 'message': message })
+    response.set_cookie('captchaid', captcha_id, expires=expires)
+
+    return response
+
+
+def create_captcha(request):
+    if request.method != 'POST':
+        return HttpResponse(status=405)
+
+    return new_captcha(request)
+
+
+def update_captcha(request):
+    if request.method != 'POST':
+        return HttpResponse(status=405)
+
+    captcha_id = request.COOKIES.get('captchaid', None)
+    if captcha_id is None:
+        return HttpResponse(status=403)
+
+    captcha = None
+    try:
+        captcha = Captcha.objects.get(id=captcha_id)
+    except Captcha.DoesNotExist:
+        pass
+
+    if captcha is None:
+        return HttpResponse(status=403)
+
+    captcha.delete()
+    delete_captcha_image(captcha_id)
+    return new_captcha(request)
+
+
+def get_captcha_image(request):
+    captcha_id = request.COOKIES.get('captchaid', None)
+    if captcha_id is None:
+        return HttpResponse(status=403)
+
+    img = get_captcha_image(captcha_id)
     response = HttpResponse(content_type='image/png')
-    img = captcha.generate(list(words))
     img.save(response, 'PNG')
     return response
 
@@ -171,7 +220,6 @@ def send_verification_email(request):
 
 
 def verify_email(request):
-    from datetime import datetime
     from django.core.exceptions import ObjectDoesNotExist
     from .http import json
     from .models import EmailToken, User

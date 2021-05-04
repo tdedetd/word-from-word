@@ -22,10 +22,21 @@ class Level(models.Model):
         managed = False
 
 
+class Captcha(models.Model):
+    id = models.CharField(max_length=40, primary_key=True)
+    answer = models.CharField(max_length=128)
+    has_given = models.BooleanField(default=False)
+    expires = models.DateTimeField()
+
+    class Meta:
+        db_table = '"public"."captcha"'
+        managed = False
+
+
 class EmailToken(models.Model):
     from datetime import datetime, timedelta
     from django.conf import settings
-    
+
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
     token = models.CharField(max_length=64)

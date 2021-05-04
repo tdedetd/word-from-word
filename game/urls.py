@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^auth/signup/$', views.signup, name='signup'),
     url(r'^auth/register/$', views.register, name='register'),
     url(r'^auth/register/checklogin/(?P<login>.+)/$', views.checklogin, name='checklogin'),
+    url(r'^auth/create_captcha/$', views.create_captcha, name='create_captcha'),
+    url(r'^auth/update_captcha/$', views.update_captcha, name='update_captcha'),
     url(r'^auth/get_captcha_image/$', views.get_captcha_image, name='get_captcha_image'),
     url(r'^auth/email/send_verify_token/$', views.send_verification_email),
     url(r'^auth/email/verify_email/$', views.verify_email, name='verify_email'),
