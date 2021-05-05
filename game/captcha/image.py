@@ -5,7 +5,7 @@ from .params import *
 
 
 def generate(words):
-    bg_color = random_color()
+    bg_color = (rand(BG_COLOR), rand(BG_COLOR), rand(BG_COLOR))
     img = Image.new('RGBA', (400, len(words) * 45), bg_color)
     draw_applique(img)
     draw_text(img, words)
@@ -45,7 +45,7 @@ def draw_text(img, words):
             font_size = rand(FONT_SIZE)
             letter_image = generate_letter_image(letter, font_size)
             img.paste(letter_image, (x, y), letter_image)
-            x += rand(CHAR_SPACING)
+            x += rand(LETTER_SPACING)
 
         x = rand(X_START)
         y += rand(LINE_SPACING) + 35
@@ -81,7 +81,7 @@ def generate_letter_image(letter, font_size):
     draw.text((img_size // 4, 0),
               letter,
               font=ImageFont.truetype(font='Arial.ttf', size=font_size),
-              fill=random_color())
+              fill=(rand(LETTER_COLOR), rand(LETTER_COLOR), rand(LETTER_COLOR)))
 
     return img.rotate(rand(LETTER_ANGLE), resample=Image.BICUBIC)
 
