@@ -27,15 +27,37 @@ $(() => {
     });
 
     form.on('submit', event => {
+        event.preventDefault();
+
+        const f = document.forms['reg-item'];
+        const value = {
+            csrfmiddlewaretoken: f.elements['csrfmiddlewaretoken'].value,
+            username: f.elements['username'].value,
+            password: f.elements['password'].value,
+            passwordConf: f.elements['password-conf'].value,
+            captcha: f.elements['captcha'].value,
+        }
+
         const errors = validators.filter(validator => !validator.fn());
 
-        errorList.empty();
         if (errors.length > 0) {
-            errors.forEach(error => {
-                errorList.append(`<li>${error.message}</li>`);
+            updateErrorList(errors.map(err => err.message));
+        } else {
+            $.ajax({
+                data: value,
+                error: (jqXHR, exception) => {
+                    console.log('error', jqXHR.status);
+                    if (jqXHR.status === 403) {
+                        updateErrorList(['Неверный ответ с картинки']);
+                    } else if (jqXHR.status === 400) {
+                        updateErrorList(['При регистрации произошла ошибка. Проверьте правильность введенных данных.']);
+                    }
+                    updateCaptcha(csrfTocken);
+                },
+                type: 'POST',
+                url: '/auth/signup/',
+                success: () => location.href = '/',
             });
-
-            event.preventDefault();
         }
     });
 });
@@ -48,6 +70,8 @@ function getValidators(form) {
     const password = form.find('[name=password]');
     /** @type {JQuery<HTMLInputElement>} */
     const passwordConfirm = form.find('[name=password-conf]');
+    /** @type {JQuery<HTMLInputElement>} */
+    const captcha = form.find('[name=captcha]');
 
     const loginPattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
     const passwordPattern = /^([0-9]|[a-z]|[A-Z])+$/;
@@ -80,6 +104,10 @@ function getValidators(form) {
         {
             fn: () => passwordPattern.test(password.val()),
             message: 'Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.'
+        },
+        {
+            fn: () => captcha.val().trim().length > 0,
+            message: 'Введите ответ картинки'
         }
     ];
 }
@@ -126,4 +154,13 @@ function updateCaptchaImage(csrfTocken) {
 
 function updateCaptchaTask(message) {
     $('#chaptcha-task').text(message);
+    $('[name=captcha]').val('');
+}
+
+function updateErrorList(errors) {
+    const errorList = $('#reg-errors');
+    errorList.empty();
+    errors.forEach(error => {
+        errorList.append(`<li>${error}</li>`);
+    });
 }

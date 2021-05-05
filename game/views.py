@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.db import connection
 from django.conf import settings
 from .models import Captcha
-from .captcha.captcha import generate as generate_captcha, delete_captcha_image, get_captcha_image
+from .captcha.captcha import generate as generate_captcha, delete_captcha_image, get_captcha_image, hash_answer
 
 
 def login(request):
@@ -14,13 +14,14 @@ def login(request):
     from django.contrib.auth import authenticate, login
     from django.shortcuts import redirect, reverse
 
+    if request.method != 'POST':
+        return HttpResponse(status=405)
+
     username = request.POST.get('username')
     password = request.POST.get('password')
 
     user = authenticate(request, username=username, password=password)
-    if user is None:
-        pass
-    else:
+    if user is not None:
         login(request, user)
 
     return redirect(reverse('home'))
@@ -45,34 +46,53 @@ def signup(request):
     from .http import template, post
     from .models import User
 
+    if request.method != 'POST':
+        return HttpResponse(status=405)
+
+    captcha_id = request.COOKIES.get('captchaid', None)
+    if captcha_id is None:
+        return HttpResponse(status=403)
+
     username = request.POST.get('username')
     password = request.POST.get('password')
-    password_conf = request.POST.get('password-conf')
+    password_conf = request.POST.get('passwordConf')
+    captcha_answer = request.POST.get('captcha')
+
+    captcha_answer_hash = hash_answer(captcha_answer)
+    captcha = None
+    try:
+        captcha = Captcha.objects.get(id=captcha_id)
+    except Captcha.DoesNotExist:
+        return HttpResponse(status=403)
+
+    answer_correct = datetime.now() < captcha.expires and captcha_answer_hash == captcha.answer
+    captcha.delete()
+    delete_captcha_image(captcha_id)
+    if not answer_correct:
+        return HttpResponse(status=403)
 
     # validators
-    fail = template(request, 400,
-        'При попытке регистрации произошла ошибка. Пожалуйста, попробуйте пройти регистрацию повторно.')
 
     if not (username and password and password_conf):
-        return fail
+        return HttpResponse(status=400)
 
     if len(username) > 40:
-        return fail
+        return HttpResponse(status=400)
 
     if re.match(r'^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$', username) is None:
-        return fail
+        return HttpResponse(status=400)
 
     if password != password_conf:
-        return fail
+        return HttpResponse(status=400)
 
     if len(password) < 4:
-        return fail
+        return HttpResponse(status=400)
 
     if re.match(r'^([0-9]|[a-z]|[A-Z])+$', password) is None:
-        return fail
+        return HttpResponse(status=400)
 
     if if_login_exists(username):
-        return fail
+        return HttpResponse(status=400)
 
     # success
     User.objects.create_user(username=username, password=password)
