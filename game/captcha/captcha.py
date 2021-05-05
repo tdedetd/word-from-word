@@ -3,9 +3,16 @@ import os
 from random import choice
 from PIL import Image
 from .image import generate as generate_image
+from .patterns import *
 
 
 CAPTCHA_IMAGES_DIR = 'captcha_images'
+
+PATTERNS = [
+    max_length,
+    min_length,
+    max_letter_frequency
+]
 
 
 def generate(words):
@@ -41,7 +48,15 @@ def get_captcha_image(captcha_id):
 
 
 def get_task(words):
-    return 'Task', 'Answer'
+    message = ''
+    answer = ''
+    success = False
+
+    while not success:
+        pattern = choice(PATTERNS)
+        message, answer, success = pattern(words)
+
+    return message, answer
 
 
 def delete_captcha_image(captcha_id):
