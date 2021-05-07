@@ -122,6 +122,9 @@ EMAIL_VERIFY_EXPIRATION_INTERVAL = 12 # in hours
 
 CAPTHCA_EXPIRATION_INTERVAL = 300 # in seconds
 
+CAPTCHA_FONT = 'Arial.ttf'
+
+# TODO: get rid
 HOST = 'http://localhost:8000' # temp
 
 WEBPACK_HOST = 'http://localhost:8080'

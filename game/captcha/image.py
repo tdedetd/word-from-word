@@ -1,5 +1,6 @@
 import math
 from random import randrange
+from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 from .params import *
 
@@ -80,7 +81,7 @@ def generate_letter_image(letter, font_size):
     draw = ImageDraw.Draw(img)
     draw.text((img_size // 4, 0),
               letter,
-              font=ImageFont.truetype(font='Arial.ttf', size=font_size),
+              font=ImageFont.truetype(font=settings.CAPTCHA_FONT, size=font_size),
               fill=(rand(LETTER_COLOR), rand(LETTER_COLOR), rand(LETTER_COLOR)))
 
     return img.rotate(rand(LETTER_ANGLE), resample=Image.BICUBIC)
