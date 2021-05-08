@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.db import connection
 from django.conf import settings
-from .models import Captcha
+from .models import Captcha, Updates
 from .captcha.captcha import generate as generate_captcha, delete_captcha_image, get_captcha_image, hash_answer
 
 
@@ -314,18 +314,8 @@ def news(request):
     Возвращает страницу новостей
     """
 
-    news_sql = '''
-        SELECT version, to_char(release_date, 'dd.mm.yyyy hh24:mi') as release_date, message
-        FROM updates
-        WHERE release_date IS NOT NULL
-        ORDER BY nio DESC
-    '''
-
-    cursor = connection.cursor()
-    cursor.execute(news_sql)
-    news = dictfetchall(cursor)
-
-    return render(request, 'news.html', context={'news': news})
+    updates = Updates.objects.all().order_by('-created_on')
+    return render(request, 'news.html', context={'updates': updates})
 
 
 def levels(request):

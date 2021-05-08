@@ -47,6 +47,16 @@ class EmailToken(models.Model):
         managed = False
 
 
+class Updates(models.Model):
+    id = models.AutoField(primary_key=True)
+    message = models.TextField()
+    created_on = models.DateTimeField()
+
+    class Meta:
+        db_table = '"public"."updates"'
+        managed = False
+
+
 class LevelOrderType(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32)
