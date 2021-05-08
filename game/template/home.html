@@ -1,27 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% extends 'base.html' %}{% load static %}{% load webpack_url %}
+{% block content %}
 <main>
-  <div class="row">
-    <div class="col col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-      <h2 class="section-title">Последняя активность</h2>
-      <div class="table">
-        <div class="table__row table__head">
-          <div class="table__cell">Дата</div>
-          <div class="table__cell">Слов отгадано</div>
-        </div>
-        {% if activity|length == 0 %}
-          <div class="table__row">
-            <div class="table__cell">Нет активности</div>
-          </div>
-        {% else %}
-          {% for activity_item in activity %}
-          <div class="table__row">
-            <div class="table__cell">{{ activity_item.date }}</div>
-            <div class="table__cell">{{ activity_item.count }}</div>
-          </div>
-          {% endfor %}
-        {% endif %}
-      </div>
-    </div>
-  </div>
+  
 </main>
 {% endblock %}

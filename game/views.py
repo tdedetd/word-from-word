@@ -292,22 +292,7 @@ def verify_email(request):
 # other
 
 def home(request):
-    activity_sql = '''
-        SELECT "date", count
-        FROM (
-            SELECT to_char(us.created_on::date, 'dd.mm.yyyy') as "date", count(*)
-            FROM user_solution us
-            WHERE us.user_id = %s
-            GROUP BY us.created_on::date
-            ORDER BY us.created_on::date desc
-        ) usd
-        LIMIT 7
-    '''
-    cursor = connection.cursor()
-    cursor.execute(activity_sql, [request.user.id])
-    activity = dictfetchall(cursor)
-
-    return render(request, 'home.html', {'activity': activity})
+    return render(request, 'home.html')
 
 
 def get_xp_info(request):
