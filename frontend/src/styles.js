@@ -1,7 +1,11 @@
+// shared
 import "./style/fonts.less";
 import "./style/common.less";
-import "./style/game.less";
 import "./style/grid.less";
+
+// screens
+import "./style/home.less";
+import "./style/game.less";
 import "./style/levels.less";
 import "./style/news.less";
 import "./style/profile.less";

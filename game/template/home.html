@@ -1,6 +1,46 @@
 {% extends 'base.html' %}{% load static %}{% load webpack_url %}
 {% block content %}
 <main>
-  
+  <h2 class="text-center m-1r mt-2e">Добро пожаловать в Word from word!</h2>
+  <section class="mt-2e">
+    <p class="home__p"><b>Word from word</b> - современная интерпретация классической игры "слова из слова", в которой из букв заданного слова нужно составить как можно больше новых слов.</p>
+    <p class="home__p">Правила игры максимально просты: отгадываемые слова должны быть существительными в единственном числе и не содержать нецензурную брань.</p>
+    <p class="home__p">Почему стоит выбрать "Word from word":</p>
+  </section>
+  <section class="mt-2e home__cards-section">
+    <div class="row">
+      <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+        <div class="box home-card">
+          <div class="home-card__icon"><i class="fas fa-save"></i></div>
+          <h3 class="home-card__header">Сохранения</h3>
+          <div class="home-card__body">Ваш прогресс никуда не денется! Просто возвращайтесь в следующиц раз и продолжайте разгадывать, где остановились!</div>
+        </div>
+      </div>
+      <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+        <div class="box home-card">
+          <div class="home-card__icon"><i class="fas fa-users"></i></div>
+          <h3 class="home-card__header">Списки лидеров</h3>
+          <div class="home-card__body">Соревнуйтесь с друзьями и остальными игроками в эрудированности и открывайте новые слова!</div>
+        </div>
+      </div>
+      <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+        <div class="box home-card">
+          <div class="home-card__icon"><i class="fas fa-chart-bar"></i></div>
+          <h3 class="home-card__header">Статистика</h3>
+          <div class="home-card__body">Изучайте подробнейшую статистику по отгаданным словам!</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% if user.is_anonymous %}
+  <section>
+    <p class="home__p">Зарегистрируйтеь прямо сейчас и получите полный доступ ко всем возможностям сайта!</p>
+    <p class="home__p text-center">
+      <button>
+        <a href="{% url 'register' %}">Зарегистрироваться</a>
+      </button>
+    </p>
+  </section>
+  {% endif %}
 </main>
 {% endblock %}
