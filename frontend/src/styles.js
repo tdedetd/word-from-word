@@ -3,6 +3,10 @@ import "./style/fonts.less";
 import "./style/common.less";
 import "./style/grid.less";
 
+// base
+import "./style/base/base.less";
+import "./style/base/footer.less";
+
 // screens
 import "./style/home.less";
 import "./style/game.less";

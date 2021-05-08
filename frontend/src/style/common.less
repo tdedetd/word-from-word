@@ -56,52 +56,6 @@ textarea {
 
 /* other */
 
-@media (min-width: 652px) {
-    header {
-        justify-content: space-between;
-    }
-
-    .user-panel {
-        text-align: right;
-    }
-
-    .full-title {
-        display: block;
-    }
-
-    .short-title {
-        display: none;
-    }
-
-    .subtitle {
-        display: block;
-    }
-}
-
-@media (max-width: 651px) {
-    header {
-        justify-content: center;
-        text-align: center;
-    }
-
-    .user-panel {
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    .full-title {
-        display: none;
-    }
-
-    .short-title {
-        display: block;
-    }
-
-    .subtitle {
-        display: none;
-    }
-}
-
 menu {
     flex-grow: 0;
     flex-shrink: 0;
@@ -123,35 +77,6 @@ main {
     flex-shrink: 0;
     padding: 5px;
     background-color: @primary-light;
-}
-
-footer {
-    flex-grow: 0;
-    flex-shrink: 0;
-    background-color: @blue;
-    color: @light-blue;
-    border-top: solid 7px @dark-blue;
-}
-
-.footer-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
-    flex-wrap: wrap;
-}
-
-.footer-wrapper__item {
-    padding: 10px 20px;
-    cursor: default;
-}
-
-.footer-wrapper__item_link {
-    cursor: pointer;
-    transition: background-color .3s cubic-bezier(0.075, 0.82, 0.165, 1);
-}
-
-.footer-wrapper__item_link:hover {
-    background: @middle-light-blue;
 }
 
 h1 {
@@ -196,14 +121,6 @@ h2 {
     margin: 10px 25px;
 }
 
-.wrapper {
-    max-width: 1024px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .title-shadow {
     text-shadow: 3px 3px 0px @dark-blue;
 }
@@ -212,48 +129,8 @@ h2 {
     text-shadow: 2px 2px 0px @dark-blue;
 }
 
-.user-panel {
-    margin-right: 10px;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.auth-form__item {
-    display: block;
-}
-
-input.auth-form__item {
-    font-size: 14px;
-    margin: 1px 0;
-}
-
 .valid-msg {
     font-size: 18px;
-}
-
-.xp-bar {
-    width: 250px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    display: flex;
-    cursor: help;
-}
-
-.xp-bar__filled {
-    width: 0%;
-    height: 13px;
-    background-color: @dark-blue;
-}
-
-.xp-bar__empty {
-    width: 100%;
-    height: 13px;
-    background-color: @light-blue;
 }
 
 .menu-item {
