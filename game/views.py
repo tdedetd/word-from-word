@@ -501,7 +501,7 @@ def game(request, level_id):
         'word_count': word_count,
         'solve_history': solve_history,
         'leaders': leaders,
-        'title': 'WFW - %s' % ''.join(letters)
+        'title': 'WFW - %s' % ''.join(letters).lower()
     }
     return render(request, 'game.html', context)
 
