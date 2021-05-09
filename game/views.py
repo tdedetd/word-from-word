@@ -501,6 +501,7 @@ def game(request, level_id):
         'word_count': word_count,
         'solve_history': solve_history,
         'leaders': leaders,
+        'title': 'WFW - %s' % ''.join(letters)
     }
     return render(request, 'game.html', context)
 
@@ -564,8 +565,8 @@ def profile(request, user_id):
 
     profile_info_dict.update(xp_info)
 
-    context = {'target_user': target_user,
-                'profile_info_dict': profile_info_dict}
+    context = {'profile_info_dict': profile_info_dict,
+               'title': 'Профиль - %s' % target_user}
 
     return render(request, 'profile.html', context)
 

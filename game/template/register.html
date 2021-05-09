@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word, wfw, слова, слово, регистрация, зарегистрироваться' %}
+
 <main class="">
   <h2 class="text-center m-1r">Регистрация</h2>
   <form id="reg-item" class="reg-form" action="{% url 'signup' %}" method="POST" autocomplete="off">
@@ -46,4 +48,5 @@
 </main>
 
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
-{% endblock %}
+
+{% include 'footer.html' %}

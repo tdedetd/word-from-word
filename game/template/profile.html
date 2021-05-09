@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word, wfw, слова, слово, информация о профиле, слов отгадано, рейтинг' title=title %}
+
 <main class="content-center">
   <h2 class="text-center m-1r">Информация о профиле</h2>
   <div class="box profile">
@@ -57,4 +59,5 @@
 
   </div>
 </main>
-{% endblock %}
+
+{% include 'footer.html' %}

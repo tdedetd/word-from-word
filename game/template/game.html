@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word, wfw, слова, слово, игра' title=title %}
+
 <div id="level-info" data-id="{{ level_id }}"></div>
 <main>
   <div class="letters" id="letters">{% for letter in letters %}
@@ -70,4 +72,5 @@
 </main>
 
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/game.js' %}{% else %}{% static 'js/game.js' %}{% endif %}"></script>
-{% endblock %}
+
+{% include 'footer.html' %}

@@ -1,8 +1,11 @@
-{% extends 'base.html' %}{% load static %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word' %}
+
 <main class="content-center text-center">
   <section class="section-narrow">
     <h2>{{ status }}</h2>
     <p>{{ message }}</p>
   </section>
 </main>
-{% endblock %}
+
+{% include 'footer.html' %}

@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word, выбор слова, слово' %}
+
 <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4" id="level-template" style="display: none;">
     <div class="level">
       <a href="">
@@ -18,6 +20,7 @@
 </div>
 
 <main>
+  <h2 class="text-center m-1r">Выбор слова</h2>
   <div class="level-select-params row">
     <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
       <div class="level-select-params__item">
@@ -72,4 +75,5 @@
 </main>
 
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
-{% endblock %}
+
+{% include 'footer.html' %}

@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load static %}{% load webpack_url %}{% block content %}
+{% load static %}{% load webpack_url %}
+{% include 'header.html' with keywords='word, word from word, новости, новости обновлений, буква' %}
+
 <main>
   <h2 class="text-center m-1r">Новости обновлений</h2>
   <div class="news-container">{% for update in updates %}
@@ -12,4 +14,5 @@
     </div>{% endfor %}
   </div>
 </main>
-{% endblock %}
+
+{% include 'footer.html' %}
