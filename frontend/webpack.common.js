@@ -42,7 +42,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.(jpg|png|eot|woff(2)?|ttf|svg)$/,
+        test: /\.(png|eot|woff(2)?|ttf|svg)$/,
         use: {
           loader: 'file-loader',
           options: {
@@ -50,6 +50,27 @@ module.exports = {
             outputPath: 'assets'
           }
         },
+      },
+      {
+        test: /\.jpg$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+                quality: 70
+              }
+            }
+          }
+        ]
       }
     ]
   },
