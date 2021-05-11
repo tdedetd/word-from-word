@@ -1,17 +1,8 @@
 import $ from 'jquery';
+import * as template from '../../template/modal.html';
 
 const MODAL_SHOWN_CLASS = 'modal_shown';
-
-const MODAL_HTML = `
-    <div class="modal__bg"></div>    
-    <div class="modal__container">
-        <div class="modal__header">
-            <h2 class="modal__h2"></h2>
-            <i class="fa fa-times modal__times" aria-hidden="true"></i>
-        </div>
-        <div class="modal__content"></div>
-    </div>
-`;
+const MODAL_HTML = template.default;
 
 export class Modal {
 
