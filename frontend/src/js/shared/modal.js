@@ -35,7 +35,7 @@ export class Modal {
     _initCloseEvents() {
         this.element.on('click', e => {
             const classes = e.target.classList;
-            if (classes.contains('modal') || classes.contains('modal__times')) {
+            if (classes.contains('modal') || classes.contains('modal__times') || classes.contains('modal__ok-btn')) {
                 this.hide();
             }
         });
