@@ -1,46 +1,54 @@
+@import '../variables.less';
+
 .modal {
+
     display: none;
-}
-
-.modal_shown {
-    display: block;
-}
-
-.modal__bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .5);
-}
+    padding-top: 10vh;
 
-.modal__container {
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 80%;
-    height: 80%;
-    background: #cecece;
-    padding: 1em;
-}
+    &_shown {
+        display: block;
+    }
 
-.modal__header {
-    margin-bottom: .5em;
-}
+    &__container {
+        box-sizing: border-box;
+        width: 80%;
+        background: #cecece;
+        margin: auto;
+        padding: 1em;
+    }
 
-.modal__header::after {
-    content: "";
-    clear: both;
-    display: block;
-}
+    &__header {
+        margin-bottom: .5em;
+    }
 
-.modal__h2 {
-    float: left;
-}
+    &__header::after {
+        content: "";
+        clear: both;
+        display: block;
+    }
 
-.modal__times {
-    float: right;
-    cursor: pointer;
+    &__h2 {
+        float: left;
+    }
+
+    &__times {
+        color: @blue;
+        float: right;
+        cursor: pointer;
+    }
+
+    &__times:hover {
+        color: @dark-blue;
+    }
+
+    &__content {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
 }

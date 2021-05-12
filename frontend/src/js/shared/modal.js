@@ -4,6 +4,9 @@ import * as template from '../../template/modal.html';
 const MODAL_SHOWN_CLASS = 'modal_shown';
 const MODAL_HTML = template.default;
 
+const TAG_TITLE = 'wfw-title';
+const TAG_CONTENT = 'wfw-content';
+
 export class Modal {
 
     get visible() {
@@ -17,10 +20,7 @@ export class Modal {
         this.element = $(`#${id}`);
         this.element.addClass('modal');
 
-        const contentHtml = this.element.html();
-        this.element.html(MODAL_HTML);
-        this.element.find('.modal__content').html(contentHtml);
-
+        this._initDom();
         this._initCloseEvents();
     }
 
@@ -33,7 +33,25 @@ export class Modal {
     }
 
     _initCloseEvents() {
-        this.element.find('.modal__bg').on('click', () => this.hide());
-        this.element.find('.modal__times').on('click', () => this.hide());
+        this.element.on('click', e => {
+            const classes = e.target.classList;
+            if (classes.contains('modal') || classes.contains('modal__times')) {
+                this.hide();
+            }
+        });
+    }
+
+    _initDom() {
+        const title = this._getTitle();
+        const contentHtml = this.element.find(TAG_CONTENT).html();
+
+        this.element.html(MODAL_HTML);
+        this.element.find('.modal__content').html(contentHtml);
+        this.element.find('.modal__h2').text(title);
+    }
+
+    _getTitle() {
+        const titleEl = $(TAG_TITLE);
+        return titleEl ? titleEl.text() : '';
     }
 }
