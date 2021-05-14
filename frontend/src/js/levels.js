@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import * as levelTemplateModule from '../template/level.html';
 "use strict";
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
@@ -36,7 +37,7 @@ let inputSearch;
 let loadingContainer;
 
 $(() => {
-    lvlHtml = $("#level-template").html();
+    lvlHtml = levelTemplateModule.default;
     levels = $("#levels");
     moreLevelsContainer = $("#container-more-levels");
     btnTop = $("#btn-top");

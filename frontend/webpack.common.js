@@ -2,6 +2,14 @@ const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const FILE_LOADER = {
+  loader: 'file-loader',
+  options: {
+    name: '[name].[ext]',
+    outputPath: 'assets'
+  }
+};
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -43,24 +51,12 @@ module.exports = {
       },
       {
         test: /\.(png|eot|woff(2)?|ttf|svg)$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'assets'
-          }
-        },
+        use: FILE_LOADER,
       },
       {
         test: /\.jpg$/,
         use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'assets'
-            }
-          },
+          FILE_LOADER,
           {
             loader: 'image-webpack-loader',
             options: {
