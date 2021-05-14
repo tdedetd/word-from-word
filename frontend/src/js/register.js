@@ -6,7 +6,6 @@ $(() => {
     /** @type {JQuery<HTMLFormElement>} */
     const form = $('#reg-item');
     const validators = getValidators(form);
-    const errorList = $('#reg-errors');
     const csrfTocken = form.find('[name=csrfmiddlewaretoken]').val();
 
     form.find('[name=username]').on('change', event => {
@@ -31,7 +30,7 @@ $(() => {
 
         const f = document.forms['reg-item'];
         const value = {
-            csrfmiddlewaretoken: f.elements['csrfmiddlewaretoken'].value,
+            csrfmiddlewaretoken: csrfTocken,
             username: f.elements['username'].value,
             password: f.elements['password'].value,
             passwordConf: f.elements['password-conf'].value,
