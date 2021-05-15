@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { Modal } from './shared/modal';
 
 let tries = 0;
 
@@ -59,6 +60,11 @@ $(() => {
             });
         }
     });
+
+    const modal = new Modal('modal-rules');
+    $('#reg-rules-link').on('click', () => {
+        modal.show();
+    })
 });
 
 function getValidators(form) {
