@@ -39,15 +39,15 @@
       </div>
     </div>
     <div class="reg-item">
-      <ul class="reg-item__errors" id="reg-errors"></ul>
-    </div>
-    <div class="reg-item">
       <label for="">
-        <input type="checkbox">
-        Согласен(-на) с политикой персональных данных и <a class="reg__link" id="reg-rules-link">правилами сайта</a>.
+        <input type="checkbox" name="confirm">
+        Согласен(-на) с {% comment %}<a class="reg__link" id="reg-privacy-link">политикой обработки персональных данных</a> а также {% endcomment %}<a class="reg__link" id="reg-rules-link">правилами сайта</a>.
       </label>
     </div>
-    <div class="reg-item reg-item__sumit text-center">
+    <div class="reg-item">
+      <ul class="reg-item__errors" id="reg-errors"></ul>
+    </div>
+    <div class="reg-item reg-item__submit text-center">
       <input type="submit" value="Зарегистрироваться">
     </div>
   </form>
@@ -64,6 +64,14 @@
   </wfw-content>
 </div>
 
-<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
+{% comment %}
+<div id="privacy-rules">
+  <wfw-title>Политика конфиденциальности</wfw-title>
+  <wfw-content>
+    bla
+  </wfw-content>
+</div>
+{% endcomment %}
+
 
 {% include 'footer.html' %}

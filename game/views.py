@@ -57,6 +57,7 @@ def signup(request):
     password = request.POST.get('password')
     password_conf = request.POST.get('passwordConf')
     captcha_answer = request.POST.get('captcha')
+    confirm = request.POST.get('confirm')
 
     captcha_answer_hash = hash_answer(captcha_answer)
     captcha = None
@@ -72,6 +73,9 @@ def signup(request):
         return HttpResponse(status=403)
 
     # validators
+
+    if not confirm == 'true':
+        return HttpResponse(status=400)
 
     if not (username and password and password_conf):
         return HttpResponse(status=400)

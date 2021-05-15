@@ -51,7 +51,7 @@ export class Modal {
     }
 
     _getTitle() {
-        const titleEl = $(TAG_TITLE);
+        const titleEl = this.element.find(TAG_TITLE);
         return titleEl ? titleEl.text() : '';
     }
 }

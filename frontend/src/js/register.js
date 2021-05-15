@@ -36,7 +36,8 @@ $(() => {
             password: f.elements['password'].value,
             passwordConf: f.elements['password-conf'].value,
             captcha: f.elements['captcha'].value,
-        }
+            confirm: f.elements['confirm'].checked,
+        };
 
         const errors = validators.filter(validator => !validator.fn());
 
@@ -46,7 +47,6 @@ $(() => {
             $.ajax({
                 data: value,
                 error: (jqXHR, exception) => {
-                    console.log('error', jqXHR.status);
                     if (jqXHR.status === 403) {
                         updateErrorList(['Неверный ответ с картинки']);
                     } else if (jqXHR.status === 400) {
@@ -61,22 +61,33 @@ $(() => {
         }
     });
 
-    const modal = new Modal('modal-rules');
+    const rulesModal = new Modal('modal-rules');
     $('#reg-rules-link').on('click', () => {
-        modal.show();
-    })
+        rulesModal.show();
+    });
+
+    // const privacyModal = new Modal('privacy-rules');
+    // $('#reg-privacy-link').on('click', () => {
+    //     privacyModal.show();
+    // });
 });
 
 function getValidators(form) {
 
     /** @type {JQuery<HTMLInputElement>} */
     const username = form.find('[name=username]');
+
     /** @type {JQuery<HTMLInputElement>} */
     const password = form.find('[name=password]');
+
     /** @type {JQuery<HTMLInputElement>} */
     const passwordConfirm = form.find('[name=password-conf]');
+
     /** @type {JQuery<HTMLInputElement>} */
     const captcha = form.find('[name=captcha]');
+
+    /** @type {JQuery<HTMLInputElement>} */
+    const confirmCheckbox = form.find('[name=confirm]');
 
     const loginPattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
     const passwordPattern = /^([0-9]|[a-z]|[A-Z])+$/;
@@ -113,6 +124,10 @@ function getValidators(form) {
         {
             fn: () => captcha.val().trim().length > 0,
             message: 'Введите ответ картинки'
+        },
+        {
+            fn: () => confirmCheckbox.prop('checked'),
+            message: 'Необходимо принять условия пользования сайтом'
         }
     ];
 }
