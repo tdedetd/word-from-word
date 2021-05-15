@@ -1,32 +1,33 @@
-import $ from 'jquery';
+import { byId, body, getParamsString } from './shared/utils';
 import { Modal } from './shared/modal';
 
 let tries = 0;
 
-$(() => {
-    /** @type {JQuery<HTMLFormElement>} */
-    const form = $('#reg-item');
+document.addEventListener('DOMContentLoaded', () => {
+    /** @type {HTMLFormElement} */
+    const form = byId('reg-item');
     const validators = getValidators(form);
-    const csrfTocken = form.find('[name=csrfmiddlewaretoken]').val();
+    const csrfTocken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    const loginExistsEl = byId('login-exists');
 
-    form.find('[name=username]').on('change', event => {
-        $.get(`/auth/register/checklogin/${event.originalEvent.target.value}/`).done(data => {
+    form.querySelector('[name=username]').addEventListener('change', event => {
+        body(`/auth/register/checklogin/${event.target.value}/`).then(data => {
             if (data.exists) {
-                $('#login-exists').removeClass('hidden');
+                loginExistsEl.classList.remove('hidden');
             } else {
-                $('#login-exists').addClass('hidden');
+                loginExistsEl.classList.add('hidden');
             }
         });
     });
 
     updateCaptcha(csrfTocken);
 
-    $('#refresh-captcha-btn').on('click', event => {
+    byId('refresh-captcha-btn').addEventListener('click', event => {
         updateCaptcha(csrfTocken);
         event.preventDefault();
     });
 
-    form.on('submit', event => {
+    form.addEventListener('submit', event => {
         event.preventDefault();
 
         const f = document.forms['reg-item'];
@@ -44,25 +45,32 @@ $(() => {
         if (errors.length > 0) {
             updateErrorList(errors.map(err => err.message));
         } else {
-            $.ajax({
-                data: value,
-                error: (jqXHR, exception) => {
-                    if (jqXHR.status === 403) {
-                        updateErrorList(['Неверный ответ с картинки']);
-                    } else if (jqXHR.status === 400) {
+            fetch('/auth/signup/', {
+                method: 'POST',
+                body: getParamsString(value),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            }).then(response => {
+                switch (response.status) {
+                    case 200:
+                        location.href = '/';
+                        break;
+                    case 400:
                         updateErrorList(['При регистрации произошла ошибка. Проверьте правильность введенных данных.']);
-                    }
-                    updateCaptcha(csrfTocken);
-                },
-                type: 'POST',
-                url: '/auth/signup/',
-                success: () => location.href = '/',
+                        updateCaptcha(csrfTocken);
+                        break;
+                    case 403:
+                        updateErrorList(['Неверный ответ с картинки']);
+                        updateCaptcha(csrfTocken);
+                        break;
+                }
             });
         }
     });
 
     const rulesModal = new Modal('modal-rules');
-    $('#reg-rules-link').on('click', () => {
+    byId('reg-rules-link').addEventListener('click', () => {
         rulesModal.show();
     });
 
@@ -72,115 +80,135 @@ $(() => {
     // });
 });
 
+/**
+ * @param {HTMLFormElement} form 
+ */
 function getValidators(form) {
 
-    /** @type {JQuery<HTMLInputElement>} */
-    const username = form.find('[name=username]');
+    /** @type {HTMLInputElement} */
+    const username = form.querySelector('[name=username]');
 
-    /** @type {JQuery<HTMLInputElement>} */
-    const password = form.find('[name=password]');
+    /** @type {HTMLInputElement} */
+    const password = form.querySelector('[name=password]');
 
-    /** @type {JQuery<HTMLInputElement>} */
-    const passwordConfirm = form.find('[name=password-conf]');
+    /** @type {HTMLInputElement} */
+    const passwordConfirm = form.querySelector('[name=password-conf]');
 
-    /** @type {JQuery<HTMLInputElement>} */
-    const captcha = form.find('[name=captcha]');
+    /** @type {HTMLInputElement} */
+    const captcha = form.querySelector('[name=captcha]');
 
-    /** @type {JQuery<HTMLInputElement>} */
-    const confirmCheckbox = form.find('[name=confirm]');
+    /** @type {HTMLInputElement} */
+    const confirmCheckbox = form.querySelector('[name=confirm]');
 
     const loginPattern = /^([a-z]|[A-Z])([0-9]|[a-z]|[A-Z])*$/;
     const passwordPattern = /^([0-9]|[a-z]|[A-Z])+$/;
 
     return [
         {
-            fn: () => username.val().trim().length > 0,
+            fn: () => username.value.trim().length > 0,
             message: 'Заполните поле "Логин"'
         },
         {
-            fn: () => username.val().trim().length <= 40,
+            fn: () => username.value.trim().length <= 40,
             message: 'Логин не должен превышать длину в 40 символов'
         },
         {
-            fn: () => loginPattern.test(username.val().trim()),
+            fn: () => loginPattern.test(username.value.trim()),
             message: 'Логин не должен начинаться с цифры и может состоять только из латинских букв (заглавных и строчных), а также цифр.'
         },
         {
-            fn: () => password.val().length > 0 && passwordConfirm.val().length > 0,
+            fn: () => password.value.length > 0 && passwordConfirm.value.length > 0,
             message: 'Необходимо заполнить оба поля ввода пароля'
         },
         {
-            fn: () => password.val() === passwordConfirm.val(),
+            fn: () => password.value === passwordConfirm.value,
             message: 'Пароли не совпадают'
         },
         {
-            fn: () => password.val().length >= 4,
+            fn: () => password.value.length >= 4,
             message: 'Пароль должен быть длиной не менее 4-х символов'
         },
         {
-            fn: () => passwordPattern.test(password.val()),
+            fn: () => passwordPattern.test(password.value),
             message: 'Пароль может состоять только из латинских букв (заглавных и строчных), а также цифр.'
         },
         {
-            fn: () => captcha.val().trim().length > 0,
+            fn: () => captcha.value.trim().length > 0,
             message: 'Введите ответ картинки'
         },
         {
-            fn: () => confirmCheckbox.prop('checked'),
+            fn: () => confirmCheckbox.checked,
             message: 'Необходимо принять условия пользования сайтом'
         }
     ];
 }
 
 function createCaptcha(csrfTocken) {
-    $.ajax({
-        data: {
-            csrfmiddlewaretoken: csrfTocken
+    fetch('/auth/create_captcha/', {
+        method: 'POST',
+        body: `csrfmiddlewaretoken=${csrfTocken}`,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        error: (jqXHR, exception) => console.log('Some error. Try again!'),
-        type: 'POST',
-        url: '/auth/create_captcha/',
-        success: data => onUpdateCaptchaSuccess(data, csrfTocken),
+    }).then(response => {
+        switch (response.status) {
+            case 200:
+                return response.json();
+            default:
+                console.log('Some error. Try again!');
+        }
+    }).then(data => {
+        if (typeof data !== 'undefined') {
+            onUpdateCaptchaSuccess(data);
+        }
     });
 }
 
 function updateCaptcha(csrfTocken) {
-    $.ajax({
-        data: {
-            csrfmiddlewaretoken: csrfTocken
+    fetch('/auth/update_captcha/', {
+        method: 'POST',
+        body: `csrfmiddlewaretoken=${csrfTocken}`,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        error: (jqXHR, exception) => {
-            if (jqXHR.status === 403) {
+    }).then(response => {
+        switch (response.status) {
+            case 200:
+                return response.json();
+            case 403:
                 createCaptcha(csrfTocken);
-            }
-        },
-        type: 'POST',
-        url: '/auth/update_captcha/',
-        success: data => onUpdateCaptchaSuccess(data, csrfTocken),
+                return;
+        }
+    }).then(data => {
+        if (typeof data !== 'undefined') {
+            onUpdateCaptchaSuccess(data);
+        } 
     });
 }
 
-function onUpdateCaptchaSuccess(data, csrfTocken) {
+function onUpdateCaptchaSuccess(data) {
     updateCaptchaTask(data.message);
-    updateCaptchaImage(csrfTocken);
+    updateCaptchaImage();
 }
 
-function updateCaptchaImage(csrfTocken) {
+function updateCaptchaImage() {
     tries++;
-    const elem = $('#chaptcha-img-container');
-    elem.empty();
-    setTimeout(() => elem.html(`<img class="reg-item__img" src="/auth/captcha_image?t=${tries}" alt="img">`));
+    const elem = byId('chaptcha-img-container');
+    elem.innerHTML = '';
+    setTimeout(() => elem.innerHTML = `<img class="reg-item__img" src="/auth/captcha_image?t=${tries}" alt="img">`);
 }
 
 function updateCaptchaTask(message) {
-    $('#chaptcha-task').text(message);
-    $('[name=captcha]').val('');
+    byId('chaptcha-task').innerText = message;
+    document.querySelector('[name=captcha]').value = '';
 }
 
 function updateErrorList(errors) {
-    const errorList = $('#reg-errors');
-    errorList.empty();
+    const errorList = byId('reg-errors');
+    errorList.innerHTML = '';
     errors.forEach(error => {
-        errorList.append(`<li>${error}</li>`);
+        const li = document.createElement('li');
+        li.innerText = error;
+        errorList.appendChild(li);
     });
 }

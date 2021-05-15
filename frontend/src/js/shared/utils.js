@@ -16,3 +16,15 @@ export function byId(id) {
 export function body(input, init=null) {
     return fetch(input, init).then(response => response.json());
 }
+
+/**
+ * Returns GET-params string (without "?")
+ * @param {object} obj
+ * @returns {string}
+ */
+export function getParamsString(obj) {
+    console.log(obj);
+    return Object.entries(obj)
+                 .map(param => `${param[0]}=${param[1]}`)
+                 .join('&');
+}
