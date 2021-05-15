@@ -73,5 +73,6 @@
 </div>
 {% endcomment %}
 
+<script type="text/javascript" src="{% if debug %}{% webpack_url '/js/register.js' %}{% else %}{% static 'js/register.js' %}{% endif %}"></script>
 
 {% include 'footer.html' %}
