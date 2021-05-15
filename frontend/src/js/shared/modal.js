@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import { byId } from '../shared/utils';
 import * as template from '../../template/modal.html';
 
 const MODAL_SHOWN_CLASS = 'modal_shown';
@@ -10,30 +10,30 @@ const TAG_CONTENT = 'wfw-content';
 export class Modal {
 
     get visible() {
-        return this.element.hasClass(MODAL_SHOWN_CLASS);
+        return this.element.classList.contains(MODAL_SHOWN_CLASS);
     }
 
     /**
      * @param {string} id id of DOM-element
      */
     constructor(id) {
-        this.element = $(`#${id}`);
-        this.element.addClass('modal');
+        this.element = byId(id);
+        this.element.classList.add('modal');
 
         this._initDom();
         this._initCloseEvents();
     }
 
     hide() {
-        this.element.removeClass(MODAL_SHOWN_CLASS);
+        this.element.classList.remove(MODAL_SHOWN_CLASS);
     }
 
     show() {
-        this.element.addClass(MODAL_SHOWN_CLASS);
+        this.element.classList.add(MODAL_SHOWN_CLASS);
     }
 
     _initCloseEvents() {
-        this.element.on('click', e => {
+        this.element.addEventListener('click', e => {
             const classes = e.target.classList;
             if (classes.contains('modal') || classes.contains('modal__times') || classes.contains('modal__ok-btn')) {
                 this.hide();
@@ -43,15 +43,16 @@ export class Modal {
 
     _initDom() {
         const title = this._getTitle();
-        const contentHtml = this.element.find(TAG_CONTENT).html();
+        const contentEl = this.element.getElementsByTagName(TAG_CONTENT)[0];
+        const contentHtml = contentEl ? contentEl.innerHTML : '';
 
-        this.element.html(MODAL_HTML);
-        this.element.find('.modal__content').html(contentHtml);
-        this.element.find('.modal__h2').text(title);
+        this.element.innerHTML = MODAL_HTML;
+        this.element.getElementsByClassName('modal__content')[0].innerHTML = contentHtml;
+        this.element.getElementsByClassName('modal__h2')[0].innerText = title;
     }
 
     _getTitle() {
-        const titleEl = this.element.find(TAG_TITLE);
-        return titleEl ? titleEl.text() : '';
+        const titleEl = this.element.getElementsByTagName(TAG_TITLE)[0];
+        return titleEl ? titleEl.innerText : '';
     }
 }
