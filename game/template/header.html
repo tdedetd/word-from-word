@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
+    {% if not debug %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVHR753B9T"></script>
     <script>
@@ -11,6 +12,7 @@
 
       gtag('config', 'G-VVHR753B9T');
     </script>
+    {% endif %}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import { byId, body } from './shared/utils';
 import * as echarts from 'echarts';
 
 /** @type {TabPane} */
@@ -21,9 +21,13 @@ class TabPane {
         this.classTab = "tab-pane__tab";
         this.classContent = "tab-pane__content";
 
-        this.pane = $("#" + id);
-        this.tabs = this.pane.find("." + this.classTab);
-        this.contents = this.pane.find("." + this.classContent);
+        this.pane = byId(id);
+
+        /** @type {HTMLDivElement[]} */
+        this.tabs = Array.from(this.pane.getElementsByClassName(this.classTab));
+
+        /** @type {HTMLDivElement[]} */
+        this.contents = Array.from(this.pane.getElementsByClassName(this.classContent));
 
         this.hideAll();
 
@@ -36,7 +40,7 @@ class TabPane {
             throw `Количество табов (${this.tabs.length}) не соответствует количеству содержимого (${this.contents.length})`;
 
         for (let i = 0; i < this.tabs.length; i++) {
-            $(this.tabs[i]).on("click", () => {
+            this.tabs[i].addEventListener("click", () => {
                 this.select(i);
 
                 if (events && events[i]) {
@@ -52,24 +56,24 @@ class TabPane {
      * Скрывает все табы
      */
     hideAll() {
-        this.tabs.removeClass(this.classTabSelected);
-        this.contents.css({"display": "none"});
+        this.tabs.forEach(tab => tab.classList.remove(this.classTabSelected));
+        this.contents.forEach(content => content.style.display = 'none');
     }
 
     /**
      * Выбирает таб с указанным индексом
-     * @param {number} index 
+     * @param {number} index индекс таба
      */
     select(index) {
         this.hideAll();
         this.selectedIndex = index;
 
-        $(this.tabs[index]).addClass(this.classTabSelected);
-        $(this.contents[index]).css({"display": "block"});
+        this.tabs[index].classList.add(this.classTabSelected);
+        this.contents[index].style.display = 'block';
     }
 }
 
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
     const events = {
         0: () => {
             if (wordLengthChart != undefined) {
@@ -88,7 +92,7 @@ $(() => {
     loadPopularWords();
 });
 
-$(window).on("resize", () => {
+document.addEventListener("resize", () => {
     wordLengthChart.resize();
     firstLetterChart.resize();
 });
@@ -101,7 +105,7 @@ function loadPersonalStats() {
     const colorDarkBlue = "#003357";
     const colorLines = "#b4b4b4";
 
-    $.get("get_personal_stats/").done(data => {
+    body("get_personal_stats/").then(data => {
 
         wordLengthChart = echarts.init(document.getElementById("chart-word-length"));
         wordLengthChart.setOption({
@@ -222,26 +226,24 @@ function loadPersonalStats() {
 }
 
 function loadPopularWords() {
-    $.get("get_popular_words/").done(data => {
-        const tbody = $("#popular-words");
+    body("get_popular_words/").then(data => {
+        const tbody = document.getElementById('popular-words');
         data.forEach(word => {
-            const row = $(document.createElement("div"));
-            row.addClass("table__row");
+            const row = document.createElement("div");
+            row.classList.add("table__row");
 
-            const cellWord = $(document.createElement("div"));
-            cellWord.addClass("table__cell");
-            cellWord.addClass("table__word");
-            cellWord.text(word["word"]);
+            const cellWord = document.createElement("div");
+            cellWord.classList.add("table__cell", "table__word");
+            cellWord.innerText = word.word;
 
-            const cellCount = $(document.createElement("div"));
-            cellCount.addClass("table__cell");
-            cellCount.addClass("table__count");
-            cellCount.text(word["count"]);
+            const cellCount = document.createElement("div");
+            cellCount.classList.add("table__cell", "table__count");
+            cellCount.innerText = word.count;
 
-            row.append(cellWord);
-            row.append(cellCount);
+            row.appendChild(cellWord);
+            row.appendChild(cellCount);
 
-            tbody.append(row);
+            tbody.appendChild(row);
         });
     });
 }

@@ -32,7 +32,9 @@
           <div class="table__cell stats-table__rating">{{ player.words }}</div>
         </a>{% endfor %}
       </div>
-    </div>{% if not user.is_anonymous %}
+    </div>
+
+    {% if not user.is_anonymous %}
     <div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
       <h2 class="section-title">Персональная статистика</h2>
       <div class="tab-pane tab-person-stats" id="tab-person-stats">
@@ -61,7 +63,9 @@
           </div>
         </div>
       </div>
-    </div>{% endif %}
+    </div>
+    {% endif %}
+
   </div>
 </main>
 
