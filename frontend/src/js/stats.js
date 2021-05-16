@@ -1,13 +1,13 @@
+import { Chart, BarController, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { byId, body } from './shared/utils';
-import * as echarts from 'echarts';
 
 /** @type {TabPane} */
 let personStatsTab;
 
-/** @type {echarts.ECharts} */
+/** @type {Chart} */
 let wordLengthChart;
 
-/** @type {echarts.ECharts} */
+/** @type {Chart} */
 let firstLetterChart;
 
 class TabPane {
@@ -71,6 +71,8 @@ class TabPane {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    Chart.register(BarController, CategoryScale, LinearScale, BarElement);
+
     const events = {
         0: () => {
             if (typeof wordLengthChart !== 'undefined') {
@@ -91,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {}
 });
 
-document.addEventListener("resize", () => {
-    wordLengthChart.resize();
-    firstLetterChart.resize();
-});
+// document.addEventListener("resize", () => {
+//     wordLengthChart.resize();
+//     firstLetterChart.resize();
+// });
 
 /**
  * Загружает данные по персональной статистике и отображает их на графиках
@@ -106,118 +108,29 @@ function loadPersonalStats() {
 
     body("get_personal_stats/").then(data => {
 
-        wordLengthChart = echarts.init(byId("chart-word-length"));
-        wordLengthChart.setOption({
-            title: {
-                text: "Распределение количества отгаданных",
-                subtext: "слов по длине слова",
-                textStyle: {
-                    color: colorDarkBlue,
-                    fontSize: 18,
-                    fontWeight: "lighter"
-                },
-                subtextStyle: {
-                    color: colorDarkBlue,
-                    fontSize: 18,
-                    fontWeight: "lighter"
-                },
-                x: "center"
+        wordLengthChart = new Chart(byId("chart-word-length"), {
+            type: 'bar',
+            data: {
+                labels: data['word_len_distrib'].names,
+                datasets: [{
+                    data: data['word_len_distrib'].vals
+                }]
             },
-            color: [colorBlue],
-            tooltip : {
-                trigger: "axis",
-                axisPointer : {
-                    type : "shadow",
-                    label: {
-                        formatter: "Длина слова: {value}"
-                    }
-                }
-            },
-            grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true
-            },
-            xAxis : [
-                {
-                    type : "category",
-                    data : data.word_len_distrib.names,
-                    axisTick: {
-                        alignWithLabel: true
-                    }
-                }
-            ],
-            yAxis : [
-                {
-                    type : "value",
-                    splitLine: {
-                        lineStyle: {
-                            color: colorLines
-                        }
-                    }
-                }
-            ],
-            series : [
-                {
-                    name: "Кол-во слов",
-                    type: "bar",
-                    barWidth: "60%",
-                    data: data.word_len_distrib.vals
-                }
-            ]
+            options: {}
         });
 
-        firstLetterChart = echarts.init(byId("chart-first-letter"));
-        firstLetterChart.setOption({
-            title: {
-                text: "Распределение количества отгаданных",
-                subtext: "слов по первой букве",
-                textStyle: {
-                    color: colorDarkBlue,
-                    fontSize: 18,
-                    fontWeight: "lighter"
-                },
-                subtextStyle: {
-                    color: colorDarkBlue,
-                    fontSize: 18,
-                    fontWeight: "lighter"
-                },
-                x: "center"
+        console.log('get_personal_stats', data['first_letter']);
+        firstLetterChart = new Chart(byId("chart-first-letter"), {
+            type: 'bar',
+            data: {
+                labels: data['first_letter'].names,
+                datasets: [{
+                    data: data['first_letter'].vals
+                }]
             },
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "shadow"
-                }
-            },
-            grid: {
-                left: "3%",
-                right: "4%",
-                bottom: "3%",
-                containLabel: true
-            },
-            xAxis: {
-                type: "value",
-                boundaryGap: [0, 0.01],
-                splitLine: {
-                    lineStyle: {
-                        color: colorLines
-                    }
-                }
-            },
-            yAxis: {
-                type: "category",
-                data: data.first_letter.names.reverse()
-            },
-            series: [
-                {
-                    name: "Кол-во слов",
-                    type: "bar",
-                    data: data.first_letter.vals.reverse()
-                }
-            ],
-            color: [colorBlue]
+            options: {
+                indexAxis: 'y'
+            }
         });
 
         personStatsTab.select(0);
