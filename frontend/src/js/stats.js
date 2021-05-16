@@ -23,6 +23,8 @@ class TabPane {
 
         this.pane = byId(id);
 
+        if (!this.pane) throw `Не удалось создать tab-панель: элемент с id "${id}" не найден`;
+
         /** @type {HTMLDivElement[]} */
         this.tabs = Array.from(this.pane.getElementsByClassName(this.classTab));
 
@@ -31,13 +33,8 @@ class TabPane {
 
         this.hideAll();
 
-        if (this.tabs.length === 0)
-            throw "Отсутствуют табы";
-        if (this.contents.length === 0)
-            throw "Отсутствует содержимое";
-
-        if (this.tabs.length !== this.contents.length)
-            throw `Количество табов (${this.tabs.length}) не соответствует количеству содержимого (${this.contents.length})`;
+        if (this.tabs.length === 0) throw "Отсутствуют табы";
+        if (this.contents.length === 0) throw "Отсутствует содержимое";
 
         for (let i = 0; i < this.tabs.length; i++) {
             this.tabs[i].addEventListener("click", () => {
@@ -76,20 +73,22 @@ class TabPane {
 document.addEventListener('DOMContentLoaded', () => {
     const events = {
         0: () => {
-            if (wordLengthChart != undefined) {
+            if (typeof wordLengthChart !== 'undefined') {
                 wordLengthChart.resize();
             }
         },
         1: () => {
-            if (firstLetterChart != undefined) {
+            if (typeof firstLetterChart !== 'undefined') {
                 firstLetterChart.resize();
             }
         }
     }
 
-    personStatsTab = new TabPane("tab-person-stats", events);
-    loadPersonalStats();
-    loadPopularWords();
+    try {
+        personStatsTab = new TabPane("tab-person-stats", events);
+        loadPersonalStats();
+        loadPopularWords();
+    } catch {}
 });
 
 document.addEventListener("resize", () => {
@@ -107,7 +106,7 @@ function loadPersonalStats() {
 
     body("get_personal_stats/").then(data => {
 
-        wordLengthChart = echarts.init(document.getElementById("chart-word-length"));
+        wordLengthChart = echarts.init(byId("chart-word-length"));
         wordLengthChart.setOption({
             title: {
                 text: "Распределение количества отгаданных",
@@ -169,7 +168,7 @@ function loadPersonalStats() {
             ]
         });
 
-        firstLetterChart = echarts.init(document.getElementById("chart-first-letter"));
+        firstLetterChart = echarts.init(byId("chart-first-letter"));
         firstLetterChart.setOption({
             title: {
                 text: "Распределение количества отгаданных",
@@ -227,7 +226,7 @@ function loadPersonalStats() {
 
 function loadPopularWords() {
     body("get_popular_words/").then(data => {
-        const tbody = document.getElementById('popular-words');
+        const tbody = byId('popular-words');
         data.forEach(word => {
             const row = document.createElement("div");
             row.classList.add("table__row");
