@@ -705,7 +705,8 @@ def get_popular_words(request):
         WHERE
             us.user_id = %s and
             us.level_word_id = lw.id and
-            lw.word_id = w.id
+            lw.word_id = w.id and
+            length(w.word) >= 4
         GROUP BY w.id
         ORDER BY 3 desc
         OFFSET %s LIMIT %s

@@ -4,19 +4,12 @@ import { byId, body } from './shared/utils';
 /** @type {TabPane} */
 let personStatsTab;
 
-/** @type {Chart} */
-let wordLengthChart;
-
-/** @type {Chart} */
-let firstLetterChart;
-
 class TabPane {
     /**
      * Инициализирует tab pane
      * @param {string} id id таб пейна
-     * @param {Object.<number, Function>} events события по нажатию на вкладку
      */
-    constructor(id, events=null) {
+    constructor(id) {
         this.classTabSelected = "tab-pane__tab_selected";
         this.classTab = "tab-pane__tab";
         this.classContent = "tab-pane__content";
@@ -39,10 +32,6 @@ class TabPane {
         for (let i = 0; i < this.tabs.length; i++) {
             this.tabs[i].addEventListener("click", () => {
                 this.select(i);
-
-                if (events && events[i]) {
-                    events[i]();
-                }
             });
         }
 
@@ -73,21 +62,8 @@ class TabPane {
 document.addEventListener('DOMContentLoaded', () => {
     Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
-    const events = {
-        0: () => {
-            if (typeof wordLengthChart !== 'undefined') {
-                wordLengthChart.resize();
-            }
-        },
-        1: () => {
-            if (typeof firstLetterChart !== 'undefined') {
-                firstLetterChart.resize();
-            }
-        }
-    }
-
     try {
-        personStatsTab = new TabPane("tab-person-stats", events);
+        personStatsTab = new TabPane("tab-person-stats");
         loadPersonalStats();
         loadPopularWords();
     } catch {}
@@ -108,24 +84,33 @@ function loadPersonalStats() {
 
     body("get_personal_stats/").then(data => {
 
-        wordLengthChart = new Chart(byId("chart-word-length"), {
+        new Chart(byId("chart-word-length"), {
             type: 'bar',
             data: {
                 labels: data['word_len_distrib'].names,
                 datasets: [{
-                    data: data['word_len_distrib'].vals
+                    data: data['word_len_distrib'].vals,
+                    backgroundColor: [ colorBlue ],
+                    borderColor: [ colorLines ]
                 }]
             },
-            options: {}
+            options: {
+                scales: {
+                    yAxes: [{
+                        display: false,
+                    }]
+                }
+            }
         });
 
-        console.log('get_personal_stats', data['first_letter']);
-        firstLetterChart = new Chart(byId("chart-first-letter"), {
+        new Chart(byId("chart-first-letter"), {
             type: 'bar',
             data: {
                 labels: data['first_letter'].names,
                 datasets: [{
-                    data: data['first_letter'].vals
+                    data: data['first_letter'].vals,
+                    backgroundColor: [ colorBlue ],
+                    borderColor: [ colorLines ]
                 }]
             },
             options: {
