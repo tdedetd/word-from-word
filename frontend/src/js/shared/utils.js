@@ -23,7 +23,6 @@ export function body(input, init=null) {
  * @returns {string}
  */
 export function getParamsString(obj) {
-    console.log(obj);
     return Object.entries(obj)
                  .map(param => `${param[0]}=${param[1]}`)
                  .join('&');

@@ -1,11 +1,11 @@
-import $ from 'jquery';
 import * as levelTemplateModule from '../template/level.html';
+import { byId, body } from './shared/utils';
 "use strict";
 
 const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
 
 /** Количество прогружаемых уровней за раз */
-const lvlLimit = 20;
+const LVL_LIMIT = 20;
 
 let lvlCount = 0;
 
@@ -15,63 +15,63 @@ let lvlCount = 0;
  */
 let lvlHtml;
 
-/** Jquery-контейнер с уровнями */
+/** @type {HTMLDivElement} */
 let levels;
 
-/** Jquery-контейнер more levels */
+/** @type {HTMLDivElement} */
 let moreLevelsContainer;
 
-/** Jquery-элемент */
+/** @type {HTMLButtonElement} */
 let btnTop;
 
-/** Jquery-элемент */
+/** @type {HTMLSelectElement} */
 let selectOrderTypes;
 
-/** Jquery-элемент */
+/** @type {HTMLSelectElement} */
 let selectOrderDirs;
 
-/** Jquery-элемент */
+/** @type {HTMLInputElement} */
 let inputSearch;
 
-/** Jquery-элемент */
+/** @type {HTMLDivElement} */
 let loadingContainer;
 
-$(() => {
+document.addEventListener('DOMContentLoaded', () => {
     lvlHtml = levelTemplateModule.default;
-    levels = $("#levels");
-    moreLevelsContainer = $("#container-more-levels");
-    btnTop = $("#btn-top");
-    selectOrderTypes = $("#select-order-types");
-    selectOrderDirs = $("#select-order-dirs");
-    inputSearch = $("#input-search");
-    loadingContainer = $("#container-loading");
+    levels = byId('levels');
+    moreLevelsContainer = byId('container-more-levels');
+    btnTop = byId('btn-top');
+    selectOrderTypes = byId('select-order-types');
+    selectOrderDirs = byId('select-order-dirs');
+    inputSearch = byId('input-search');
+    loadingContainer = byId('container-loading');
 
     if (sessionStorage.getItem("selectOrderType") !== null &&
         sessionStorage.getItem("selectOrderDir") !== null &&
         sessionStorage.getItem("searchFilter") !== null) {
 
-        selectOrderTypes.val(sessionStorage.getItem("selectOrderType"));
-        selectOrderDirs.val(sessionStorage.getItem("selectOrderDir"));
-        inputSearch.val(sessionStorage.getItem("searchFilter"));
+        selectOrderTypes.value = sessionStorage.getItem("selectOrderType");
+        selectOrderDirs.value = sessionStorage.getItem("selectOrderDir");
+        inputSearch.value = sessionStorage.getItem("searchFilter");
     }
 
-    selectOrderTypes.on("change", resetLevels);
-    selectOrderDirs.on("change", resetLevels);
-    inputSearch.on("keyup", resetLevels);
-    $("#btn-more-levels").on("click", loadLevels);
+    selectOrderTypes.addEventListener("change", resetLevels);
+    selectOrderDirs.addEventListener("change", resetLevels);
+    inputSearch.addEventListener("keyup", resetLevels);
+    byId('btn-more-levels').addEventListener("click", loadLevels);
 
-    btnTop.on("click", () => {
-        $("html, body").animate({ scrollTop: 0 }, "fast");
+    btnTop.addEventListener("click", () => {
+        window.scrollTo(0, 0);
     });
 
     window.addEventListener("scroll", () => {
         updateOntopButton(window.scrollY);
     });
 
-    $("#btn-reset-filters").click(() => {
+    byId('btn-reset-filters').addEventListener('click', () => {
         resetSelect(selectOrderTypes);
         resetSelect(selectOrderDirs);
-        inputSearch.val("");
+        inputSearch.value = '';
         resetLevels();
     });
 
@@ -80,19 +80,22 @@ $(() => {
 });
 
 function loadLevels() {
-    moreLevelsContainer.hide();
-    loadingContainer.show();
-    $.get("/get_levels/", {
-        typeId: selectOrderTypes.val(),
-        dirId: selectOrderDirs.val(),
+    moreLevelsContainer.style.display = 'none';
+    loadingContainer.style.display = 'flex';
+    const url = new URL(`${location.origin}/get_levels/`);
+    const params = {
+        typeId: selectOrderTypes.value,
+        dirId: selectOrderDirs.value,
         offset: lvlCount,
-        limit: lvlLimit,
-        filter: inputSearch.val().trim()
-    }).done(data => {
-        lvlCount += lvlLimit;
+        limit: LVL_LIMIT,
+        filter: inputSearch.value.trim()
+    };
+    url.search = new URLSearchParams(params).toString();
+    body(url).then(data => {
+        lvlCount += LVL_LIMIT;
         if (data.levels.length !== 0 && !data.end) {
-            moreLevelsContainer.show();
-            loadingContainer.hide();
+            moreLevelsContainer.style.display = 'flex';
+            loadingContainer.style.display = 'none';
         }
 
         data["levels"].forEach(level => {
@@ -109,18 +112,18 @@ function loadLevels() {
 
 /** Очищает окно со списком уровней */
 function clearLevels() {
-    levels.empty();
+    levels.innerHTML = '';
     lvlCount = 0;
 }
 
 /** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
 function resetLevels() {
-    sessionStorage.setItem("selectOrderType", selectOrderTypes.val());
-    sessionStorage.setItem("selectOrderDir", selectOrderDirs.val());
-    sessionStorage.setItem("searchFilter", inputSearch.val().trim());
+    sessionStorage.setItem("selectOrderType", selectOrderTypes.value);
+    sessionStorage.setItem("selectOrderDir", selectOrderDirs.value);
+    sessionStorage.setItem("searchFilter", inputSearch.value.trim());
 
     clearLevels();
-    moreLevelsContainer.show();
+    moreLevelsContainer.style.display = 'flex';
     loadLevels();
 }
 
@@ -133,41 +136,40 @@ function resetLevels() {
  * @param {string} lastActivity дата последней активности
  */
 function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
-    const div = document.createElement("div");
-    div.className = LVL_CLASS;
-    const level = $(div);
-    level.html(lvlHtml);
+    const level = document.createElement("div");
+    level.className = LVL_CLASS;
+    level.innerHTML = lvlHtml;
 
-    const wordEl = level.find(".level__word");
+    /** @type {HTMLDivElement} */
+    const wordEl = level.getElementsByClassName('level__word')[0];
     const wordUpperCase = word.toUpperCase();
 
-    wordEl.text(wordUpperCase);
-    wordEl.prop("title", wordUpperCase);
-    level.find(".level__words-solved").text(wordsSolved);
-    level.find(".level__words-total").text(wordsTotal);
-    level.find(".level__last-activity").text("Активность: " + lastActivity);
+    wordEl.innerText = wordUpperCase;
+    wordEl.setAttribute('title', wordUpperCase);
+    level.getElementsByClassName('level__words-solved')[0].innerText = wordsSolved;
+    level.getElementsByClassName('level__words-total')[0].innerText = wordsTotal;
+    level.getElementsByClassName('level__last-activity')[0].innerText = "Активность: " + lastActivity;
 
     const perc = wordsSolved / wordsTotal * 100;
-    level.find(".level__bar-solved").css("width", `${perc}%`);
-    level.find(".level__bar-unsolved").css("width", `${100 - perc}%`);
+    level.getElementsByClassName('level__bar-solved')[0].style.width = `${perc}%`;
+    level.getElementsByClassName('level__bar-unsolved')[0].style.width = `${100 - perc}%`;
 
-    level.find(".level__bar").attr("title", perc.toFixed(2) + "%");
-    level.find("a").attr("href", `/game/${id}/`);
+    level.getElementsByClassName('level__bar')[0].setAttribute('title', perc.toFixed(2) + "%");
+    level.getElementsByTagName('a')[0].setAttribute('href', `/game/${id}/`);
 
-    levels.append(level);
+    levels.appendChild(level);
 }
 
 function updateOntopButton(pageY) {
-    if (pageY > 200) btnTop.show();
-    else btnTop.hide();
+    if (pageY > 200) btnTop.style.display = 'block';
+    else btnTop.style.display = 'none';
 }
 
 // TODO: move out into common module
 /**
  * Сбрасывает значение select'а на первый в списке
- * @param {object} selectJquery 
+ * @param {HTMLSelectElement} select
  */
-function resetSelect(selectJquery) {
-    const value = selectJquery.get()[0].children[0].value;
-    selectJquery.val(value);
+function resetSelect(select) {
+    select.selectedIndex = 0;
 }
