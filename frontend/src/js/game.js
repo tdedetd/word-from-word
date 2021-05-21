@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import { byId } from './shared/utils';
 import { displayXpInfo } from './shared/xp';
 "use strict";
 
@@ -8,7 +8,7 @@ class SolvedWord {
      * @param {string} word 
      * @param {boolean} isNew 
      */
-    constructor(word, isNew) {
+    constructor(word, isNew=false) {
         this.word = word;
         this.isNew = isNew;
     }
@@ -21,13 +21,12 @@ class SolvedWord {
 let letters;
 
 /**
- * @type {JQuery<HTMLDivElement>}
+ * @type {HTMLDivElement}
  */
 let solvedWordsContainer;
 
 /**
- * Jquery-объект поля ввода слова
- * @type {JQuery<HTMLInputElement>}
+ * @type {HTMLInputElement}
  */
  let wordInput;
 
@@ -40,34 +39,33 @@ const words = [];
 /** @type {string} */
 let csrfToken;
 
-$(() => {
-    csrfToken = $(document.getElementsByName("csrfmiddlewaretoken")[0]).val();
+document.addEventListener('DOMContentLoaded', () => {
+    csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
-    wordInput = $("#word-input");
-    letters = document.getElementById("letters");
-    wordInput.val("");
-    solvedWordsContainer = $("#solved-words");
+    wordInput = byId('word-input');
+    letters = byId("letters");
+    solvedWordsContainer = byId('solved-words');
 
-    solvedWordsContainer.children().each((curWordNumber, curWordName) => {
-        words.push(new SolvedWord(curWordName.innerText, false));
+    Array.from(solvedWordsContainer.children).forEach(wordEl => {
+        words.push(new SolvedWord(wordEl.innerText));
     });
 
-    $("#submit-word-button").on("click", () => {
+    byId('submit-word-button').addEventListener("click", () => {
         submitWord();
     });
 
-    $("#backspace-button").on("click", () => {
+    byId('backspace-button').addEventListener("click", () => {
         backspace();
         filterWords();
     });
 
-    $("#clear-button").on("click", () => {
-        wordInput.val("");
+    byId('clear-button').addEventListener("click", () => {
+        wordInput.value = '';
         enableAllLetters();
         filterWords();
     });
 
-    wordInput.on("keydown", e => {
+    wordInput.addEventListener("keydown", e => {
         if (e.key === "Enter") {
             submitWord();
         } else if (e.key === "Backspace") {
@@ -80,40 +78,43 @@ $(() => {
         }
     });
 
-    $("body").on("keydown", e => {
+    document.body.addEventListener("keydown", e => {
         if (e.key === "Enter") {
             submitWord();
         }
     });
 
-    $(".letters__item").on("click", e => {
-        const letterBlock = $(e.originalEvent.target);
+    Array.from(document.getElementsByClassName('letters__item')).forEach(letterEl => {
+        letterEl.addEventListener('click', e => {
+            /** @type {HTMLDivElement} */
+            const letterBlock = e.target;
 
-        if (!letterBlock.hasClass("letters__item_disabled")) {
-            letterBlock.addClass("letters__item_disabled");
-            wordInput.val(wordInput.val() + letterBlock.text().toLowerCase());
-            filterWords();
-        }
+            if (!letterBlock.classList.contains("letters__item_disabled")) {
+                letterBlock.classList.add("letters__item_disabled");
+                wordInput.value += letterBlock.innerText.toLowerCase();
+                filterWords();
+            }
+        });
     });
 
-    $("#shuffle-words-button").on("click", () => {
+    byId('shuffle-words-button').addEventListener("click", () => {
         shuffleLetters();
     });
 
     setInterval(clearLabels, 10000);
-    $("#word-input").trigger("focus");
+    byId('word-input').focus();
 });
 
 /**
  * Разоблокирует последнюю букву в поле ввода.
  */
 function backspace() {
-    if (wordInput.val() === "") {
+    if (wordInput.value === "") {
         return;
     }
 
     /** @type {string} */
-    let word = wordInput.val();
+    let word = wordInput.value;
     let lastLetter = word.slice(-1);
     if (lastLetter === "ё" || lastLetter === "Ё") {
         lastLetter = "е";
@@ -121,15 +122,15 @@ function backspace() {
     enableLetter(lastLetter);
 
     word = word.slice(0, -1);
-    wordInput.val(word);
+    wordInput.value = word;
 }
 
 /**
  * Фильтрует слова в списке отгаданных в соответствии с заданным фильтром
  */
 function filterWords() {
-    const filter = wordInput.val().toLowerCase().trim();
-    solvedWordsContainer.html("");
+    const filter = wordInput.value.toLowerCase().trim();
+    solvedWordsContainer.innerHTML = '';
     words.forEach(solvedWord => {
         if (solvedWord.word.indexOf(filter) === 0) {
             insertSolvedWord(solvedWord);
@@ -138,8 +139,8 @@ function filterWords() {
 }
 
 function submitWord() {
-    const word = wordInput.val().toLowerCase().trim();
-    wordInput.val("");
+    const word = wordInput.value.toLowerCase().trim();
+    wordInput.value = '';
     enableAllLetters();
     filterWords();
 
@@ -149,15 +150,19 @@ function submitWord() {
         return;
     }
 
-    $.post("submit_word/", {
-        word,
-        csrfmiddlewaretoken: csrfToken
-    }).done(data => {
+    fetch('submit_word/', {
+        method: 'POST',
+        body: `csrfmiddlewaretoken=${csrfToken}&word=${word}`,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    }).then(response => response.json())
+    .then(data => {
         if (data.success === 1) {
             const solvedWord = new SolvedWord(word, true);
             insertSolvedWord(solvedWord);
             words.push(solvedWord);
-            $("#words-solved").text(words.length);
+            byId('words-solved').innerText = words.length;
             spawnLabel(`+${data.reward}`, "label-success");
             displayXpInfo();
         } else {
@@ -184,32 +189,34 @@ function wordExists(word) {
  */
 function insertSolvedWord(solvedWord) {
     const word = solvedWord.word;
-    const div = $(document.createElement("div"));
-    div.addClass("solved-words__item");
+    const div = document.createElement("div");
+    div.classList.add("solved-words__item");
+    div.innerText = word;
 
-    if (solvedWord.isNew) div.addClass("solved-words__item_new");
-    div.text(word);
+    if (solvedWord.isNew) div.classList.add("solved-words__item_new");
 
-    const wordsJquery = solvedWordsContainer.children();
+    const wordsElements = solvedWordsContainer.children;
 
-    if (wordsJquery.length === 0 || word > wordsJquery[wordsJquery.length - 1].innerText) {
-        solvedWordsContainer.append(div);
+    if (wordsElements.length === 0 || word > wordsElements[wordsElements.length - 1].innerText) {
+        solvedWordsContainer.appendChild(div);
     } else {
         let wordCount = 0;
-        while (word > wordsJquery[wordCount].innerText) {
+        while (word > wordsElements[wordCount].innerText) {
             wordCount++;
         }
 
         if (wordCount === 0) {
             solvedWordsContainer.prepend(div);
         } else {
-            div.insertBefore($(wordsJquery[wordCount]));
+            solvedWordsContainer.insertBefore(div, wordsElements[wordCount]);
         }
     }
 }
 
 function enableAllLetters() {
-    $(".letters__item").removeClass("letters__item_disabled");
+    Array.from(document.getElementsByClassName('letters__item')).forEach(letterEl => {
+        letterEl.classList.remove("letters__item_disabled");
+    });
 }
 
 /**
@@ -251,21 +258,22 @@ function toggleLetter(enable, letter) {
 
     if (letter === "ё") letter = "е";
 
-    const letters = $(".letters__item");
+    /** @type {HTMLDivElement[]} */
+    const letters = Array.from(document.getElementsByClassName('letters__item'));
     let letterBlock, letterDisabled, letterSuits;
 
     for (let i = 0; i < letters.length; i++) {
-        letterBlock = $(letters[i]);
+        letterBlock = letters[i];
 
-        letterDisabled = letterBlock.hasClass("letters__item_disabled");
-        letterSuits = letterBlock.text().toLowerCase() === letter;
+        letterDisabled = letterBlock.classList.contains("letters__item_disabled");
+        letterSuits = letterBlock.innerText.toLowerCase() === letter;
 
         if (enable === letterDisabled && letterSuits) {
 
             if (enable) {
-                letterBlock.removeClass("letters__item_disabled");
+                letterBlock.classList.remove("letters__item_disabled");
             } else {
-                letterBlock.addClass("letters__item_disabled");
+                letterBlock.classList.add("letters__item_disabled");
             }
             return true;
         }
@@ -279,56 +287,49 @@ function toggleLetter(enable, letter) {
  * @param {boolean} cssClass cssClass
  */
 function spawnLabel(text, cssClass) {
-    const div = $(document.createElement("div"));
-    div.addClass("label");
+    const div = document.createElement("div");
+    div.classList.add("label");
 
-    if (text === "cross") div.html(`<i class="fa fa-times" aria-hidden="true"></i>`);
-    else div.text(text);
+    if (text === "cross") div.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
+    else div.innerText = text;
 
-    div.addClass(cssClass);
+    div.classList.add(cssClass);
 
-    $("#labels").append(div);
-    div.addClass("label-anim");
+    byId('labels').appendChild(div);
+    div.classList.add("label-anim");
 
-    const width = $(window).width(),
-            height = $(window).height(),
+    const width = window.innerWidth,
+            height = window.innerHeight,
             top = height / 2 * Math.random() + height / 2,
             left = width / 4 * 3 * Math.random();
 
-    div.css({
-        top: top + "px",
-        left: left + "px"
-    });
+    div.style.top = top + "px";
+    div.style.left = left + "px";
 
-    setTimeout(animateLabel.bind(null, div), 10);
-}
-
-/**
- * Меняет свойства прозрачности и высоты выбранноо блока
- * @param {object} div jquery-объект элемента
- */
-function animateLabel(div) {
-    div.css({
-        top: "-50px",
-        opacity: 0
-    });
+    setTimeout(() => {
+        div.style.top = "-50px";
+        div.style.opacity = 0;
+    }, 10);
 }
 
 /**
  * Очищает всплывающие лейблы с нулевой прозрачностью
  */
 function clearLabels() {
-    const labelsElem = document.getElementById("labels");
-    const labels = $(labelsElem).children();
-    let labelsToRemove = [];
+    const labelsEl = byId("labels");
 
-    for (let i = 0; i < labels.length; i++) {
-        if ($(labels[i]).css("opacity") == 0)
-            labelsToRemove.push(labels[i]);
+    /** @type {HTMLDivElement[]} */
+    const labels = labelsEl.children;
+    const labelsToRemove = [];
+
+    for (const label of labels) {
+        if (window.getComputedStyle(label).getPropertyValue('opacity') < 0.001) {
+            labelsToRemove.push(label);
+        }
     }
 
     labelsToRemove.forEach(label => {
-        labelsElem.removeChild(label);
+        labelsEl.removeChild(label);
     });
 }
 
@@ -339,6 +340,7 @@ function shuffleLetters() {
 }
 
 /**
+ * TODO: to utils
  * @param {T} array
  * @returns {T}
  */
