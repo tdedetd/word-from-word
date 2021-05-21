@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     byId('btn-reset-filters').addEventListener('click', () => {
-        resetSelect(selectOrderTypes);
-        resetSelect(selectOrderDirs);
+        selectOrderTypes.selectedIndex = 0;
+        selectOrderDirs.selectedIndex = 0;
         inputSearch.value = '';
         resetLevels();
     });
@@ -163,13 +163,4 @@ function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
 function updateOntopButton(pageY) {
     if (pageY > 200) btnTop.style.display = 'block';
     else btnTop.style.display = 'none';
-}
-
-// TODO: move out into common module
-/**
- * Сбрасывает значение select'а на первый в списке
- * @param {HTMLSelectElement} select
- */
-function resetSelect(select) {
-    select.selectedIndex = 0;
 }

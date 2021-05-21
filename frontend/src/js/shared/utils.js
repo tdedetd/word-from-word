@@ -27,3 +27,25 @@ export function getParamsString(obj) {
                  .map(param => `${param[0]}=${param[1]}`)
                  .join('&');
 }
+
+/**
+ * Reshuffles elements of array
+ * @param {T} array
+ * @returns {T} new array with shuffled elements
+ */
+export function shuffle(array) {
+    let currentIndex = array.length;
+    let randomIndex;
+    let temp;
+
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        temp = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temp;
+    }
+
+    return array;
+}

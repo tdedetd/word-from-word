@@ -1,4 +1,4 @@
-import { byId } from './shared/utils';
+import { byId, shuffle } from './shared/utils';
 import { displayXpInfo } from './shared/xp';
 "use strict";
 
@@ -13,6 +13,8 @@ class SolvedWord {
         this.isNew = isNew;
     }
 }
+
+const DISABLED_LETTER_CLASS = "letters__item_disabled";
 
 /**
  * Элемент с буквами слова
@@ -89,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
             /** @type {HTMLDivElement} */
             const letterBlock = e.target;
 
-            if (!letterBlock.classList.contains("letters__item_disabled")) {
-                letterBlock.classList.add("letters__item_disabled");
+            if (!letterBlock.classList.contains(DISABLED_LETTER_CLASS)) {
+                letterBlock.classList.add(DISABLED_LETTER_CLASS);
                 wordInput.value += letterBlock.innerText.toLowerCase();
                 filterWords();
             }
@@ -215,7 +217,7 @@ function insertSolvedWord(solvedWord) {
 
 function enableAllLetters() {
     Array.from(document.getElementsByClassName('letters__item')).forEach(letterEl => {
-        letterEl.classList.remove("letters__item_disabled");
+        letterEl.classList.remove(DISABLED_LETTER_CLASS);
     });
 }
 
@@ -227,7 +229,7 @@ function enableAllLetters() {
  * @returns {boolean} признак успешности активации буквы
  */
 function enableLetter(letter) {
-    return toggleLetter(true, letter);
+    return setLetterState('enable', letter);
 }
 
 /**
@@ -238,17 +240,17 @@ function enableLetter(letter) {
  * @returns {boolean} признак успешности деактивации буквы
  */
 function disableLetter(letter) {
-    return toggleLetter(false, letter);
+    return setLetterState('disable', letter);
 }
 
 /**
  * Меняет состояние блока с первой встретившейся указанной буквой на указанное.
  * Возаращает признак успешности.
- * @param {boolean} enable true - активировать, false - деактивировать
+ * @param {'enable' | 'disable'} mode
  * @param {string} letter буква
  * @returns {boolean} признак успешности смены состояния буквы
  */
-function toggleLetter(enable, letter) {
+function setLetterState(mode, letter) {
     try {
         letter = letter.toLowerCase();
     } catch (e) {
@@ -265,15 +267,14 @@ function toggleLetter(enable, letter) {
     for (let i = 0; i < letters.length; i++) {
         letterBlock = letters[i];
 
-        letterDisabled = letterBlock.classList.contains("letters__item_disabled");
+        letterDisabled = letterBlock.classList.contains(DISABLED_LETTER_CLASS);
         letterSuits = letterBlock.innerText.toLowerCase() === letter;
 
-        if (enable === letterDisabled && letterSuits) {
-
-            if (enable) {
-                letterBlock.classList.remove("letters__item_disabled");
-            } else {
-                letterBlock.classList.add("letters__item_disabled");
+        if (letterSuits) {
+            if (mode === 'enable') {
+                letterBlock.classList.remove(DISABLED_LETTER_CLASS);
+            } else if (mode === 'disable') {
+                letterBlock.classList.add(DISABLED_LETTER_CLASS);
             }
             return true;
         }
@@ -337,26 +338,4 @@ function shuffleLetters() {
     const letterElements = Array.from(letters.children);
     letters.innerHTML = "";
     shuffle(letterElements).forEach(letter => letters.appendChild(letter));
-}
-
-/**
- * TODO: to utils
- * @param {T} array
- * @returns {T}
- */
-function shuffle(array) {
-    let currentIndex = array.length;
-    let randomIndex;
-    let temp;
-
-    while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        temp = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temp;
-    }
-
-    return array;
 }
