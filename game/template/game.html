@@ -24,9 +24,11 @@
       <button class="submit-word-form__item btn-green" id="submit-word-button" title="Отправить">
         <i class="fa fa-check" aria-hidden="true"></i>
       </button>
+      {% if not user.is_anonymous %}
       <button class="submit-word-form__item" id="shuffle-words-button" title="Перемешать буквы в слове">
         <i class="fa fa-random" aria-hidden="true"></i>
       </button>
+      {% endif %}
     </div>
     <div class="level-status">
       Слов:&nbsp;<span id="words-solved">{{ solved_words|length }}</span>&nbsp;/&nbsp;{{ word_count }}

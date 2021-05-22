@@ -165,7 +165,7 @@ function submitWord() {
             insertSolvedWord(solvedWord);
             words.push(solvedWord);
             byId('words-solved').innerText = words.length;
-            spawnLabel(`+${data.reward}`, 'label-success');
+            spawnLabel(data.reward ? `+${data.reward}` : 'check', 'label-success');
             displayXpInfo();
         } else {
             spawnLabel('cross', 'label-neutral');
@@ -293,6 +293,7 @@ function spawnLabel(text, cssClass) {
     div.classList.add('label');
 
     if (text === 'cross') div.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
+    else if (text === 'check') div.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i>`;
     else div.innerText = text;
 
     div.classList.add(cssClass);

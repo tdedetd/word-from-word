@@ -55,13 +55,15 @@
           {% endif %}
         </div>
       </header>
-      <menu type="list">{% if not user.is_anonymous %}
+      <menu type="list">
         <a href="{% url 'levels' %}">
           <li class="menu-item">Играть</li>
         </a>
+        {% if not user.is_anonymous %}
         <a href="{% url 'profile' user.id %}">
           <li class="menu-item">Профиль</li>
-        </a>{% endif %}
+        </a>
+        {% endif %}
         <a href="{% url 'stats' %}">
           <li class="menu-item">Статистика</li>
         </a>

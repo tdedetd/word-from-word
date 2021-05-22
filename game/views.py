@@ -326,9 +326,6 @@ def levels(request):
     """
     Окно с выбором уровня
     """
-    if request.user.is_anonymous:
-        return  redirect_to_register(request)
-
     # from models
     order_types_sql = '''
         SELECT id, name FROM level_order_types ORDER BY nio
@@ -354,9 +351,6 @@ def get_levels(request):
     """
     Возвращает список уровней
     """
-    if request.user.is_anonymous:
-        return HttpResponse(status=401)
-
     user_id = request.user.id
     type_id = request.GET.get("typeId")
     dir_id = request.GET.get("dirId")
@@ -429,9 +423,6 @@ def game(request, level_id):
     """
     from .http import template
     from .models import Level
-
-    if request.user.is_anonymous:
-        return redirect_to_register(request)
 
     word_sql = '''
         SELECT upper(word)
@@ -515,19 +506,18 @@ def submit_word(request, level_id):
     Отправляет слово на проверку.
     Возвращает результат с признаком успешности и текущим уровнем пользователя.
     """
-    if request.user.is_anonymous:
-        return HttpResponse(status=401)
 
     word = request.POST.get('word')
 
     if word is None or word.strip() == '':
         return HttpResponse(status=400)
 
-    submit_word_sql = '''
-        SELECT key, val FROM submit_word(%s, %s, %s)
-    '''
-
-    params = [request.user.id, int(level_id), word]
+    if request.user.is_anonymous:
+        submit_word_sql = 'SELECT key, val FROM submit_word_guest(%s, %s)'
+        params = [int(level_id), word]
+    else:
+        submit_word_sql = 'SELECT key, val FROM submit_word(%s, %s, %s)'
+        params = [request.user.id, int(level_id), word]
 
     cursor = connection.cursor()
     cursor.execute(submit_word_sql, params)
