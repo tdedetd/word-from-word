@@ -10,9 +10,9 @@ class TabPane {
      * @param {string} id id таб пейна
      */
     constructor(id) {
-        this.classTabSelected = "tab-pane__tab_selected";
-        this.classTab = "tab-pane__tab";
-        this.classContent = "tab-pane__content";
+        this.classTabSelected = 'tab-pane__tab_selected';
+        this.classTab = 'tab-pane__tab';
+        this.classContent = 'tab-pane__content';
 
         this.pane = byId(id);
 
@@ -26,11 +26,11 @@ class TabPane {
 
         this.hideAll();
 
-        if (this.tabs.length === 0) throw "Отсутствуют табы";
-        if (this.contents.length === 0) throw "Отсутствует содержимое";
+        if (this.tabs.length === 0) throw 'Отсутствуют табы';
+        if (this.contents.length === 0) throw 'Отсутствует содержимое';
 
         for (let i = 0; i < this.tabs.length; i++) {
-            this.tabs[i].addEventListener("click", () => {
+            this.tabs[i].addEventListener('click', () => {
                 this.select(i);
             });
         }
@@ -63,28 +63,23 @@ document.addEventListener('DOMContentLoaded', () => {
     Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
     try {
-        personStatsTab = new TabPane("tab-person-stats");
+        personStatsTab = new TabPane('tab-person-stats');
         loadPersonalStats();
         loadPopularWords();
     } catch {}
 });
 
-// document.addEventListener("resize", () => {
-//     wordLengthChart.resize();
-//     firstLetterChart.resize();
-// });
-
 /**
  * Загружает данные по персональной статистике и отображает их на графиках
  */
 function loadPersonalStats() {
-    const colorBlue = "#005998";
-    const colorDarkBlue = "#003357";
-    const colorLines = "#b4b4b4";
+    const colorBlue = '#005998';
+    const colorDarkBlue = '#003357';
+    const colorLines = '#b4b4b4';
 
-    body("get_personal_stats/").then(data => {
+    body('get_personal_stats/').then(data => {
 
-        new Chart(byId("chart-word-length"), {
+        new Chart(byId('chart-word-length'), {
             type: 'bar',
             data: {
                 labels: data['word_len_distrib'].names,
@@ -103,7 +98,7 @@ function loadPersonalStats() {
             }
         });
 
-        new Chart(byId("chart-first-letter"), {
+        new Chart(byId('chart-first-letter'), {
             type: 'bar',
             data: {
                 labels: data['first_letter'].names,
@@ -123,18 +118,18 @@ function loadPersonalStats() {
 }
 
 function loadPopularWords() {
-    body("get_popular_words/").then(data => {
+    body('get_popular_words/').then(data => {
         const tbody = byId('popular-words');
         data.forEach(word => {
-            const row = document.createElement("div");
-            row.classList.add("table__row");
+            const row = document.createElement('div');
+            row.classList.add('table__row');
 
-            const cellWord = document.createElement("div");
-            cellWord.classList.add("table__cell", "table__word");
+            const cellWord = document.createElement('div');
+            cellWord.classList.add('table__cell', 'table__word');
             cellWord.innerText = word.word;
 
-            const cellCount = document.createElement("div");
-            cellCount.classList.add("table__cell", "table__count");
+            const cellCount = document.createElement('div');
+            cellCount.classList.add('table__cell', 'table__count');
             cellCount.innerText = word.count;
 
             row.appendChild(cellWord);

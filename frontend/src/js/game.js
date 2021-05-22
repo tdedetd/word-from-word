@@ -1,6 +1,6 @@
 import { byId, shuffle } from './shared/utils';
 import { displayXpInfo } from './shared/xp';
-"use strict";
+'use strict';
 
 class SolvedWord {
 
@@ -14,7 +14,7 @@ class SolvedWord {
     }
 }
 
-const DISABLED_LETTER_CLASS = "letters__item_disabled";
+const DISABLED_LETTER_CLASS = 'letters__item_disabled';
 
 /**
  * Элемент с буквами слова
@@ -42,35 +42,35 @@ const words = [];
 let csrfToken;
 
 document.addEventListener('DOMContentLoaded', () => {
-    csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
     wordInput = byId('word-input');
-    letters = byId("letters");
+    letters = byId('letters');
     solvedWordsContainer = byId('solved-words');
 
     Array.from(solvedWordsContainer.children).forEach(wordEl => {
         words.push(new SolvedWord(wordEl.innerText));
     });
 
-    byId('submit-word-button').addEventListener("click", () => {
+    byId('submit-word-button').addEventListener('click', () => {
         submitWord();
     });
 
-    byId('backspace-button').addEventListener("click", () => {
+    byId('backspace-button').addEventListener('click', () => {
         backspace();
         filterWords();
     });
 
-    byId('clear-button').addEventListener("click", () => {
+    byId('clear-button').addEventListener('click', () => {
         wordInput.value = '';
         enableAllLetters();
         filterWords();
     });
 
-    wordInput.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
+    wordInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
             submitWord();
-        } else if (e.key === "Backspace") {
+        } else if (e.key === 'Backspace') {
             e.preventDefault();
             backspace();
             setTimeout(() => filterWords());
@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.body.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
+    document.body.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
             submitWord();
         }
     });
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    byId('shuffle-words-button').addEventListener("click", () => {
+    byId('shuffle-words-button').addEventListener('click', () => {
         shuffleLetters();
     });
 
@@ -111,15 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
  * Разоблокирует последнюю букву в поле ввода.
  */
 function backspace() {
-    if (wordInput.value === "") {
+    if (wordInput.value === '') {
         return;
     }
 
     /** @type {string} */
     let word = wordInput.value;
     let lastLetter = word.slice(-1);
-    if (lastLetter === "ё" || lastLetter === "Ё") {
-        lastLetter = "е";
+    if (lastLetter === 'ё' || lastLetter === 'Ё') {
+        lastLetter = 'е';
     }
     enableLetter(lastLetter);
 
@@ -146,9 +146,9 @@ function submitWord() {
     enableAllLetters();
     filterWords();
 
-    if (word === "") return;
+    if (word === '') return;
     if (wordExists(word)) {
-        spawnLabel("Уже отгадано!", "label-neutral");
+        spawnLabel('Уже отгадано!', 'label-neutral');
         return;
     }
 
@@ -165,10 +165,10 @@ function submitWord() {
             insertSolvedWord(solvedWord);
             words.push(solvedWord);
             byId('words-solved').innerText = words.length;
-            spawnLabel(`+${data.reward}`, "label-success");
+            spawnLabel(`+${data.reward}`, 'label-success');
             displayXpInfo();
         } else {
-            spawnLabel("cross", "label-neutral");
+            spawnLabel('cross', 'label-neutral');
         }
     });
 }
@@ -191,11 +191,11 @@ function wordExists(word) {
  */
 function insertSolvedWord(solvedWord) {
     const word = solvedWord.word;
-    const div = document.createElement("div");
-    div.classList.add("solved-words__item");
+    const div = document.createElement('div');
+    div.classList.add('solved-words__item');
     div.innerText = word;
 
-    if (solvedWord.isNew) div.classList.add("solved-words__item_new");
+    if (solvedWord.isNew) div.classList.add('solved-words__item_new');
 
     const wordsElements = solvedWordsContainer.children;
 
@@ -258,7 +258,7 @@ function setLetterState(mode, letter) {
         else throw e;
     }
 
-    if (letter === "ё") letter = "е";
+    if (letter === 'ё') letter = 'е';
 
     /** @type {HTMLDivElement[]} */
     const letters = Array.from(document.getElementsByClassName('letters__item'));
@@ -288,27 +288,27 @@ function setLetterState(mode, letter) {
  * @param {boolean} cssClass cssClass
  */
 function spawnLabel(text, cssClass) {
-    const div = document.createElement("div");
-    div.classList.add("label");
+    const div = document.createElement('div');
+    div.classList.add('label');
 
-    if (text === "cross") div.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
+    if (text === 'cross') div.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
     else div.innerText = text;
 
     div.classList.add(cssClass);
 
     byId('labels').appendChild(div);
-    div.classList.add("label-anim");
+    div.classList.add('label-anim');
 
     const width = window.innerWidth,
             height = window.innerHeight,
             top = height / 2 * Math.random() + height / 2,
             left = width / 4 * 3 * Math.random();
 
-    div.style.top = top + "px";
-    div.style.left = left + "px";
+    div.style.top = top + 'px';
+    div.style.left = left + 'px';
 
     setTimeout(() => {
-        div.style.top = "-50px";
+        div.style.top = '-50px';
         div.style.opacity = 0;
     }, 10);
 }
@@ -317,7 +317,7 @@ function spawnLabel(text, cssClass) {
  * Очищает всплывающие лейблы с нулевой прозрачностью
  */
 function clearLabels() {
-    const labelsEl = byId("labels");
+    const labelsEl = byId('labels');
 
     /** @type {HTMLDivElement[]} */
     const labels = labelsEl.children;
@@ -336,6 +336,6 @@ function clearLabels() {
 
 function shuffleLetters() {
     const letterElements = Array.from(letters.children);
-    letters.innerHTML = "";
+    letters.innerHTML = '';
     shuffle(letterElements).forEach(letter => letters.appendChild(letter));
 }

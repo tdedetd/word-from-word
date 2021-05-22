@@ -1,8 +1,8 @@
 import * as levelTemplateModule from '../template/level.html';
 import { byId, body } from './shared/utils';
-"use strict";
+'use strict';
 
-const LVL_CLASS = "col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4";
+const LVL_CLASS = 'col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4';
 
 /** Количество прогружаемых уровней за раз */
 const LVL_LIMIT = 20;
@@ -46,25 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
     inputSearch = byId('input-search');
     loadingContainer = byId('container-loading');
 
-    if (sessionStorage.getItem("selectOrderType") !== null &&
-        sessionStorage.getItem("selectOrderDir") !== null &&
-        sessionStorage.getItem("searchFilter") !== null) {
+    if (sessionStorage.getItem('selectOrderType') !== null &&
+        sessionStorage.getItem('selectOrderDir') !== null &&
+        sessionStorage.getItem('searchFilter') !== null) {
 
-        selectOrderTypes.value = sessionStorage.getItem("selectOrderType");
-        selectOrderDirs.value = sessionStorage.getItem("selectOrderDir");
-        inputSearch.value = sessionStorage.getItem("searchFilter");
+        selectOrderTypes.value = sessionStorage.getItem('selectOrderType');
+        selectOrderDirs.value = sessionStorage.getItem('selectOrderDir');
+        inputSearch.value = sessionStorage.getItem('searchFilter');
     }
 
-    selectOrderTypes.addEventListener("change", resetLevels);
-    selectOrderDirs.addEventListener("change", resetLevels);
-    inputSearch.addEventListener("keyup", resetLevels);
-    byId('btn-more-levels').addEventListener("click", loadLevels);
+    selectOrderTypes.addEventListener('change', resetLevels);
+    selectOrderDirs.addEventListener('change', resetLevels);
+    inputSearch.addEventListener('keyup', resetLevels);
+    byId('btn-more-levels').addEventListener('click', loadLevels);
 
-    btnTop.addEventListener("click", () => {
+    btnTop.addEventListener('click', () => {
         window.scrollTo(0, 0);
     });
 
-    window.addEventListener("scroll", () => {
+    window.addEventListener('scroll', () => {
         updateOntopButton(window.scrollY);
     });
 
@@ -98,13 +98,13 @@ function loadLevels() {
             loadingContainer.style.display = 'none';
         }
 
-        data["levels"].forEach(level => {
+        data['levels'].forEach(level => {
             displayLevel(
-                level["id"],
-                level["word"],
-                level["word_count"],
-                level["solved"],
-                level["last_activity"]
+                level['id'],
+                level['word'],
+                level['word_count'],
+                level['solved'],
+                level['last_activity']
             );
         });
     });
@@ -118,9 +118,9 @@ function clearLevels() {
 
 /** Сбрасывает окно уровней до состояния, соотвествующем выбранным параметрам */
 function resetLevels() {
-    sessionStorage.setItem("selectOrderType", selectOrderTypes.value);
-    sessionStorage.setItem("selectOrderDir", selectOrderDirs.value);
-    sessionStorage.setItem("searchFilter", inputSearch.value.trim());
+    sessionStorage.setItem('selectOrderType', selectOrderTypes.value);
+    sessionStorage.setItem('selectOrderDir', selectOrderDirs.value);
+    sessionStorage.setItem('searchFilter', inputSearch.value.trim());
 
     clearLevels();
     moreLevelsContainer.style.display = 'flex';
@@ -135,8 +135,8 @@ function resetLevels() {
  * @param {number} wordsSolved количество отгаданных слов
  * @param {string} lastActivity дата последней активности
  */
-function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
-    const level = document.createElement("div");
+function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity='-') {
+    const level = document.createElement('div');
     level.className = LVL_CLASS;
     level.innerHTML = lvlHtml;
 
@@ -148,13 +148,13 @@ function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity="-") {
     wordEl.setAttribute('title', wordUpperCase);
     level.getElementsByClassName('level__words-solved')[0].innerText = wordsSolved;
     level.getElementsByClassName('level__words-total')[0].innerText = wordsTotal;
-    level.getElementsByClassName('level__last-activity')[0].innerText = "Активность: " + lastActivity;
+    level.getElementsByClassName('level__last-activity')[0].innerText = 'Активность: ' + lastActivity;
 
     const perc = wordsSolved / wordsTotal * 100;
     level.getElementsByClassName('level__bar-solved')[0].style.width = `${perc}%`;
     level.getElementsByClassName('level__bar-unsolved')[0].style.width = `${100 - perc}%`;
 
-    level.getElementsByClassName('level__bar')[0].setAttribute('title', perc.toFixed(2) + "%");
+    level.getElementsByClassName('level__bar')[0].setAttribute('title', perc.toFixed(2) + '%');
     level.getElementsByTagName('a')[0].setAttribute('href', `/game/${id}/`);
 
     levels.appendChild(level);
