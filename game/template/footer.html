@@ -7,6 +7,15 @@
             </footer>
         </div>
 
+        <div id="cookie-modal">
+            <wfw-title>Предупреждение о куках</wfw-title>
+            <wfw-content>
+                <span>Этот сайт использует куки!
+                    <a href="https://ru.wikipedia.org/wiki/Cookie" target="_blank" class="cookie-modal__link">Подробнее о куках</a>
+                </span>
+            </wfw-content>
+        </div>
+
         <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/shared.js' %}{% else %}{% static 'js/shared.js' %}{% endif %}"></script>
         <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/main.js' %}{% else %}{% static 'js/main.js' %}{% endif %}"></script>
     </body>
