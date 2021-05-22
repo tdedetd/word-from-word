@@ -271,12 +271,13 @@ function setLetterState(mode, letter) {
         letterSuits = letterBlock.innerText.toLowerCase() === letter;
 
         if (letterSuits) {
-            if (mode === 'enable') {
+            if (mode === 'enable' && letterDisabled) {
                 letterBlock.classList.remove(DISABLED_LETTER_CLASS);
-            } else if (mode === 'disable') {
+                return true;
+            } else if (mode === 'disable' && !letterDisabled) {
                 letterBlock.classList.add(DISABLED_LETTER_CLASS);
+                return true;
             }
-            return true;
         }
     }
     return false;
