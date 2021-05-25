@@ -42,6 +42,7 @@ const words = [];
 let csrfToken;
 
 document.addEventListener('DOMContentLoaded', () => {
+    const shuffleWordsButton = byId('shuffle-words-button');
     csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
     wordInput = byId('word-input');
@@ -99,9 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    byId('shuffle-words-button').addEventListener('click', () => {
-        shuffleLetters();
-    });
+    if (shuffleWordsButton) {
+        shuffleWordsButton.addEventListener('click', () => shuffleLetters());
+    }
 
     setInterval(clearLabels, 10000);
     byId('word-input').focus();

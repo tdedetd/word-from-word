@@ -3,6 +3,14 @@
 
 <div id="level-info" data-id="{{ level_id }}"></div>
 <main>
+  {% if user.is_anonymous %}
+  <div class="game__reg-alert">
+    <span>Зарегистрируйтесь и сохраняйте свой прогресс!</span>
+    <button>
+      <a href="{% url 'register' %}">Зарегистрироваться</a>
+    </button>
+  </div>
+  {% endif %}
   <div class="letters" id="letters">{% for letter in letters %}
     <div class="letters__item">{{ letter }}</div>{% endfor %}
   </div>
