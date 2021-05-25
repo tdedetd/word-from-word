@@ -425,7 +425,7 @@ def game(request, level_id):
     from .models import Level
 
     word_sql = '''
-        SELECT upper(word)
+        SELECT upper(words.word), levels.available_for_guests
         FROM levels, words
         WHERE levels.id = %s and levels.word_id = words.id
     '''
@@ -436,8 +436,13 @@ def game(request, level_id):
 
     if word_result is None:
         return template(request, 404, 'Указанного уровня не существует')
-    else:
-        word = word_result[0]
+
+    word, available_for_guests = word_result
+    if request.user.is_anonymous and not available_for_guests:
+        return render(request,
+                      'error.html',
+                      status=403,
+                      context={ 'status': 403, 'message': 'Для доступа ко всем уровням необходимо зарегистрироваться' })
 
     letters = list(word)
 
