@@ -95,8 +95,8 @@ function loadLevels() {
         lvlCount += LVL_LIMIT;
         if (data.levels.length !== 0 && !data.end) {
             moreLevelsContainer.style.display = 'flex';
-            loadingContainer.style.display = 'none';
         }
+        loadingContainer.style.display = 'none';
 
         data['levels'].forEach(level => {
             displayLevel(
