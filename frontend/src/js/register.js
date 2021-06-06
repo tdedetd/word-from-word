@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rulesModal.show();
     });
 
-    // const privacyModal = new Modal('privacy-rules');
+    // const privacyModal = new Modal('modal-privacy-policy');
     // $('#reg-privacy-link').on('click', () => {
     //     privacyModal.show();
     // });
@@ -151,17 +151,17 @@ function createCaptcha(csrfTocken) {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     }).then(response => {
-        switch (response.status) {
-            case 200:
-                return response.json();
-            default:
-                console.log('Some error. Try again!');
-        }
-    }).then(data => {
-        if (typeof data !== 'undefined') {
-            onUpdateCaptchaSuccess(data);
-        }
-    });
+        return new Promise(resolve => {
+            switch (response.status) {
+                case 200:
+                    resolve(response.json());
+                    break;
+                default:
+                    throw 'Some error. Try again!';
+            } 
+        });
+    }).then(data => onUpdateCaptchaSuccess(data))
+    .catch(err => console.error(err));
 }
 
 function updateCaptcha(csrfTocken) {
@@ -172,18 +172,18 @@ function updateCaptcha(csrfTocken) {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     }).then(response => {
-        switch (response.status) {
-            case 200:
-                return response.json();
-            case 403:
-                createCaptcha(csrfTocken);
-                return;
-        }
-    }).then(data => {
-        if (typeof data !== 'undefined') {
-            onUpdateCaptchaSuccess(data);
-        } 
-    });
+        return new Promise(resolve => {
+            switch (response.status) {
+                case 200:
+                    resolve(response.json());
+                    break;
+                case 403:
+                    createCaptcha(csrfTocken);
+                    throw response.status;
+            } 
+        });
+    }).then(data => onUpdateCaptchaSuccess(data))
+    .catch(() => {});
 }
 
 function onUpdateCaptchaSuccess(data) {

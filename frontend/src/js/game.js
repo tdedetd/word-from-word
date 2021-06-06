@@ -285,7 +285,7 @@ function setLetterState(mode, letter) {
 }
 
 /**
- * Спавнит всплывающую надпись
+ * Спавнит всплывающую надпись индикации результата отгадывания
  * @param {string} text текст сообщения
  * @param {boolean} cssClass cssClass
  */
@@ -313,7 +313,7 @@ function spawnLabel(text, cssClass) {
     setTimeout(() => {
         div.style.top = '-50px';
         div.style.opacity = 0;
-    }, 10);
+    });
 }
 
 /**

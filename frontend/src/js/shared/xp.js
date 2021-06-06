@@ -5,7 +5,7 @@ import { byId } from './utils';
  */
 export function displayXpInfo() {
     fetch('/get_xp_info/').then(response => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (response.status !== 200) throw response.status;
             resolve(response.json());
         });
