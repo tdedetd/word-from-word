@@ -1,5 +1,5 @@
 {% load static %}{% load webpack_url %}
-{% include 'header.html' with keywords='word, word from word, выбор слова, слово' title='Выбор уровня' %}
+{% include 'header.html' with keywords='word, word from word, выбор слова, слово' title='Выбор уровня' canonical='https://wordfromword.com/game/guest/' %}
 
 <main>
   <h2 class="text-center m-1r">Выбор слова</h2>
@@ -43,8 +43,31 @@
     </div>
   </div>
   <div class="levels-wrapper">
-    <div class="row" id="levels"></div>
+    <div class="row" id="levels">
+      {% if levels %}
+        {% for level in levels %}
+        <div class="col col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+          <div class="level">
+            <a href="/game/{{ level.id }}">
+              <div class="level__word" title="{{ level.word }}">{{ level.word | upper }}</div>
+              <div class="level__last-activity">Активность: {{ level.last_activity }}</div>
+              <div class="level__status">
+                <div class="level__bar">
+                  <div class="level__bar-solved"></div>
+                  <div class="level__bar-unsolved" style="width: 100%;"></div>
+                </div>
+                <div class="level__word-count">
+                  <span class="level__words-solved">{{ level.solved }}</span>&nbsp;/&nbsp;<span class="level__words-total">{{ level.word_count }}</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
   </div>
+  {% if not levels %}
   <div class="content-center" id="container-more-levels">
     <button id="btn-more-levels" title="Загрузить больше слов">Еще</button>
   </div>
@@ -54,8 +77,11 @@
   <button id="btn-top" class="btn-top" title="Наверх">
     <i class="fa fa-angle-up" aria-hidden="true"></i>
   </button>
+  {% endif %} 
 </main>
 
+{% if not levels %}
 <script type="text/javascript" src="{% if debug %}{% webpack_url '/js/levels.js' %}{% else %}{% static 'js/levels.js' %}{% endif %}"></script>
+{% endif %}
 
 {% include 'footer.html' %}

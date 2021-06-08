@@ -22,6 +22,10 @@
     <title>{% if title %}{{ title }}{% else %}Word from word{% endif %}</title>
     <link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/fontawesome.css' %}{% else %}{% static 'style/fontawesome.css' %}{% endif %}">
     <link rel="stylesheet" href="{% if debug %}{% webpack_url '/style/styles.css' %}{% else %}{% static 'style/styles.css' %}{% endif %}">
+
+    {% if canonical %}
+    <link rel="canonical" href="{{ canonical }}">
+    {% endif %}
   </head>
   <body>
     <div class="wrapper">

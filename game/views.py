@@ -322,7 +322,7 @@ def news(request):
     return render(request, 'news.html', context={'updates': updates})
 
 
-def levels(request):
+def levels(request, ssr):
     """
     Окно с выбором уровня
     """
@@ -343,6 +343,16 @@ def levels(request):
     order_dirs = dictfetchall(cursor)
 
     context = {'order_types': order_types, 'order_dirs': order_dirs}
+
+    if ssr:
+        levels_sql = '''
+            SELECT id, word, word_count, solved, last_activity
+            FROM get_levels(null, 1, 1)
+        '''
+        cursor = connection.cursor()
+        cursor.execute(levels_sql)
+        levels = dictfetchall(cursor)
+        context.update({'levels': levels})
 
     return render(request, 'levels.html', context)
 
