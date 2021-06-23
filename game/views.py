@@ -322,7 +322,7 @@ def news(request):
     return render(request, 'news.html', context={'updates': updates})
 
 
-def levels(request, ssr):
+def levels(request, isCanonical):
     """
     Окно с выбором уровня
     """
@@ -342,9 +342,9 @@ def levels(request, ssr):
     cursor.execute(order_dirs_sql)
     order_dirs = dictfetchall(cursor)
 
-    context = {'order_types': order_types, 'order_dirs': order_dirs}
+    context = {'order_types': order_types, 'order_dirs': order_dirs, 'canonical': 'https://wordfromword.com/game/guest/'}
 
-    if ssr:
+    if isCanonical:
         levels_sql = '''
             SELECT id, word, word_count, solved, last_activity
             FROM get_levels(null, 1, 1)
@@ -352,7 +352,7 @@ def levels(request, ssr):
         cursor = connection.cursor()
         cursor.execute(levels_sql)
         levels = dictfetchall(cursor)
-        context.update({'levels': levels})
+        context.update({'levels': levels, 'canonical': None})
 
     return render(request, 'levels.html', context)
 
