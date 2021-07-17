@@ -141,21 +141,21 @@ function displayLevel(id, word, wordsTotal, wordsSolved=0, lastActivity='-') {
     level.innerHTML = lvlHtml;
 
     /** @type {HTMLDivElement} */
-    const wordEl = level.getElementsByClassName('level__word')[0];
+    const wordEl = level.querySelector('.level__word');
     const wordUpperCase = word.toUpperCase();
 
     wordEl.innerText = wordUpperCase;
     wordEl.setAttribute('title', wordUpperCase);
-    level.getElementsByClassName('level__words-solved')[0].innerText = wordsSolved;
-    level.getElementsByClassName('level__words-total')[0].innerText = wordsTotal;
-    level.getElementsByClassName('level__last-activity')[0].innerText = 'Активность: ' + lastActivity;
+    level.querySelector('.level__words-solved').innerText = wordsSolved;
+    level.querySelector('.level__words-total').innerText = wordsTotal;
+    level.querySelector('.level__last-activity').innerText = 'Активность: ' + lastActivity;
 
     const perc = wordsSolved / wordsTotal * 100;
-    level.getElementsByClassName('level__bar-solved')[0].style.width = `${perc}%`;
-    level.getElementsByClassName('level__bar-unsolved')[0].style.width = `${100 - perc}%`;
+    level.querySelector('.level__bar-solved').style.width = `${perc}%`;
+    level.querySelector('.level__bar-unsolved').style.width = `${100 - perc}%`;
 
-    level.getElementsByClassName('level__bar')[0].setAttribute('title', perc.toFixed(2) + '%');
-    level.getElementsByTagName('a')[0].setAttribute('href', `/game/${id}/`);
+    level.querySelector('.level__bar').setAttribute('title', perc.toFixed(2) + '%');
+    level.querySelector('a').setAttribute('href', `/game/${id}/`);
 
     levels.appendChild(level);
 }

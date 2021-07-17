@@ -43,7 +43,7 @@ let csrfToken;
 
 document.addEventListener('DOMContentLoaded', () => {
     const shuffleWordsButton = byId('shuffle-words-button');
-    csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     wordInput = byId('word-input');
     letters = byId('letters');

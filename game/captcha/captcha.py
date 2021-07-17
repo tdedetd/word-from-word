@@ -29,6 +29,7 @@ def generate(words):
 
 
 def hash_answer(answer):
+    # TODO: salt by secret key!!!
     hash_object = hashlib.sha256(answer.strip().lower().encode('utf-8'))
     return hash_object.hexdigest()
 

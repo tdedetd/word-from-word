@@ -1,6 +1,7 @@
 import { byId } from '../shared/utils';
 import * as template from '../../template/modal.html';
 
+const MODAL_CLASS = 'modal';
 const MODAL_SHOWN_CLASS = 'modal_shown';
 const MODAL_HTML = template.default;
 
@@ -18,7 +19,7 @@ export class Modal {
      */
     constructor(id) {
         this.element = byId(id);
-        this.element.classList.add('modal');
+        this.element.classList.add(MODAL_CLASS);
 
         this._initDom();
         this._initCloseEvents();
@@ -35,7 +36,7 @@ export class Modal {
     _initCloseEvents() {
         this.element.addEventListener('click', e => {
             const classes = e.target.classList;
-            if (classes.contains('modal') || classes.contains('modal__times') || classes.contains('modal__ok-btn')) {
+            if (classes.contains(MODAL_CLASS) || classes.contains('modal__times') || classes.contains('modal__ok-btn')) {
                 this.hide();
             }
         });
@@ -43,16 +44,16 @@ export class Modal {
 
     _initDom() {
         const title = this._getTitle();
-        const contentEl = this.element.getElementsByTagName(TAG_CONTENT)[0];
+        const contentEl = this.element.querySelector(TAG_CONTENT);
         const contentHtml = contentEl ? contentEl.innerHTML : '';
 
         this.element.innerHTML = MODAL_HTML;
-        this.element.getElementsByClassName('modal__content')[0].innerHTML = contentHtml;
-        this.element.getElementsByClassName('modal__h2')[0].innerText = title;
+        this.element.querySelector('.modal__content').innerHTML = contentHtml;
+        this.element.querySelector('.modal__h2').innerText = title;
     }
 
     _getTitle() {
-        const titleEl = this.element.getElementsByTagName(TAG_TITLE)[0];
+        const titleEl = this.element.querySelector(TAG_TITLE);
         return titleEl ? titleEl.innerText : '';
     }
 }

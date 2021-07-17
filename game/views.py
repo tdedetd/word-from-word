@@ -8,9 +8,6 @@ from .captcha.captcha import generate as generate_captcha, delete_captcha_image,
 
 
 def login(request):
-    """
-    Авторизует пользователя
-    """
     from django.contrib.auth import authenticate, login
     from django.shortcuts import redirect, reverse
 
@@ -28,9 +25,6 @@ def login(request):
 
 
 def logout(request):
-    """
-    Деавторизует пользователя
-    """
     from django.contrib.auth import logout
     from django.shortcuts import redirect, reverse
 
@@ -43,7 +37,6 @@ def signup(request):
     Регистрирует пользователя, предварительно проводя валидацию логина и пароля
     """
     import re
-    from .http import template, post
     from .models import User
 
     if request.method != 'POST':
@@ -66,10 +59,10 @@ def signup(request):
     except Captcha.DoesNotExist:
         return HttpResponse(status=403)
 
-    answer_correct = datetime.now() < captcha.expires and captcha_answer_hash == captcha.answer
+    captcha_passed = datetime.now() < captcha.expires and captcha_answer_hash == captcha.answer
     captcha.delete()
     delete_captcha_image(captcha_id)
-    if not answer_correct:
+    if not captcha_passed:
         return HttpResponse(status=403)
 
     # validators
@@ -104,9 +97,6 @@ def signup(request):
 
 
 def register(request):
-    """
-    Возвращает страницу регистрации
-    """
     return render(request, 'register.html')
 
 
@@ -117,8 +107,7 @@ def redirect_to_register(request):
 
 def checklogin(request, login):
     """
-    Проверяет, присутствует ли пользователь с указанным именем в базе
-    и возвращает json-ответ.
+    Проверяет, присутствует ли пользователь с указанным именем в базе.
     """
     return JsonResponse({'exists': if_login_exists(login)})
 
